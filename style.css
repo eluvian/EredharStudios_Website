@@ -342,7 +342,6 @@ footer {
   }
 }
 
-
 /* Project pages: landscape covers */
 .book-entry.project-entry {
   display: flex;
@@ -359,4 +358,16 @@ footer {
 .book-entry.project-entry .book-info {
   margin: 20px 0 0;
   text-align: center;
+}
+
+/* 1. When an accordion is open, pad its content underneath */
+.accordion-content.active {
+  margin-bottom: 60px;  /* room for the next header */
+}
+
+/* 2. On narrow screens, give every accordion section more breathing room */
+@media screen and (max-width: 600px) {
+  .accordion-section {
+    margin-bottom: 120px;  /* ensure Cinematics can’t slide up too soon */
+  }
 }
