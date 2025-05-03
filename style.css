@@ -247,7 +247,7 @@ section {
 /* Limit accordion width to match content */
 .accordion-section {
   max-width: 1100px;
-  margin: 0 auto 60px;
+  margin: 0 auto;
   padding: 0 20px;
 }
 
