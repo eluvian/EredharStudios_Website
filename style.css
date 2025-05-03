@@ -368,6 +368,6 @@ footer {
 /* on small screens, give the opened accordion a much larger bottom-margin */
 @media screen and (max-width: 600px) {
   .accordion-content.active {
-    margin-bottom: 200px; /* feel free to tweak this value */
+    margin-bottom: 300px; /* feel free to tweak this value */
   }
 }
