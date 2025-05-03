@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Forgotten Kingdom | Eredhar Studios</title>
+  <link rel="stylesheet" href="../style.css">
+  
+ />
+
+  
+</head>
+<body>
+  <header class="hero">
+    <img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios Logo" class="logo" />
+    <p class="tagline">Forging Worlds of Wonder</p>
+  </header>
+  <main>
+    <section class="about">
+      <h2>The Forgotten Kingdom</h2>
+      <p><strong>Status:</strong> Completed</p>
+      <p>Adventure through the remnants of a long-lost underground kingdom in this short puzzle game. As you navigate the crumbling halls and mysterious chambers, your wit and cunning will be put to the test. Engage in a unique blend of light-based puzzles, where you must skillfully manipulate beams of light, bouncing them off surfaces to activate ancient mechanisms and unlock hidden pathways. You won't be alone in this adventure. An AI companion will accompany you, lending a helping hand when needed.</p>
+      <div class="book-entry project-entry">
+        <img src="../assets/images/forgotten-kingdom.jpg" alt="The Forgotten Kingdom" class="book-cover">
+        <div class="book-info">
+          <h3>Play The Forgotten Kingdom</h3>
+          <a href="https://bit.ly/3CmHx9l" target="_blank">Play The Forgotten Kingdom</a>
+        </div>
+      </div>
+      <p><a href="../index.html">← Back to Home</a></p>
+    </section>
+  </main>
+  <footer><p>© 2025 Eredhar Studios. All rights reserved.</p></footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero');
+      let hasShrunk = false;
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 120) {
+          if (!hasShrunk) { hero.classList.add('shrink'); hasShrunk = true; }
+        } else {
+          if (hasShrunk) { hero.classList.remove('shrink'); hasShrunk = false; }
+        }
+      }, { passive: true });
+    });
+  </script>
+</body>
+</html>

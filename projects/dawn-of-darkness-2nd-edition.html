@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dawn of Darkness (2nd Edition) | Eredhar Studios</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <!-- 🌟 Header -->
+  <header class="hero">
+    <img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios Logo" class="logo">
+    <p class="tagline">Forging Worlds of Wonder</p>
+  </header>
+
+  <main>
+    <section class="about">
+      <h2>Dawn of Darkness (2nd Edition)</h2>
+      <p><strong>Status:</strong> In Development</p>
+      <p>The 2nd edition reimagines the original tale of Wars of Eredhar, bringing greater depth, clarity, and resonance to its characters, themes, and world. It is a story of fading light, unspoken loss, and the fragile hope that lingers. New material enriches the emotional texture and lore, while honoring the spirit of the first edition. It is not simply a revision—it is a rediscovery.</p>
+
+      <div class="card-base minerva-card">
+        <img src="../assets/images/Coming-Soon.png" alt="Dawn of Darkness 2nd Edition coming soon">
+        <h3>Coming Soon</h3>
+      </div>
+
+      <p><a href="../index.html">← Back to Home</a></p>
+    </section>
+  </main>
+
+  <!-- 📄 Footer -->
+  <footer>
+    <p>© 2025 Eredhar Studios. All rights reserved.</p>
+  </footer>
+
+  <!-- 🔄 Header Shrink Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero');
+      let hasShrunk = false;
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 120) {
+          if (!hasShrunk) { hero.classList.add('shrink'); hasShrunk = true; }
+        } else {
+          if (hasShrunk) { hero.classList.remove('shrink'); hasShrunk = false; }
+        }
+      }, { passive: true });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mission to Minerva | Eredhar Studios</title>
+  <link rel="stylesheet" href="../style.css">
+  
+>
+
+  
+</head>
+<body>
+  <header class="hero">
+    <img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios Logo" class="logo">
+    <p class="tagline">Forging Worlds of Wonder</p>
+  </header>
+  <main>
+    <section class="about">
+      <h2>Mission to Minerva</h2>
+      <p><strong>Status:</strong> Completed</p>
+      <p>Humanity discovered a new galaxy: Minerva. We took it upon ourselves to chart the unknown. Thus, the story begins... Contest entry: #KB3Dchallenge</p>
+      <div class="book-entry project-entry">
+        <img src="../assets/images/mission-to-minerva.jpg" alt="Mission to Minerva" class="book-cover">
+        <div class="book-info">
+          <h3>Watch Mission to Minerva</h3>
+          <a href="https://www.youtube.com/watch?v=LCD1RRdazms" target="_blank">Watch Mission to Minerva</a>
+        </div>
+      </div>
+      <p><a href="../index.html">← Back to Home</a></p>
+    </section>
+  </main>
+  <footer><p>&copy; 2025 Eredhar Studios. All rights reserved.</p></footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero');
+      window.addEventListener('scroll', () => {
+        window.scrollY > 120 ? hero.classList.add('shrink') : hero.classList.remove('shrink');
+      }, { passive: true });
+    });
+  </script>
+</body>
+</html>

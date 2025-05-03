@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Educational Tool | Eredhar Studios</title>
+  <link rel="stylesheet" href="../style.css">
+  
+ />
+
+  
+</head>
+<body>
+  <header class="hero">
+    <img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios Logo" class="logo" />
+    <p class="tagline">Forging Worlds of Wonder</p>
+  </header>
+  <main>
+    <section class="about">
+      <h2>Educational Tool</h2>
+      <p><strong>Status:</strong> Completed</p>
+      <p>This "Educational Tool" is designed to be an interactive experience, where gamification meets learning! In this engaging environment, you are entrusted with the mission of rebuilding a majestic tower. The key to success? Your knowledge! Challenge yourself with a series of thought-provoking questions spanning various subjects, created by teachers and parents. Correct answers not only propel you higher in the game (literally) but also contribute to the reconstruction of the magnificent tower.</p>
+      <div class="book-entry project-entry">
+        <img src="../assets/images/educational-tool.jpg" alt="Educational Tool" class="book-cover">
+        <div class="book-info">
+          <h3>Play Educational Tool</h3>          
+          <a href="https://drive.google.com/file/d/1Qsxx62ljGXIEpqpVOxRsfXY0M8ZG_WtH/view" target="_blank">Play Educational Tool</a>
+        </div>
+      </div>
+      <p><a href="../index.html">← Back to Home</a></p>
+    </section>
+  </main>
+  <footer><p>© 2025 Eredhar Studios. All rights reserved.</p></footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero');
+      let hasShrunk = false;
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 120) {
+          if (!hasShrunk) { hero.classList.add('shrink'); hasShrunk = true; }
+        } else {
+          if (hasShrunk) { hero.classList.remove('shrink'); hasShrunk = false; }
+        }
+      }, { passive: true });
+    });
+  </script>
+</body>
+</html>

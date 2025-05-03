@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A World Without Magic | Eredhar Studios</title>
+  <link rel="stylesheet" href="../style.css">
+  
+>
+
+  
+</head>
+<body>
+  <header class="hero">
+    <img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios Logo" class="logo">
+    <p class="tagline">Forging Worlds of Wonder</p>
+  </header>
+  <main>
+    <section class="about">
+      <h2>A World Without Magic</h2>
+      <p><strong>Status:</strong> Completed</p>
+      <p>In A World Without Magic, the world has lost all traces of magic — its landscapes are lifeless, its histories forgotten. You are the last wielder of the Light, able to briefly illuminate echoes of what once was. Using this fading gift, you reveal long-lost structures and fragments of memory scattered across a forgotten land. Your presence is a contradiction — the last ember of a world without magic.</p>
+      <div class="book-entry project-entry">
+        <img src="../assets/images/world-without-magic.jpg" alt="A World Without Magic" class="book-cover">
+        <div class="book-info">
+          <h3>Play A World Without Magic</h3>
+          <a href="https://eredhar.itch.io/a-world-without-magic" target="_blank">Play A World Without Magic</a>
+        </div>
+      </div>
+      <p><a href="../index.html">← Back to Home</a></p>
+    </section>
+  </main>
+  <footer><p>&copy; 2025 Eredhar Studios. All rights reserved.</p></footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero');
+      window.addEventListener('scroll', () => {
+        window.scrollY > 120 ? hero.classList.add('shrink') : hero.classList.remove('shrink');
+      }, { passive: true });
+    });
+  </script>
+</body>
+</html>

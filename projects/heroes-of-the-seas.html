@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Heroes of the Seas | Eredhar Studios</title>
+  <link rel="stylesheet" href="../style.css">
+  
+ />
+
+  
+</head>
+<body>
+  <header class="hero">
+    <img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios Logo" class="logo" />
+    <p class="tagline">Forging Worlds of Wonder</p>
+  </header>
+  <main>
+    <section class="about">
+      <h2>Heroes of the Seas</h2>
+      <p><strong>Status:</strong> Completed</p>
+      <p>Heroes of the Seas is a fan project crafted with the help of and together with the vibrant Sea of Thieves community. Set forth on an adventure through a quaint port and village and gaze upon a delightful showcase of wooden-framed portraits, each capturing the essence of the beloved pirate characters alongside breathtaking screenshots. As you wander around, encounter plenty of colourful characters who eagerly share amusing anecdotes and tales of daring escapades from fellow players.</p>
+      <div class="book-entry project-entry">
+        <img src="../assets/images/heroes-of-the-seas.jpg" alt="Heroes of the Seas" class="book-cover">
+        <div class="book-info">
+          <h3>Play Heroes of the Seas</h3>          
+          <a href="https://bit.ly/Heroes_Of_The_Seas" target="_blank">Play Heroes of the Seas</a>
+        </div>
+      </div>
+      <p><a href="../index.html">← Back to Home</a></p>
+    </section>
+  </main>
+  <footer><p>© 2025 Eredhar Studios. All rights reserved.</p></footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero');
+      let hasShrunk = false;
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 120) {
+          if (!hasShrunk) { hero.classList.add('shrink'); hasShrunk = true; }
+        } else {
+          if (hasShrunk) { hero.classList.remove('shrink'); hasShrunk = false; }
+        }
+      }, { passive: true });
+    });
+  </script>
+</body>
+</html>

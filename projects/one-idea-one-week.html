@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Idea, One Week | Eredhar Studios</title>
+  <link rel="stylesheet" href="../style.css">
+  
+ />
+
+  
+</head>
+<body>
+  <header class="hero">
+    <img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios Logo" class="logo" />
+    <p class="tagline">Forging Worlds of Wonder</p>
+  </header>
+  <main>
+    <section class="about">
+      <h2>One Idea, One Week, One Game</h2>
+      <p><strong>Status:</strong> Completed</p>
+      <p>Step into the untamed depths of a jungle, where adventure awaits. Uncover the secrets hidden within the four magical books scattered throughout the perilous terrain. Time is of the essence, for the stakes are high, and your very life hangs in the balance.</p>
+      <div class="book-entry project-entry">
+        <img src="../assets/images/one-idea-one-week.jpg" alt="One Idea, One Week" class="book-cover">
+        <div class="book-info">
+          <h3>Play One Idea, One Week</h3>
+          <a href="https://drive.google.com/file/d/1jQ0lehBMyeqxDLcr6Zs7_huDP8wLCJRZ/view" target="_blank">Play One Idea, One Week</a>
+        </div>
+      </div>
+      <p><a href="../index.html">← Back to Home</a></p>
+    </section>
+  </main>
+  <footer><p>© 2025 Eredhar Studios. All rights reserved.</p></footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero');
+      let hasShrunk = false;
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 120) {
+          if (!hasShrunk) { hero.classList.add('shrink'); hasShrunk = true; }
+        } else {
+          if (hasShrunk) { hero.classList.remove('shrink'); hasShrunk = false; }
+        }
+      }, { passive: true });
+    });
+  </script>
+</body>
+</html>
