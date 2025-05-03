@@ -360,14 +360,14 @@ footer {
   text-align: center;
 }
 
-/* 1. When an accordion is open, pad its content underneath */
+/* When a section is expanded, pad its content so the next header sits below it */
 .accordion-content.active {
-  margin-bottom: 60px;  /* room for the next header */
+  padding-bottom: 20px;  /* adjust as needed, e.g. 20–30px */
 }
 
-/* 2. On narrow screens, give every accordion section more breathing room */
+/* on small screens, give the opened accordion a much larger bottom-margin */
 @media screen and (max-width: 600px) {
-  .accordion-section {
-    margin-bottom: 120px;  /* ensure Cinematics can’t slide up too soon */
+  .accordion-content.active {
+    margin-bottom: 200px; /* feel free to tweak this value */
   }
 }
