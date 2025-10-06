@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medieval Kingdom Simulator | Eredhar Studios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* Eredhar Studios Theme Variables */
+    :root {
+      --bg-dark: #0e0e14;
+      --bg-card: #161621;
+      --bg-header: #1a1a25;
+      --gold: #ffe082;
+      --gold-hover: #ffcc33;
+      --blue-link: #81d4fa;
+      --text-light: #f5f5f5;
+      --text-gray: #ccc;
+      --border-gold: 2px solid #ffe082;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Playfair Display', serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .game-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .game-header {
+      text-align: center;
+      background-color: var(--bg-header);
+      padding: 30px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      margin-bottom: 30px;
+    }
+
+    .game-header h1 {
+      color: var(--gold);
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .game-header p {
+      color: var(--text-gray);
+      font-style: italic;
+      font-size: 1.1rem;
+    }
+
+    /* Stats Panel */
+    .stats-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    /* Kingdom Summary */
+    .kingdom-summary {
+      background-color: var(--bg-card);
+      padding: 25px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      margin-bottom: 30px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .summary-item {
+      background-color: var(--bg-header);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 224, 130, 0.3);
+    }
+
+    .summary-item h4 {
+      color: var(--gold);
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .summary-item p {
+      color: var(--text-gray);
+      font-size: 0.9rem;
+      margin: 3px 0;
+    }
+
+    .stat-card {
+      background-color: var(--bg-card);
+      padding: 20px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(255, 224, 130, 0.3);
+    }
+
+    .stat-label {
+      color: var(--gold);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--text-light);
+    }
+
+    .stat-rate {
+      font-size: 0.85rem;
+      color: var(--text-gray);
+      margin-top: 5px;
+      font-style: italic;
+    }
+
+    /* Main Content Grid */
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Buildings Section */
+    .buildings-section, .trade-section {
+      background-color: var(--bg-card);
+      padding: 25px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .section-title {
+      color: var(--gold);
+      font-size: 1.4rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .building-grid {
+      display: grid;
+      gap: 15px;
+    }
+
+    .building-card {
+      background-color: var(--bg-header);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 224, 130, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .building-card:hover {
+      background-color: #29293d;
+    }
+
+    .building-info h3 {
+      color: var(--gold);
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    .building-info p {
+      color: var(--text-gray);
+      font-size: 0.9rem;
+    }
+
+    .building-count {
+      color: var(--gold);
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .buy-btn {
+      background-color: var(--gold);
+      color: var(--bg-dark);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+    }
+
+    .buy-btn:hover {
+      background-color: var(--gold-hover);
+    }
+
+    .buy-btn:active {
+      transform: scale(0.95);
+    }
+
+    .buy-btn:disabled {
+      background-color: #555;
+      color: #888;
+      cursor: not-allowed;
+    }
+
+    /* Trade Section */
+    .trade-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .trade-input-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .trade-input {
+      flex: 1;
+      background-color: var(--bg-header);
+      border: 1px solid var(--gold);
+      color: var(--text-light);
+      padding: 10px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+    }
+
+    .trade-input:focus {
+      outline: none;
+      border-color: var(--gold-hover);
+      box-shadow: 0 0 10px rgba(255, 224, 130, 0.3);
+    }
+
+    .trade-btn {
+      background-color: var(--blue-link);
+      color: var(--bg-dark);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      flex: 2;
+    }
+
+    .trade-btn:hover {
+      background-color: #4fc3f7;
+    }
+
+    .trade-btn:disabled {
+      background-color: #555;
+      color: #888;
+      cursor: not-allowed;
+    }
+
+    .quick-sell-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .quick-sell-btn {
+      background-color: var(--bg-header);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 8px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .quick-sell-btn:hover {
+      background-color: var(--gold);
+      color: var(--bg-dark);
+    }
+
+    /* Game Over Screen */
+    .game-over {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .game-over.active {
+      display: flex;
+    }
+
+    .game-over-content {
+      background-color: var(--bg-card);
+      padding: 40px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      text-align: center;
+      max-width: 500px;
+      box-shadow: 0 0 50px rgba(255, 224, 130, 0.5);
+    }
+
+    .game-over-content h2 {
+      color: var(--gold);
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .game-over-content p {
+      color: var(--text-gray);
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+
+    .restart-btn {
+      background-color: var(--gold);
+      color: var(--bg-dark);
+      border: none;
+      padding: 15px 40px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .restart-btn:hover {
+      background-color: var(--gold-hover);
+    }
+
+    /* Event Popup */
+    .event-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .event-popup.active {
+      display: flex;
+    }
+
+    .event-popup-content {
+      background-color: var(--bg-card);
+      padding: 40px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      text-align: center;
+      max-width: 500px;
+      box-shadow: 0 0 50px rgba(255, 224, 130, 0.5);
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .event-title {
+      color: var(--gold);
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .event-description {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .event-choices {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .event-choice-btn {
+      background-color: var(--gold);
+      color: var(--bg-dark);
+      border: none;
+      padding: 15px 30px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .event-choice-btn:hover:not(:disabled) {
+      background-color: var(--gold-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 224, 130, 0.3);
+    }
+
+    .event-choice-btn:disabled {
+      background-color: #555;
+      color: #888;
+      cursor: not-allowed;
+    }
+
+    /* Event Log Section */
+    .event-log-section {
+      background-color: var(--bg-card);
+      padding: 25px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      margin-bottom: 30px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .event-log {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      background-color: var(--bg-header);
+      border-radius: 8px;
+    }
+
+    .event-log::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .event-log::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+      border-radius: 4px;
+    }
+
+    .event-log::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 4px;
+    }
+
+    .event-log::-webkit-scrollbar-thumb:hover {
+      background: var(--gold-hover);
+    }
+
+    .event-log-empty {
+      color: var(--text-gray);
+      font-style: italic;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .event-log-entry {
+      background-color: var(--bg-card);
+      padding: 12px 15px;
+      border-radius: 6px;
+      border-left: 4px solid var(--gold);
+      animation: slideInLog 0.3s ease;
+    }
+
+    @keyframes slideInLog {
+      from { 
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .event-log-entry.positive {
+      border-left-color: #4caf50;
+    }
+
+    .event-log-entry.negative {
+      border-left-color: #f44336;
+    }
+
+    .event-log-entry.neutral {
+      border-left-color: #2196f3;
+    }
+
+    .event-log-title {
+      color: var(--gold);
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .event-log-desc {
+      color: var(--text-gray);
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+
+    .event-log-time {
+      color: #888;
+      font-size: 0.75rem;
+      font-style: italic;
+    }
+
+    /* Back Link */
+    .back-link {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .back-link a {
+      color: var(--blue-link);
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .back-link a:hover {
+      color: var(--gold);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <!-- Header -->
+    <div class="game-header">
+      <h1>⚔️ Medieval Kingdom Simulator ⚔️</h1>
+      <p>Build your settlement, manage resources, and survive the test of time</p>
+    </div>
+
+    <!-- Stats Panel -->
+    <div class="stats-panel">
+      <div class="stat-card">
+        <div class="stat-label">💰 Gold</div>
+        <div class="stat-value" id="gold">100</div>
+        <div class="stat-rate" id="goldRate">+0/sec</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">🌾 Food</div>
+        <div class="stat-value" id="food">0</div>
+        <div class="stat-rate" id="foodRate">+0/sec</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">👥 Population</div>
+        <div class="stat-value" id="population">0</div>
+        <div class="stat-rate" id="popRate">+0/sec</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">⏱️ Time Survived</div>
+        <div class="stat-value" id="time">0s</div>
+      </div>
+    </div>
+
+    <!-- Kingdom Summary -->
+    <div class="kingdom-summary">
+      <h2 class="section-title">📊 Kingdom Overview</h2>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <h4>👥 Population: <span id="summaryPopulation">0</span></h4>
+          <p>Tax Income: <span id="summaryTaxIncome">+0/sec</span></p>
+          <p>Food Consumption: <span id="summaryFoodConsume">-0/sec</span></p>
+        </div>
+        <div class="summary-item">
+          <h4>🌾 Farms: <span id="summaryFarms">0</span></h4>
+          <p><span id="summaryFoodProd">Net: +0/sec (0 - 0)</span></p>
+        </div>
+        <div class="summary-item">
+          <h4>🏠 Houses: <span id="summaryHouses">0</span></h4>
+          <p>Population Capacity: <span id="summaryPopCap">0</span></p>
+        </div>
+        <div class="summary-item">
+          <h4>🏪 Markets: <span id="summaryMarkets">0</span></h4>
+          <p>Market Income: <span id="summaryGoldIncome">+0/sec</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Log -->
+    <div class="event-log-section">
+      <h2 class="section-title">📜 Recent Events</h2>
+      <div class="event-log" id="eventLog">
+        <p class="event-log-empty">No events yet. Your kingdom awaits its fate...</p>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Buildings -->
+      <div class="buildings-section">
+        <h2 class="section-title">🏰 Buildings</h2>
+        <div class="building-grid">
+          <!-- Farm -->
+          <div class="building-card">
+            <div class="building-info">
+              <h3>🌾 Farm</h3>
+              <p>Produces food for your people</p>
+              <p style="color: var(--gold); font-size: 0.85rem;">Cost: 50 Gold | +0.5 Food/sec</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="building-count" id="farmCount">0</span>
+              <button class="buy-btn" onclick="buyBuilding('farm')">Build</button>
+            </div>
+          </div>
+
+          <!-- House -->
+          <div class="building-card">
+            <div class="building-info">
+              <h3>🏠 House</h3>
+              <p>Increases population capacity</p>
+              <p style="color: var(--gold); font-size: 0.85rem;">Cost: 40 Gold | +5 Max Pop</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="building-count" id="houseCount">0</span>
+              <button class="buy-btn" onclick="buyBuilding('house')">Build</button>
+            </div>
+          </div>
+
+          <!-- Market -->
+          <div class="building-card">
+            <div class="building-info">
+              <h3>🏪 Market</h3>
+              <p>Generates passive gold income</p>
+              <p style="color: var(--gold); font-size: 0.85rem;">Cost: 60 Gold | +0.2 Gold/sec</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="building-count" id="marketCount">0</span>
+              <button class="buy-btn" onclick="buyBuilding('market')">Build</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trade -->
+      <div class="trade-section">
+        <h2 class="section-title">💱 Trade Market</h2>
+        <div class="trade-controls">
+          <div class="trade-input-group">
+            <input 
+              type="number" 
+              class="trade-input" 
+              id="sellAmount" 
+              placeholder="Amount of food to sell"
+              min="0"
+              value="10"
+            >
+          </div>
+          <button class="trade-btn" id="sellBtn" onclick="sellFood()">
+            Sell Food (1 Food = 0.5 Gold)
+          </button>
+          <div class="quick-sell-buttons">
+            <button class="quick-sell-btn" onclick="quickSell(10)">10</button>
+            <button class="quick-sell-btn" onclick="quickSell(25)">25</button>
+            <button class="quick-sell-btn" onclick="quickSell(50)">50</button>
+            <button class="quick-sell-btn" onclick="quickSell('all')">All</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back Link -->
+    <div class="back-link">
+      <a href="index.html">← Back to Eredhar Studios</a>
+    </div>
+  </div>
+
+  <!-- Event Popup -->
+  <div class="event-popup" id="eventPopup">
+    <div class="event-popup-content">
+      <h2 id="eventTitle" class="event-title">Event Title</h2>
+      <p id="eventDescription" class="event-description">Event description goes here.</p>
+      <div id="eventChoices" class="event-choices"></div>
+    </div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div class="game-over" id="gameOver">
+    <div class="game-over-content">
+      <h2>Kingdom Fallen</h2>
+      <p>Your kingdom has perished...</p>
+      <p id="finalStats"></p>
+      <button class="restart-btn" onclick="restartGame()">Build Anew</button>
+    </div>
+  </div>
+
+  <script>
+    // Game State
+    let gameState = {
+      gold: 100,
+      food: 0,
+      population: 0,
+      maxPopulation: 25, // Starting capacity for initial settlers
+      buildings: {
+        farm: 0,
+        house: 0,
+        market: 0
+      },
+      time: 0,
+      gameOver: false,
+      hasHadPopulation: false, // Track if player ever had population
+      paused: false, // Track if game is paused due to tab switching
+      lastEventTime: 0, // Track when last event occurred
+      nextEventInterval: 30 + Math.random() * 30, // Pre-calculated next event interval (30-60 sec)
+      activeEvent: null, // Currently displayed event
+      eventLog: [], // History of recent events (last 8)
+      lastSaveTime: Date.now(), // Timestamp for offline progression
+      totalTimePlayed: 0, // Track total time played
+      statistics: {
+        totalGoldEarned: 0,
+        totalFoodProduced: 0,
+        totalBuildingsBuilt: 0,
+        maxPopulationReached: 0,
+        longestSurvival: 0
+      }
+    };
+
+    let gameInterval = null; // Store interval ID for pausing
+    const SAVE_INTERVAL = 10000; // Auto-save every 10 seconds
+    const MAX_OFFLINE_TIME = 28800; // Cap offline gains at 8 hours (in seconds)
+
+    // Save Game to LocalStorage
+    function saveGame() {
+      try {
+        gameState.lastSaveTime = Date.now();
+        const saveData = JSON.stringify(gameState);
+        localStorage.setItem('medievalKingdomSave', saveData);
+      } catch (e) {
+        console.error('Failed to save game:', e);
+      }
+    }
+
+    // Load Game from LocalStorage
+    function loadGame() {
+      try {
+        const saveData = localStorage.getItem('medievalKingdomSave');
+        if (saveData) {
+          const loaded = JSON.parse(saveData);
+          
+          // Calculate offline progression
+          const now = Date.now();
+          const timeSinceLastSave = (now - loaded.lastSaveTime) / 1000; // Convert to seconds
+          
+          if (timeSinceLastSave > 5) { // Only if away for more than 5 seconds
+            calculateOfflineProgress(loaded, timeSinceLastSave);
+          }
+          
+          // Restore game state (but not activeEvent, keep it null)
+          Object.assign(gameState, loaded);
+          gameState.activeEvent = null; // Never restore active events
+          gameState.paused = false; // Never start paused
+          
+          return true;
+        }
+      } catch (e) {
+        console.error('Failed to load game:', e);
+      }
+      return false;
+    }
+
+    // Calculate Offline Progress
+    function calculateOfflineProgress(savedState, timeAway) {
+      const cappedTime = Math.min(timeAway, MAX_OFFLINE_TIME);
+      
+      // Calculate rates based on saved state
+      const farmRate = savedState.buildings.farm * 0.5;
+      const marketRate = savedState.buildings.market * 0.2;
+      const popTax = savedState.population * 0.05;
+      const foodConsumption = savedState.population * 0.1;
+      
+      const netFoodRate = farmRate - foodConsumption;
+      const netGoldRate = marketRate + popTax;
+      
+      // Calculate offline gains
+      const offlineGold = Math.max(0, netGoldRate * cappedTime);
+      const offlineFood = Math.max(0, netFoodRate * cappedTime);
+      
+      // Calculate population growth (simplified - no events)
+      let offlinePopulation = 0;
+      // Only grow if we have food and space
+      if (savedState.food > 20 && savedState.population < savedState.maxPopulation) {
+        const avgPopGrowth = 0.1; // Average growth rate
+        offlinePopulation = Math.min(
+          avgPopGrowth * cappedTime,
+          savedState.maxPopulation - savedState.population
+        );
+      }
+      
+      // Show welcome back popup
+      showWelcomeBack(cappedTime, offlineGold, offlineFood, offlinePopulation);
+      
+      // Apply offline gains to saved state
+      savedState.gold += offlineGold;
+      savedState.food += offlineFood;
+      savedState.population = Math.min(
+        savedState.population + offlinePopulation,
+        savedState.maxPopulation
+      );
+      savedState.time += cappedTime;
+      savedState.totalTimePlayed += cappedTime;
+      
+      // Update statistics
+      savedState.statistics.totalGoldEarned += offlineGold;
+      savedState.statistics.totalFoodProduced += offlineFood;
+      savedState.statistics.maxPopulationReached = Math.max(
+        savedState.statistics.maxPopulationReached,
+        Math.floor(savedState.population)
+      );
+    }
+
+    // Show Welcome Back Popup
+    function showWelcomeBack(timeAway, gold, food, population) {
+      const popup = document.getElementById('eventPopup');
+      document.getElementById('eventTitle').textContent = '🏰 Welcome Back!';
+      
+      const timeAwayFormatted = formatTime(timeAway);
+      let description = `You were away for ${timeAwayFormatted}.\n\nWhile you were gone, your kingdom produced:\n\n`;
+      
+      if (gold > 0) description += `💰 +${Math.floor(gold)} Gold\n`;
+      if (food > 0) description += `🌾 +${Math.floor(food)} Food\n`;
+      if (population > 0) description += `👥 +${Math.floor(population)} Population\n`;
+      
+      if (gold === 0 && food === 0 && population === 0) {
+        description = `You were away for ${timeAwayFormatted}.\n\nYour kingdom maintained its current state.`;
+      }
+      
+      document.getElementById('eventDescription').textContent = description;
+      
+      const choicesDiv = document.getElementById('eventChoices');
+      choicesDiv.innerHTML = '';
+      
+      const button = document.createElement('button');
+      button.className = 'event-choice-btn';
+      button.textContent = 'Continue Ruling';
+      button.onclick = () => {
+        popup.classList.remove('active');
+        gameState.paused = false;
+      };
+      
+      choicesDiv.appendChild(button);
+      popup.classList.add('active');
+      gameState.paused = true;
+    }
+
+    // Format time into readable units
+    function formatTime(seconds) {
+      const totalSeconds = Math.floor(seconds);
+      
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const secs = totalSeconds % 60;
+      
+      if (days > 0) {
+        return `${days}d ${hours}h ${minutes}m`;
+      } else if (hours > 0) {
+        return `${hours}h ${minutes}m ${secs}s`;
+      } else if (minutes > 0) {
+        return `${minutes}m ${secs}s`;
+      } else {
+        return `${secs}s`;
+      }
+    }
+
+    // Random Events System
+    const randomEvents = [
+      // Good Events
+      {
+        id: 'abundant_harvest',
+        title: '🌾 Abundant Harvest',
+        description: 'Your farms have yielded an exceptional harvest this season!',
+        effect: () => {
+          gameState.food += 50;
+        },
+        weight: 15
+      },
+      {
+        id: 'traveling_merchant',
+        title: '💰 Traveling Merchant',
+        description: 'A wealthy merchant passes through, offering to buy your goods.',
+        choices: [
+          {
+            text: 'Sell 30 Food for 20 Gold',
+            condition: () => gameState.food >= 30,
+            effect: () => {
+              gameState.food -= 30;
+              gameState.gold += 20;
+            }
+          },
+          {
+            text: 'Politely decline',
+            effect: () => {}
+          }
+        ],
+        weight: 12
+      },
+      {
+        id: 'refugees',
+        title: '👥 Refugees Arrive',
+        description: 'A group of refugees from a distant land seeks shelter in your kingdom.',
+        choices: [
+          {
+            text: 'Welcome them (+5 Population, -20 Food)',
+            condition: () => gameState.food >= 20,
+            effect: () => {
+              gameState.population += 5; // Always add full amount, allow overflow
+              gameState.food -= 20;
+              // Temporarily increase maxPopulation if needed
+              if (gameState.population > gameState.maxPopulation) {
+                gameState.maxPopulation = gameState.population;
+              }
+            }
+          },
+          {
+            text: 'Turn them away',
+            effect: () => {}
+          }
+        ],
+        weight: 10
+      },
+      {
+        id: 'gold_discovery',
+        title: '✨ Gold Discovery',
+        description: 'Your people discover a small cache of gold while working the fields!',
+        effect: () => {
+          gameState.gold += 30;
+        },
+        weight: 8
+      },
+      // Bad Events
+      {
+        id: 'harsh_winter',
+        title: '❄️ Harsh Winter',
+        description: 'An unexpectedly harsh winter destroys part of your food stores.',
+        effect: () => {
+          const loss = Math.floor(gameState.food * 0.3);
+          gameState.food -= loss;
+        },
+        weight: 10
+      },
+      {
+        id: 'disease_outbreak',
+        title: '💀 Disease Outbreak',
+        description: 'A sickness spreads through your population!',
+        effect: () => {
+          const loss = Math.floor(gameState.population * 0.2);
+          gameState.population -= loss;
+        },
+        condition: () => gameState.population >= 5,
+        weight: 8
+      },
+      {
+        id: 'bandit_raid',
+        title: '⚔️ Bandit Raid',
+        description: 'Bandits raid your kingdom, stealing resources!',
+        effect: () => {
+          gameState.gold = Math.max(0, gameState.gold - 25);
+          gameState.food = Math.max(0, gameState.food - 15);
+        },
+        condition: () => gameState.gold >= 10 || gameState.food >= 10,
+        weight: 12
+      },
+      {
+        id: 'farm_fire',
+        title: '🔥 Farm Fire',
+        description: 'A fire breaks out in one of your farms, destroying crops!',
+        effect: () => {
+          gameState.food = Math.max(0, gameState.food - 30);
+        },
+        condition: () => gameState.buildings.farm >= 1,
+        weight: 9
+      },
+      // Neutral/Choice Events
+      {
+        id: 'wandering_scholar',
+        title: '📜 Wandering Scholar',
+        description: 'A scholar offers to teach your people farming techniques for a fee.',
+        choices: [
+          {
+            text: 'Pay 40 Gold (+0.2 food/farm temporarily)',
+            condition: () => gameState.gold >= 40,
+            effect: () => {
+              gameState.gold -= 40;
+              gameState.food += 20; // Immediate bonus
+            }
+          },
+          {
+            text: 'Decline the offer',
+            effect: () => {}
+          }
+        ],
+        weight: 8
+      },
+      {
+        id: 'festival_proposal',
+        title: '🎭 Festival Proposal',
+        description: 'Your people wish to hold a festival to boost morale.',
+        choices: [
+          {
+            text: 'Host Festival (30 Food, 20 Gold) - Attract +3 settlers',
+            condition: () => gameState.food >= 30 && gameState.gold >= 20,
+            effect: () => {
+              gameState.food -= 30;
+              gameState.gold -= 20;
+              gameState.population += 3; // Always add full amount
+              // Temporarily increase maxPopulation if needed
+              if (gameState.population > gameState.maxPopulation) {
+                gameState.maxPopulation = gameState.population;
+              }
+            }
+          },
+          {
+            text: 'Times are too hard for festivities',
+            effect: () => {}
+          }
+        ],
+        condition: () => gameState.population >= 10,
+        weight: 7
+      }
+    ];
+
+    // Trigger random event
+    function triggerRandomEvent() {
+      // Filter events that meet their conditions
+      const availableEvents = randomEvents.filter(event => 
+        !event.condition || event.condition()
+      );
+      
+      if (availableEvents.length === 0) return;
+      
+      // Weighted random selection
+      const totalWeight = availableEvents.reduce((sum, event) => sum + event.weight, 0);
+      let random = Math.random() * totalWeight;
+      
+      for (const event of availableEvents) {
+        random -= event.weight;
+        if (random <= 0) {
+          showEvent(event);
+          break;
+        }
+      }
+    }
+
+    // Show event popup
+    function showEvent(event) {
+      gameState.activeEvent = event;
+      gameState.paused = true; // Pause game during event
+      
+      // Add event to log
+      addEventToLog(event);
+      
+      const popup = document.getElementById('eventPopup');
+      document.getElementById('eventTitle').textContent = event.title;
+      document.getElementById('eventDescription').textContent = event.description;
+      
+      const choicesDiv = document.getElementById('eventChoices');
+      choicesDiv.innerHTML = '';
+      
+      if (event.choices) {
+        // Event has choices
+        event.choices.forEach((choice, index) => {
+          const button = document.createElement('button');
+          button.className = 'event-choice-btn';
+          
+          // Check if condition is met
+          const canChoose = !choice.condition || choice.condition();
+          
+          if (!canChoose) {
+            button.disabled = true;
+            button.style.opacity = '0.5';
+            // Add requirement hint
+            let requirement = '';
+            if (choice.text.includes('Food')) {
+              const foodMatch = choice.text.match(/(\d+)\s*Food/);
+              if (foodMatch && gameState.food < parseInt(foodMatch[1])) {
+                requirement = ` (Need ${foodMatch[1]} Food, have ${Math.floor(gameState.food)})`;
+              }
+            }
+            if (choice.text.includes('Gold')) {
+              const goldMatch = choice.text.match(/(\d+)\s*Gold/);
+              if (goldMatch && gameState.gold < parseInt(goldMatch[1])) {
+                requirement = ` (Need ${goldMatch[1]} Gold, have ${Math.floor(gameState.gold)})`;
+              }
+            }
+            button.textContent = choice.text + requirement;
+          } else {
+            button.textContent = choice.text;
+          }
+          
+          button.onclick = () => {
+            if (canChoose) {
+              choice.effect();
+              closeEvent();
+            }
+          };
+          
+          choicesDiv.appendChild(button);
+        });
+      } else {
+        // Simple event with just "Continue" button
+        const button = document.createElement('button');
+        button.className = 'event-choice-btn';
+        button.textContent = 'Continue';
+        button.onclick = () => {
+          event.effect();
+          closeEvent();
+        };
+        choicesDiv.appendChild(button);
+      }
+      
+      popup.classList.add('active');
+    }
+
+    // Add event to log
+    function addEventToLog(event) {
+      // Determine event type for color coding
+      let eventType = 'neutral';
+      if (['abundant_harvest', 'traveling_merchant', 'refugees', 'gold_discovery'].includes(event.id)) {
+        eventType = 'positive';
+      } else if (['harsh_winter', 'disease_outbreak', 'bandit_raid', 'farm_fire'].includes(event.id)) {
+        eventType = 'negative';
+      }
+      
+      const logEntry = {
+        title: event.title,
+        description: event.description,
+        time: formatTime(gameState.time),
+        type: eventType
+      };
+      
+      // Add to front of log (newest first)
+      gameState.eventLog.unshift(logEntry);
+      
+      // Keep only last 8 events
+      if (gameState.eventLog.length > 8) {
+        gameState.eventLog.pop();
+      }
+      
+      updateEventLog();
+    }
+
+    // Update event log display
+    function updateEventLog() {
+      const logDiv = document.getElementById('eventLog');
+      
+      if (gameState.eventLog.length === 0) {
+        logDiv.innerHTML = '<p class="event-log-empty">No events yet. Your kingdom awaits its fate...</p>';
+        return;
+      }
+      
+      logDiv.innerHTML = '';
+      
+      gameState.eventLog.forEach(entry => {
+        const entryDiv = document.createElement('div');
+        entryDiv.className = `event-log-entry ${entry.type}`;
+        
+        // Create title element
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'event-log-title';
+        titleDiv.textContent = entry.title;
+        
+        // Create description element
+        const descDiv = document.createElement('div');
+        descDiv.className = 'event-log-desc';
+        descDiv.textContent = entry.description;
+        
+        // Create time element
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'event-log-time';
+        timeDiv.textContent = `Time: ${entry.time}`;
+        
+        // Append all elements
+        entryDiv.appendChild(titleDiv);
+        entryDiv.appendChild(descDiv);
+        entryDiv.appendChild(timeDiv);
+        
+        logDiv.appendChild(entryDiv);
+      });
+    }
+
+    // Close event popup
+    function closeEvent() {
+      document.getElementById('eventPopup').classList.remove('active');
+      gameState.activeEvent = null;
+      gameState.paused = false; // Resume game
+      updateDisplay();
+    }
+
+    // Building Costs and Effects
+    const buildings = {
+      farm: { cost: 50, foodRate: 0.5 },
+      house: { cost: 40, popIncrease: 5 },
+      market: { cost: 60, goldRate: 0.2 }
+    };
+
+    // Population Growth Rate (Settlement System)
+    function getPopGrowthRate() {
+      // Can't have negative population
+      if (gameState.population < 0) return 0;
+      
+      // Starvation - population dies
+      if (gameState.food < 10) return -0.5;
+      
+      // Can't exceed max population (natural growth only, events can overflow)
+      if (gameState.population >= gameState.maxPopulation) return 0;
+      
+      // Settlement rate based on food security
+      const food = gameState.food;
+      if (food < 20) return 0;        // No settlers - too risky
+      if (food < 50) return 0.05;     // Slow arrival
+      if (food < 100) return 0.1;     // Steady flow
+      return 0.2;                      // Rapid settlement
+    }
+
+    // Calculate Rates
+    function calculateRates() {
+      const foodRate = gameState.buildings.farm * buildings.farm.foodRate - gameState.population * 0.1;
+      const goldRate = gameState.buildings.market * buildings.market.goldRate + gameState.population * 0.05; // Markets + Population Tax
+      const popRate = getPopGrowthRate();
+      
+      return { foodRate, goldRate, popRate };
+    }
+
+    // Buy Building
+    function buyBuilding(type) {
+      const cost = buildings[type].cost;
+      
+      if (gameState.gold >= cost && !gameState.gameOver) {
+        gameState.gold -= cost;
+        gameState.buildings[type]++;
+        gameState.statistics.totalBuildingsBuilt++;
+        
+        if (type === 'house') {
+          gameState.maxPopulation += buildings.house.popIncrease;
+        }
+        
+        saveGame(); // Save after building
+        updateDisplay();
+      }
+    }
+
+    // Sell Food
+    function sellFood() {
+      const amount = parseInt(document.getElementById('sellAmount').value) || 0;
+      
+      if (amount > 0 && amount <= gameState.food && !gameState.gameOver) {
+        gameState.food -= amount;
+        gameState.gold += amount * 0.5;
+        saveGame(); // Save after selling
+        updateDisplay();
+      }
+    }
+
+    // Quick Sell
+    function quickSell(amount) {
+      if (amount === 'all') {
+        document.getElementById('sellAmount').value = Math.floor(gameState.food);
+      } else {
+        document.getElementById('sellAmount').value = amount;
+      }
+      sellFood();
+    }
+
+    // Update Display
+    function updateDisplay() {
+      const rates = calculateRates();
+      
+      // Update stats
+      document.getElementById('gold').textContent = Math.floor(gameState.gold);
+      document.getElementById('food').textContent = Math.floor(gameState.food);
+      document.getElementById('population').textContent = Math.floor(gameState.population);
+      document.getElementById('time').textContent = formatTime(gameState.time);
+      
+      // Update rates
+      document.getElementById('goldRate').textContent = `${rates.goldRate >= 0 ? '+' : ''}${rates.goldRate.toFixed(1)}/sec`;
+      document.getElementById('foodRate').textContent = `${rates.foodRate >= 0 ? '+' : ''}${rates.foodRate.toFixed(1)}/sec`;
+      document.getElementById('popRate').textContent = `${rates.popRate >= 0 ? '+' : ''}${rates.popRate.toFixed(2)}/sec`;
+      
+      // Update kingdom summary
+      const foodProduction = gameState.buildings.farm * buildings.farm.foodRate;
+      const foodConsumption = gameState.population * 0.1;
+      const netFood = foodProduction - foodConsumption;
+      const taxIncome = gameState.population * 0.05;
+      
+      document.getElementById('summaryPopulation').textContent = Math.floor(gameState.population);
+      document.getElementById('summaryTaxIncome').textContent = `+${taxIncome.toFixed(2)}/sec`;
+      document.getElementById('summaryFoodConsume').textContent = `-${foodConsumption.toFixed(1)}/sec`;
+      document.getElementById('summaryFarms').textContent = gameState.buildings.farm;
+      document.getElementById('summaryHouses').textContent = gameState.buildings.house;
+      document.getElementById('summaryMarkets').textContent = gameState.buildings.market;
+      document.getElementById('summaryFoodProd').textContent = 
+        `Net: ${netFood >= 0 ? '+' : ''}${netFood.toFixed(1)}/sec (${foodProduction.toFixed(1)} - ${foodConsumption.toFixed(1)})`;
+      document.getElementById('summaryPopCap').textContent = gameState.maxPopulation;
+      document.getElementById('summaryGoldIncome').textContent = `+${(gameState.buildings.market * buildings.market.goldRate).toFixed(1)}/sec`;
+      
+      // Update building counts
+      document.getElementById('farmCount').textContent = gameState.buildings.farm;
+      document.getElementById('houseCount').textContent = gameState.buildings.house;
+      document.getElementById('marketCount').textContent = gameState.buildings.market;
+      
+      // Update button states
+      document.querySelectorAll('.buy-btn').forEach((btn, index) => {
+        const types = ['farm', 'house', 'market'];
+        btn.disabled = gameState.gold < buildings[types[index]].cost;
+      });
+      
+      // Update sell button
+      const sellAmount = parseInt(document.getElementById('sellAmount').value) || 0;
+      document.getElementById('sellBtn').disabled = sellAmount <= 0 || sellAmount > gameState.food;
+      document.getElementById('sellBtn').textContent = 
+        `Sell ${sellAmount} Food → +${(sellAmount * 0.5).toFixed(1)} Gold`;
+    }
+
+    // Game Loop
+    function gameLoop() {
+      if (gameState.gameOver || gameState.paused) return;
+      
+      const rates = calculateRates();
+      const delta = 0.1; // 100ms updates
+      
+      // Track previous values for statistics
+      const prevGold = gameState.gold;
+      const prevFood = gameState.food;
+      
+      // Update resources
+      gameState.gold += rates.goldRate * delta;
+      gameState.food += rates.foodRate * delta;
+      gameState.population += rates.popRate * delta;
+      gameState.time += delta;
+      gameState.totalTimePlayed += delta;
+      
+      // Update statistics
+      if (gameState.gold > prevGold) {
+        gameState.statistics.totalGoldEarned += (gameState.gold - prevGold);
+      }
+      if (gameState.food > prevFood) {
+        gameState.statistics.totalFoodProduced += (gameState.food - prevFood);
+      }
+      gameState.statistics.maxPopulationReached = Math.max(
+        gameState.statistics.maxPopulationReached,
+        Math.floor(gameState.population)
+      );
+      gameState.statistics.longestSurvival = Math.max(
+        gameState.statistics.longestSurvival,
+        Math.floor(gameState.time)
+      );
+      
+      // Clamp values
+      gameState.gold = Math.max(0, gameState.gold);
+      gameState.food = Math.max(0, gameState.food);
+      gameState.population = Math.max(0, Math.min(gameState.population, gameState.maxPopulation));
+      
+      // Track if player has ever had population
+      if (gameState.population >= 1) {
+        gameState.hasHadPopulation = true;
+      }
+      
+      // Auto-save every SAVE_INTERVAL
+      if (Math.floor(gameState.time * 10) % (SAVE_INTERVAL / 100) === 0) {
+        saveGame();
+      }
+      
+      // Random Events - trigger based on pre-calculated interval
+      const timeSinceLastEvent = gameState.time - gameState.lastEventTime;
+      
+      if (timeSinceLastEvent >= gameState.nextEventInterval && !gameState.activeEvent && gameState.time > 10) {
+        triggerRandomEvent();
+        gameState.lastEventTime = gameState.time;
+        gameState.nextEventInterval = 30 + Math.random() * 30; // Set next interval (30-60 sec)
+      }
+      
+      // Check game over - Only if you HAD population that then died
+      if (gameState.hasHadPopulation && gameState.population < 0.1) {
+        endGame();
+      }
+      
+      updateDisplay();
+    }
+
+    // End Game
+    function endGame() {
+      gameState.gameOver = true;
+      clearInterval(gameInterval); // Stop game loop properly
+      document.getElementById('finalStats').innerHTML = 
+        `You survived <strong style="color: var(--gold)">${formatTime(gameState.time)}</strong><br>` +
+        `Built <strong style="color: var(--gold)">${gameState.buildings.farm + gameState.buildings.house + gameState.buildings.market}</strong> buildings<br>` +
+        `Reached <strong style="color: var(--gold)">${Math.floor(gameState.population)}</strong> population`;
+      document.getElementById('gameOver').classList.add('active');
+    }
+
+    // Restart Game
+    function restartGame() {
+      // Clear saved game
+      localStorage.removeItem('medievalKingdomSave');
+      
+      gameState = {
+        gold: 100,
+        food: 0,
+        population: 0,
+        maxPopulation: 25, // Starting capacity for initial settlers
+        buildings: {
+          farm: 0,
+          house: 0,
+          market: 0
+        },
+        time: 0,
+        gameOver: false,
+        hasHadPopulation: false, // Reset population tracking
+        paused: false, // Reset pause state
+        lastEventTime: 0, // Reset event timer
+        nextEventInterval: 30 + Math.random() * 30, // New random interval
+        activeEvent: null, // Clear active event
+        eventLog: [], // Clear event log
+        lastSaveTime: Date.now(),
+        totalTimePlayed: 0,
+        statistics: {
+          totalGoldEarned: 0,
+          totalFoodProduced: 0,
+          totalBuildingsBuilt: 0,
+          maxPopulationReached: 0,
+          longestSurvival: 0
+        }
+      };
+      document.getElementById('gameOver').classList.remove('active');
+      document.getElementById('eventPopup').classList.remove('active');
+      updateEventLog(); // Reset log display
+      updateDisplay();
+      // Restart game loop
+      gameInterval = setInterval(gameLoop, 100);
+      saveGame(); // Save the fresh state
+    }
+
+    // Update sell button dynamically
+    document.getElementById('sellAmount').addEventListener('input', updateDisplay);
+
+    // Pause/Resume game functions
+    function pauseGame() {
+      gameState.paused = true;
+    }
+
+    function resumeGame() {
+      gameState.paused = false;
+    }
+
+    // Load saved game on startup
+    const hasLoadedGame = loadGame();
+    
+    // Start game loop
+    gameInterval = setInterval(gameLoop, 100);
+    updateEventLog(); // Initialize event log
+    updateDisplay();
+  </script>
+</body>
+</html>
