@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Medieval Kingdom Simulator | Eredhar Studios</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="hero">
+    <img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios Logo" class="logo" />
+    <p class="tagline">Forging Worlds of Wonder</p>
+  </header>
+  <main>
+    <section class="about">
+      <h2>Medieval Kingdom Simulator</h2>
+      <p><strong>Status:</strong> Playable (Browser Game)</p>
+      <p>Build your medieval settlement from the ground up in this immersive kingdom management simulator. Start with nothing but gold and ambition, then construct farms, houses, and markets to attract settlers and grow your population. Manage your resources carefully as you balance food production, gold income, and population growth.</p>
+      <p>Face random events that will test your leadership—from abundant harvests and traveling merchants to harsh winters and bandit raids. Each decision matters as you guide your kingdom through prosperity and peril. Will your kingdom stand the test of time, or will it fall to starvation and ruin?</p>
+      
+      <div class="book-entry project-entry">
+        <img src="../assets/images/medieval-simulator.jpg" alt="Medieval Kingdom Simulator" class="book-cover">
+        <div class="book-info">
+          <h3>Play Medieval Kingdom Simulator</h3>
+          <p><strong>Features:</strong></p>
+          <ul style="text-align: left; color: #ddd; margin: 10px 0;">
+            <li>⚔️ Build and manage your medieval settlement</li>
+            <li>🌾 Balance food production, gold, and population</li>
+            <li>🎲 Dynamic random events that shape your kingdom</li>
+            <li>📈 Track your kingdom's progress and survival time</li>
+            <li>🏰 Three building types with unique benefits</li>
+          </ul>
+          <a href="../medieval-simulator.html" target="_blank">Play Now in Browser</a>
+        </div>
+      </div>
+      
+      <p><a href="../index.html">← Back to Home</a></p>
+    </section>
+  </main>
+  <footer><p>© 2025 Eredhar Studios. All rights reserved.</p></footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero');
+      let hasShrunk = false;
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 120) {
+          if (!hasShrunk) { hero.classList.add('shrink'); hasShrunk = true; }
+        } else {
+          if (hasShrunk) { hero.classList.remove('shrink'); hasShrunk = false; }
+        }
+      }, { passive: true });
+    });
+  </script>
+</body>
+</html>
