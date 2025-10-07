@@ -1,0 +1,3242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medieval Kingdom Simulator | Eredhar Studios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* Eredhar Studios Theme Variables */
+    :root {
+      --bg-dark: #0e0e14;
+      --bg-card: #161621;
+      --bg-header: #1a1a25;
+      --gold: #ffe082;
+      --gold-hover: #ffcc33;
+      --blue-link: #81d4fa;
+      --purple: #ba68c8;
+      --purple-hover: #ab47bc;
+      --text-light: #f5f5f5;
+      --text-gray: #ccc;
+      --border-gold: 2px solid #ffe082;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Playfair Display', serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .game-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .game-header {
+      text-align: center;
+      background-color: var(--bg-header);
+      padding: 30px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      margin-bottom: 30px;
+    }
+
+    .game-header h1 {
+      color: var(--gold);
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .game-header p {
+      color: var(--text-gray);
+      font-style: italic;
+      font-size: 1.1rem;
+    }
+
+    /* Stats Panel */
+    .stats-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    /* Kingdom Summary */
+    .kingdom-summary {
+      background-color: var(--bg-card);
+      padding: 25px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      margin-bottom: 30px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .summary-item {
+      background-color: var(--bg-header);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 224, 130, 0.3);
+    }
+
+    .summary-item h4 {
+      color: var(--gold);
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .summary-item p {
+      color: var(--text-gray);
+      font-size: 0.9rem;
+      margin: 3px 0;
+    }
+
+    .stat-card {
+      background-color: var(--bg-card);
+      padding: 20px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(255, 224, 130, 0.3);
+    }
+
+    .stat-label {
+      color: var(--gold);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--text-light);
+    }
+
+    .stat-rate {
+      font-size: 0.85rem;
+      color: var(--text-gray);
+      margin-top: 5px;
+      font-style: italic;
+    }
+
+    /* Main Content Grid */
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Buildings Section */
+    .buildings-section, .trade-section {
+      background-color: var(--bg-card);
+      padding: 25px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .section-title {
+      color: var(--gold);
+      font-size: 1.4rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .building-grid {
+      display: grid;
+      gap: 15px;
+    }
+
+    .building-card {
+      background-color: var(--bg-header);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 224, 130, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .building-card:hover {
+      background-color: #29293d;
+    }
+
+    .building-info h3 {
+      color: var(--gold);
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    .building-info p {
+      color: var(--text-gray);
+      font-size: 0.9rem;
+    }
+
+    .building-count {
+      color: var(--gold);
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .buy-btn {
+      background-color: var(--gold);
+      color: var(--bg-dark);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+    }
+
+    .buy-btn:hover {
+      background-color: var(--gold-hover);
+    }
+
+    .buy-btn:active {
+      transform: scale(0.95);
+    }
+
+    .buy-btn:disabled {
+      background-color: #555;
+      color: #888;
+      cursor: not-allowed;
+    }
+
+    /* Trade Section */
+    .trade-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .trade-input-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .trade-input {
+      flex: 1;
+      background-color: var(--bg-header);
+      border: 1px solid var(--gold);
+      color: var(--text-light);
+      padding: 10px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+    }
+
+    .trade-input:focus {
+      outline: none;
+      border-color: var(--gold-hover);
+      box-shadow: 0 0 10px rgba(255, 224, 130, 0.3);
+    }
+
+    .trade-btn {
+      background-color: var(--blue-link);
+      color: var(--bg-dark);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      flex: 2;
+    }
+
+    .trade-btn:hover {
+      background-color: #4fc3f7;
+    }
+
+    .trade-btn:disabled {
+      background-color: #555;
+      color: #888;
+      cursor: not-allowed;
+    }
+
+    .quick-sell-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .quick-sell-btn {
+      background-color: var(--bg-header);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 8px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .quick-sell-btn:hover {
+      background-color: var(--gold);
+      color: var(--bg-dark);
+    }
+
+    /* Game Over Screen */
+    .game-over {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .game-over.active {
+      display: flex;
+    }
+
+    .game-over-content {
+      background-color: var(--bg-card);
+      padding: 40px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      text-align: center;
+      max-width: 500px;
+      box-shadow: 0 0 50px rgba(255, 224, 130, 0.5);
+    }
+
+    .game-over-content h2 {
+      color: var(--gold);
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .game-over-content p {
+      color: var(--text-gray);
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+
+    .restart-btn {
+      background-color: var(--gold);
+      color: var(--bg-dark);
+      border: none;
+      padding: 15px 40px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .restart-btn:hover {
+      background-color: var(--gold-hover);
+    }
+
+    /* Event Popup */
+    .event-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .event-popup.active {
+      display: flex;
+    }
+
+    .event-popup-content {
+      background-color: var(--bg-card);
+      padding: 40px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      text-align: center;
+      max-width: 500px;
+      box-shadow: 0 0 50px rgba(255, 224, 130, 0.5);
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .event-title {
+      color: var(--gold);
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .event-description {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .event-choices {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .event-choice-btn {
+      background-color: var(--gold);
+      color: var(--bg-dark);
+      border: none;
+      padding: 15px 30px;
+      border-radius: 6px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .event-choice-btn:hover:not(:disabled) {
+      background-color: var(--gold-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 224, 130, 0.3);
+    }
+
+    .event-choice-btn:disabled {
+      background-color: #555;
+      color: #888;
+      cursor: not-allowed;
+    }
+
+    /* Event Log Section */
+    .event-log-section {
+      background-color: var(--bg-card);
+      padding: 25px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      margin-bottom: 30px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .event-log {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      background-color: var(--bg-header);
+      border-radius: 8px;
+    }
+
+    .event-log::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .event-log::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+      border-radius: 4px;
+    }
+
+    .event-log::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 4px;
+    }
+
+    .event-log::-webkit-scrollbar-thumb:hover {
+      background: var(--gold-hover);
+    }
+
+    .event-log-empty {
+      color: var(--text-gray);
+      font-style: italic;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .event-log-entry {
+      background-color: var(--bg-card);
+      padding: 12px 15px;
+      border-radius: 6px;
+      border-left: 4px solid var(--gold);
+      animation: slideInLog 0.3s ease;
+    }
+
+    @keyframes slideInLog {
+      from { 
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+    }
+
+    .event-log-entry.positive {
+      border-left-color: #4caf50;
+    }
+
+    .event-log-entry.negative {
+      border-left-color: #f44336;
+    }
+
+    .event-log-entry.neutral {
+      border-left-color: #2196f3;
+    }
+
+    .event-log-title {
+      color: var(--gold);
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .event-log-desc {
+      color: var(--text-gray);
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+
+    .event-log-time {
+      color: #888;
+      font-size: 0.75rem;
+      font-style: italic;
+    }
+
+    /* Back Link */
+    .back-link {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .back-link a {
+      color: var(--blue-link);
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .back-link a:hover {
+      color: var(--gold);
+      text-decoration: underline;
+    }
+
+    /* Statistics Button */
+    .stats-btn {
+      background-color: var(--bg-header);
+      color: var(--gold);
+      border: 2px solid var(--gold);
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .stats-btn:hover {
+      background-color: var(--gold);
+      color: var(--bg-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(255, 224, 130, 0.3);
+    }
+
+    /* Research Button */
+    .research-btn {
+      background-color: var(--bg-header);
+      color: var(--purple);
+      border: 2px solid var(--purple);
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .research-btn:hover {
+      background-color: var(--purple);
+      color: var(--bg-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(186, 104, 200, 0.3);
+    }
+
+    /* About Button */
+    .about-btn {
+      background-color: var(--bg-header);
+      color: var(--blue-link);
+      border: 2px solid var(--blue-link);
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .about-btn:hover {
+      background-color: var(--blue-link);
+      color: var(--bg-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(129, 212, 250, 0.3);
+    }
+
+    /* Statistics Popup */
+    .statistics-popup, .research-popup, .about-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .statistics-popup.active, .research-popup.active, .about-popup.active {
+      display: flex;
+    }
+
+    .statistics-content, .research-content, .about-content {
+      background-color: var(--bg-card);
+      padding: 40px 30px;
+      border-radius: 12px;
+      border: var(--border-gold);
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 0 50px rgba(255, 224, 130, 0.5);
+      position: relative;
+    }
+
+    .close-stats-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: var(--gold);
+      font-size: 2rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-stats-btn:hover {
+      transform: rotate(90deg);
+      color: var(--gold-hover);
+    }
+
+    .stats-title {
+      color: var(--gold);
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .stats-section {
+      margin-bottom: 35px;
+    }
+
+    .stats-section-title {
+      color: var(--gold);
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid rgba(255, 224, 130, 0.3);
+      padding-bottom: 8px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .stat-card-small {
+      background-color: var(--bg-header);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 224, 130, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stat-card-small:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 224, 130, 0.2);
+    }
+
+    .stat-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .stat-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .stat-label-small {
+      color: var(--text-gray);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .stat-value-small {
+      color: var(--gold);
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    /* Achievements Grid */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .achievement-card {
+      background-color: var(--bg-header);
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 224, 130, 0.3);
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .achievement-card.unlocked {
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(255, 224, 130, 0.2);
+    }
+
+    .achievement-card.locked {
+      opacity: 0.4;
+      filter: grayscale(100%);
+    }
+
+    .achievement-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .achievement-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .achievement-name {
+      color: var(--gold);
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .achievement-desc {
+      color: var(--text-gray);
+      font-size: 0.75rem;
+    }
+
+    .achievement-progress {
+      color: var(--blue-link);
+      font-size: 0.7rem;
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    /* Reset Button */
+    .reset-all-btn {
+      background-color: #f44336;
+      color: white;
+      border: 2px solid #d32f2f;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(244, 67, 54, 0.3);
+    }
+
+    .reset-all-btn:hover {
+      background-color: #d32f2f;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(244, 67, 54, 0.5);
+    }
+
+    .reset-all-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Technology Tree Styles */
+    .tech-tier {
+      margin-bottom: 30px;
+    }
+
+    .tech-tier-title {
+      color: var(--purple);
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tech-tier-title::before {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--purple));
+    }
+
+    .tech-tier-title::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(to left, transparent, var(--purple));
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .tech-card {
+      background-color: var(--bg-header);
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px solid rgba(186, 104, 200, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tech-card:hover:not(.tech-locked):not(.tech-purchased) {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(186, 104, 200, 0.3);
+      border-color: var(--purple);
+    }
+
+    .tech-card.tech-locked {
+      opacity: 0.5;
+      filter: grayscale(100%);
+      cursor: not-allowed;
+    }
+
+    .tech-card.tech-purchased {
+      border-color: #4caf50;
+      background-color: rgba(76, 175, 80, 0.1);
+    }
+
+    .tech-icon {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .tech-name {
+      color: var(--purple);
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .tech-card.tech-purchased .tech-name {
+      color: #4caf50;
+    }
+
+    .tech-desc {
+      color: var(--text-gray);
+      font-size: 0.85rem;
+      text-align: center;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .tech-cost {
+      color: var(--purple);
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 6px;
+      background-color: rgba(186, 104, 200, 0.1);
+      border-radius: 4px;
+    }
+
+    .tech-card.tech-purchased .tech-cost {
+      color: #4caf50;
+    }
+
+    .tech-requirement {
+      color: #f44336;
+      font-size: 0.75rem;
+      text-align: center;
+      margin-top: 5px;
+      font-style: italic;
+    }
+
+    /* About Section Styles */
+    .about-section {
+      margin-bottom: 30px;
+    }
+
+    .about-intro {
+      color: var(--text-gray);
+      font-size: 1.1rem;
+      line-height: 1.8;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .changelog-entry {
+      background-color: var(--bg-header);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 224, 130, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .changelog-entry:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .changelog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    .changelog-version {
+      color: var(--gold);
+      font-size: 1.1rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .changelog-arrow {
+      color: var(--blue-link);
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .changelog-entry.expanded .changelog-arrow {
+      transform: rotate(90deg);
+    }
+
+    .changelog-badge {
+      background-color: var(--purple);
+      color: var(--bg-dark);
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .changelog-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, margin-top 0.4s ease;
+    }
+
+    .changelog-entry.expanded .changelog-content {
+      max-height: 1000px;
+      margin-top: 15px;
+    }
+
+    .changelog-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .changelog-list li {
+      color: var(--text-gray);
+      font-size: 0.9rem;
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .changelog-list li::before {
+      content: "•";
+      color: var(--blue-link);
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    .credits-box {
+      background: linear-gradient(135deg, var(--bg-header), var(--bg-card));
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      border: 2px solid rgba(129, 212, 250, 0.3);
+    }
+
+    .credits-text {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .credits-author {
+      color: var(--gold);
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .statistics-content, .research-content, .about-content {
+        padding: 30px 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+
+      .achievements-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <!-- Header -->
+    <div class="game-header">
+      <h1>⚔️ Medieval Kingdom Simulator ⚔️</h1>
+      <p>Build your settlement, manage resources, and advance your civilization</p>
+      <p style="font-size: 0.85rem; color: #888; margin-top: 8px;">v2.0.1 - Bug Fixes & Improvements</p>
+    </div>
+
+    <!-- Stats Panel -->
+    <div class="stats-panel">
+      <div class="stat-card">
+        <div class="stat-label">💰 Gold</div>
+        <div class="stat-value" id="gold">100</div>
+        <div class="stat-rate" id="goldRate">+0/sec</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">🌾 Food</div>
+        <div class="stat-value" id="food">0</div>
+        <div class="stat-rate" id="foodRate">+0/sec</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">👥 Population</div>
+        <div class="stat-value" id="population">0</div>
+        <div class="stat-rate" id="popRate">+0/sec</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">📚 Research</div>
+        <div class="stat-value" id="research">0</div>
+        <div class="stat-rate" id="researchRate">+0/sec</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">⏱️ Time Survived</div>
+        <div class="stat-value" id="time">0s</div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
+      <button class="research-btn" onclick="showResearch()">🔬 Research Technologies</button>
+      <button class="stats-btn" onclick="showStatistics()">📊 Kingdom Statistics</button>
+      <button class="about-btn" onclick="showAbout()">ℹ️ About</button>
+    </div>
+
+    <!-- Kingdom Summary -->
+    <div class="kingdom-summary">
+      <h2 class="section-title">📊 Kingdom Overview</h2>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <h4>👥 Population: <span id="summaryPopulation">0</span></h4>
+          <p>Tax Income: <span id="summaryTaxIncome">+0/sec</span></p>
+          <p>Food Consumption: <span id="summaryFoodConsume">-0/sec</span></p>
+        </div>
+        <div class="summary-item">
+          <h4>🌾 Farms: <span id="summaryFarms">0</span></h4>
+          <p><span id="summaryFoodProd">Net: +0/sec (0 - 0)</span></p>
+        </div>
+        <div class="summary-item">
+          <h4>🏠 Houses: <span id="summaryHouses">0</span></h4>
+          <p>Population Capacity: <span id="summaryPopCap">0</span></p>
+        </div>
+        <div class="summary-item">
+          <h4>🏪 Markets: <span id="summaryMarkets">0</span></h4>
+          <p>Market Income: <span id="summaryGoldIncome">+0/sec</span></p>
+        </div>
+        <div class="summary-item">
+          <h4>📚 Libraries: <span id="summaryLibraries">0</span></h4>
+          <p>Research Rate: <span id="summaryResearchRate">+0/sec</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Log -->
+    <div class="event-log-section">
+      <h2 class="section-title">📜 Recent Events</h2>
+      <div class="event-log" id="eventLog">
+        <p class="event-log-empty">No events yet. Your kingdom awaits its fate...</p>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Buildings -->
+      <div class="buildings-section">
+        <h2 class="section-title">🏰 Buildings</h2>
+        <div class="building-grid">
+          <!-- Farm -->
+          <div class="building-card">
+            <div class="building-info">
+              <h3>🌾 Farm</h3>
+              <p>Produces food for your people</p>
+              <p style="color: var(--gold); font-size: 0.85rem;" id="farmCost">Cost: 50 Gold | +0.5 Food/sec</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="building-count" id="farmCount">0</span>
+              <button class="buy-btn" onclick="buyBuilding('farm')">Build</button>
+            </div>
+          </div>
+
+          <!-- House -->
+          <div class="building-card">
+            <div class="building-info">
+              <h3>🏠 House</h3>
+              <p>Increases population capacity</p>
+              <p style="color: var(--gold); font-size: 0.85rem;" id="houseCost">Cost: 40 Gold | +5 Max Pop</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="building-count" id="houseCount">0</span>
+              <button class="buy-btn" onclick="buyBuilding('house')">Build</button>
+            </div>
+          </div>
+
+          <!-- Market -->
+          <div class="building-card">
+            <div class="building-info">
+              <h3>🏪 Market</h3>
+              <p>Generates passive gold income</p>
+              <p style="color: var(--gold); font-size: 0.85rem;" id="marketCost">Cost: 60 Gold | +0.2 Gold/sec</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="building-count" id="marketCount">0</span>
+              <button class="buy-btn" onclick="buyBuilding('market')">Build</button>
+            </div>
+          </div>
+
+          <!-- Library -->
+          <div class="building-card">
+            <div class="building-info">
+              <h3>📚 Library</h3>
+              <p>Generates research points</p>
+              <p style="color: var(--gold); font-size: 0.85rem;" id="libraryCost">Cost: 80 Gold | +0.1 Research/sec</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="building-count" id="libraryCount">0</span>
+              <button class="buy-btn" onclick="buyBuilding('library')">Build</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trade -->
+      <div class="trade-section">
+        <h2 class="section-title">💱 Trade Market</h2>
+        <div class="trade-controls">
+          <div class="trade-input-group">
+            <input 
+              type="number" 
+              class="trade-input" 
+              id="sellAmount" 
+              placeholder="Amount of food to sell"
+              min="0"
+              value="10"
+            >
+          </div>
+          <button class="trade-btn" id="sellBtn" onclick="sellFood()">
+            Sell Food (1 Food = 0.5 Gold)
+          </button>
+          <div class="quick-sell-buttons">
+            <button class="quick-sell-btn" onclick="quickSell(10)">10</button>
+            <button class="quick-sell-btn" onclick="quickSell(25)">25</button>
+            <button class="quick-sell-btn" onclick="quickSell(50)">50</button>
+            <button class="quick-sell-btn" onclick="quickSell('all')">All</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back Link -->
+    <div class="back-link">
+      <a href="index.html">← Back to Eredhar Studios</a>
+    </div>
+  </div>
+
+  <!-- Event Popup -->
+  <div class="event-popup" id="eventPopup">
+    <div class="event-popup-content">
+      <h2 id="eventTitle" class="event-title">Event Title</h2>
+      <p id="eventDescription" class="event-description">Event description goes here.</p>
+      <div id="eventChoices" class="event-choices"></div>
+    </div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div class="game-over" id="gameOver">
+    <div class="game-over-content">
+      <h2>Kingdom Fallen</h2>
+      <p>Your kingdom has perished...</p>
+      <p id="finalStats"></p>
+      <button class="restart-btn" onclick="restartGame()">Build Anew</button>
+    </div>
+  </div>
+
+  <!-- Research Popup -->
+  <div class="research-popup" id="researchPopup">
+    <div class="research-content">
+      <button class="close-stats-btn" onclick="hideResearch()">✕</button>
+      <h2 class="stats-title">🔬 Technology Research</h2>
+      
+      <div style="text-align: center; margin-bottom: 30px; padding: 15px; background-color: var(--bg-header); border-radius: 8px; border: 2px solid var(--purple);">
+        <p style="color: var(--text-gray); margin-bottom: 10px;">Available Research Points</p>
+        <p style="color: var(--purple); font-size: 2rem; font-weight: bold;" id="researchAvailable">0</p>
+      </div>
+
+      <!-- Tier 1 -->
+      <div class="tech-tier">
+        <h3 class="tech-tier-title">Tier 1 Technologies</h3>
+        <div class="tech-grid" id="tier1Grid"></div>
+      </div>
+
+      <!-- Tier 2 -->
+      <div class="tech-tier">
+        <h3 class="tech-tier-title">Tier 2 Technologies</h3>
+        <div class="tech-grid" id="tier2Grid"></div>
+      </div>
+
+      <!-- Tier 3 -->
+      <div class="tech-tier">
+        <h3 class="tech-tier-title">Tier 3 Technologies</h3>
+        <div class="tech-grid" id="tier3Grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Screen -->
+  <div class="statistics-popup" id="statisticsPopup">
+    <div class="statistics-content">
+      <button class="close-stats-btn" onclick="hideStatistics()">✕</button>
+      <h2 class="stats-title">📊 Kingdom Statistics</h2>
+      
+      <!-- Current Kingdom Section -->
+      <div class="stats-section">
+        <h3 class="stats-section-title">⚔️ Current Kingdom</h3>
+        <div class="stats-grid">
+          <div class="stat-card-small">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-info">
+              <div class="stat-label-small">Time Survived</div>
+              <div class="stat-value-small" id="statCurrentTime">0s</div>
+            </div>
+          </div>
+          <div class="stat-card-small">
+            <div class="stat-icon">💰</div>
+            <div class="stat-info">
+              <div class="stat-label-small">Gold Earned</div>
+              <div class="stat-value-small" id="statCurrentGold">0</div>
+            </div>
+          </div>
+          <div class="stat-card-small">
+            <div class="stat-icon">🌾</div>
+            <div class="stat-info">
+              <div class="stat-label-small">Food Produced</div>
+              <div class="stat-value-small" id="statCurrentFood">0</div>
+            </div>
+          </div>
+          <div class="stat-card-small">
+            <div class="stat-icon">🗺️</div>
+            <div class="stat-info">
+              <div class="stat-label-small">Buildings Built</div>
+              <div class="stat-value-small" id="statCurrentBuildings">0</div>
+            </div>
+          </div>
+          <div class="stat-card-small">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+              <div class="stat-label-small">Max Population</div>
+              <div class="stat-value-small" id="statCurrentPopulation">0</div>
+            </div>
+          </div>
+          <div class="stat-card-small">
+            <div class="stat-icon">🔬</div>
+            <div class="stat-info">
+              <div class="stat-label-small">Technologies</div>
+              <div class="stat-value-small" id="statCurrentTech">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All-Time Records Section -->
+      <div class="stats-section">
+        <h3 class="stats-section-title">🏆 All-Time Records</h3>
+        <div class="stats-grid">
+          <div class="stat-card-small">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-info">
+              <div class="stat-label-small">Longest Survival</div>
+              <div class="stat-value-small" id="statAllTimeTime">0s</div>
+            </div>
+          </div>
+          <div class="stat-card-small">
+            <div class="stat-icon">💎</div>
+            <div class="stat-info">
+              <div class="stat-label-small">Total Gold Earned</div>
+              <div class="stat-value-small" id="statAllTimeGold">0</div>
+            </div>
+          </div>
+          <div class="stat-card-small">
+            <div class="stat-icon">🌾</div>
+            <div class="stat-info">
+              <div class="stat-label-small">Total Food Produced</div>
+              <div class="stat-value-small" id="statAllTimeFood">0</div>
+            </div>
+          </div>
+          <div class="stat-card-small">
+            <div class="stat-icon">🗺️</div>
+            <div class="stat-info">
+              <div class="stat-label-small">Total Buildings</div>
+              <div class="stat-value-small" id="statAllTimeBuildings">0</div>
+            </div>
+          </div>
+          <div class="stat-card-small">
+            <div class="stat-icon">👑</div>
+            <div class="stat-info">
+              <div class="stat-label-small">Highest Population</div>
+              <div class="stat-value-small" id="statAllTimePopulation">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Achievements Section -->
+      <div class="stats-section">
+        <h3 class="stats-section-title">🎯 Achievements</h3>
+        <div id="achievementsList" class="achievements-grid">
+          <!-- Achievements will be generated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Reset Progress Section -->
+      <div class="stats-section" style="margin-top: 40px; border-top: 2px solid rgba(255, 224, 130, 0.2); padding-top: 30px;">
+        <h3 class="stats-section-title" style="color: #f44336;">⚠️ Danger Zone</h3>
+        <div style="text-align: center;">
+          <p style="color: #ccc; margin-bottom: 15px; font-size: 0.9rem;">
+            This will permanently delete ALL your progress, statistics, and achievements.
+          </p>
+          <button class="reset-all-btn" onclick="confirmResetAll()">🗑️ Reset Everything</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Popup -->
+  <div class="about-popup" id="aboutPopup">
+    <div class="about-content">
+      <button class="close-stats-btn" onclick="hideAbout()">✕</button>
+      <h2 class="stats-title">ℹ️ About</h2>
+      
+      <!-- About the Game Section -->
+      <div class="about-section">
+        <h3 class="stats-section-title">🏰 About the Game</h3>
+        <p class="about-intro">
+          Medieval Kingdom Simulator is an idle kingdom management game where you build and grow your settlement through strategic decisions. Balance resources, expand your population, research technologies, and survive random events to create a thriving medieval kingdom.
+        </p>
+        <p class="about-intro" style="font-size: 0.95rem; color: #888;">
+          Version 2.0.1 - Bug Fixes & Improvements
+        </p>
+      </div>
+
+      <!-- Update History Section -->
+      <div class="about-section">
+        <h3 class="stats-section-title">📄 Update History</h3>
+        
+        <div class="changelog-entry expanded" onclick="toggleChangelog(this)">
+          <div class="changelog-header">
+            <div class="changelog-version">
+              v2.0.1 - Bug Fixes & Improvements
+              <span class="changelog-badge">Current</span>
+            </div>
+            <div class="changelog-arrow">▶</div>
+          </div>
+          <div class="changelog-content">
+            <ul class="changelog-list">
+              <li>Fixed disease event triggering even with Public Health immunity</li>
+              <li>Fixed refugee event showing incorrect population bonus with Welcoming Culture</li>
+              <li>Fixed population growth showing negative rate when at 0</li>
+              <li>Fixed achievement progress parsing for numbers with commas</li>
+              <li>Improved technology requirement chain validation</li>
+              <li>Added rate limiting to prevent button spam</li>
+              <li>Better input validation for food trading</li>
+              <li>Improved time display for short durations</li>
+              <li>Added visual feedback for resource changes</li>
+              <li>Code quality improvements and bug fixes</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="changelog-entry" onclick="toggleChangelog(this)">
+          <div class="changelog-header">
+            <div class="changelog-version">v2.0.0 - Research System</div>
+            <div class="changelog-arrow">▶</div>
+          </div>
+          <div class="changelog-content">
+            <ul class="changelog-list">
+              <li>Added Research Points resource and Libraries building</li>
+              <li>Introduced Technology Tree with 12 unlockable technologies across 3 tiers</li>
+              <li>Technologies provide powerful bonuses: boost production, reduce event damage, enhance growth</li>
+              <li>New achievements for researching technologies</li>
+              <li>Automatic save data migration system for seamless updates</li>
+              <li>Version tracking and changelog system</li>
+              <li>Enhanced UI with research popup and technology cards</li>
+              <li>Refugee events now scale with Welcoming Culture technology</li>
+              <li>Disease events reduced by Medicine technologies</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="changelog-entry" onclick="toggleChangelog(this)">
+          <div class="changelog-header">
+            <div class="changelog-version">v1.0.0 - Initial Release</div>
+            <div class="changelog-arrow">▶</div>
+          </div>
+          <div class="changelog-content">
+            <ul class="changelog-list">
+              <li>Base game with three building types: Farms, Houses, and Markets</li>
+              <li>Resource management system (Gold, Food, Population)</li>
+              <li>Random events system with choices and consequences</li>
+              <li>Exponential building cost scaling (15% increase per building)</li>
+              <li>Event log tracking recent kingdom events</li>
+              <li>Statistics tracking and all-time records</li>
+              <li>Achievement system with 16+ achievements</li>
+              <li>Offline progression - your kingdom grows while you're away</li>
+              <li>Save/Load system with auto-save every 10 seconds</li>
+              <li>Food trading system for emergency gold</li>
+              <li>Population growth based on food security</li>
+              <li>Game over conditions and restart functionality</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Credits Section -->
+      <div class="about-section">
+        <h3 class="stats-section-title">👨‍💻 Credits</h3>
+        <div class="credits-box">
+          <p class="credits-text">Developed with AI by</p>
+          <p class="credits-author">Andrei Alexe</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===================================
+    // GAME VERSION & CONSTANTS
+    // ===================================
+    
+    const GAME_VERSION = "2.0.1"; // v2.0.1 - Bug Fixes & Improvements
+    
+    // Debug mode (set to true to enable logging)
+    const DEBUG_MODE = false;
+
+    // Game Balance Constants
+    const BALANCE = {
+      // Starting values
+      STARTING_GOLD: 100,
+      STARTING_MAX_POPULATION: 25,
+      
+      // Building costs and effects
+      BUILDING_COST_MULTIPLIER: 1.15,
+      
+      FARM_BASE_COST: 50,
+      FARM_FOOD_RATE: 0.5,
+      
+      HOUSE_BASE_COST: 40,
+      HOUSE_POPULATION: 5,
+      
+      MARKET_BASE_COST: 60,
+      MARKET_GOLD_RATE: 0.2,
+      
+      LIBRARY_BASE_COST: 80,
+      LIBRARY_RESEARCH_RATE: 0.1,
+      
+      // Population mechanics
+      POPULATION_TAX_RATE: 0.05,
+      POPULATION_FOOD_CONSUMPTION: 0.1,
+      POPULATION_STARVATION_PENALTY: -0.5,
+      
+      // Growth rates by food level
+      POP_GROWTH_RATE_NONE: 0,      // < 20 food
+      POP_GROWTH_RATE_LOW: 0.05,    // 20-50 food
+      POP_GROWTH_RATE_MED: 0.1,     // 50-100 food
+      POP_GROWTH_RATE_HIGH: 0.2,    // 100+ food
+      
+      // Food thresholds
+      FOOD_STARVATION_THRESHOLD: 10,
+      FOOD_GROWTH_THRESHOLD_LOW: 20,
+      FOOD_GROWTH_THRESHOLD_MED: 50,
+      FOOD_GROWTH_THRESHOLD_HIGH: 100,
+      
+      // Trade
+      FOOD_TO_GOLD_RATE: 0.5,
+      
+      // Events
+      EVENT_MIN_INTERVAL: 30,
+      EVENT_MAX_INTERVAL: 60,
+      EVENT_START_DELAY: 10,
+      MAX_EVENT_LOG_ENTRIES: 8,
+      
+      // System
+      GAME_LOOP_INTERVAL: 100, // ms
+      SAVE_INTERVAL: 10000, // ms
+      MAX_OFFLINE_TIME: 28800, // 8 hours in seconds
+      BUTTON_COOLDOWN: 100, // ms
+    };
+
+    // ===================================
+    // GAME STATE
+    // ===================================
+    
+    let gameState = {
+      version: GAME_VERSION,
+      gold: BALANCE.STARTING_GOLD,
+      food: 0,
+      population: 0,
+      maxPopulation: BALANCE.STARTING_MAX_POPULATION,
+      research: 0,
+      buildings: {
+        farm: 0,
+        house: 0,
+        market: 0,
+        library: 0
+      },
+      technologies: {},
+      time: 0,
+      gameOver: false,
+      hasHadPopulation: false,
+      paused: false,
+      lastEventTime: 0,
+      nextEventInterval: BALANCE.EVENT_MIN_INTERVAL + Math.random() * (BALANCE.EVENT_MAX_INTERVAL - BALANCE.EVENT_MIN_INTERVAL),
+      activeEvent: null,
+      eventLog: [],
+      lastSaveTime: Date.now(),
+      totalTimePlayed: 0,
+      statistics: {
+        totalGoldEarned: 0,
+        totalFoodProduced: 0,
+        totalBuildingsBuilt: 0,
+        maxPopulationReached: 0,
+        longestSurvival: 0,
+        technologiesPurchased: 0
+      }
+    };
+
+    let gameInterval = null;
+
+    // All-Time Statistics (persists across games)
+    let allTimeStats = {
+      longestSurvival: 0,
+      totalGoldEarned: 0,
+      totalFoodProduced: 0,
+      totalBuildingsBuilt: 0,
+      highestPopulation: 0,
+      gamesPlayed: 0
+    };
+
+    // Rate limiting for button clicks
+    const buttonCooldowns = new Map();
+
+    // ===================================
+    // TECHNOLOGY TREE DEFINITION
+    // ===================================
+    
+    const technologies = {
+      // Tier 1
+      advancedFarming: {
+        id: 'advancedFarming',
+        name: 'Advanced Farming',
+        icon: '🌾',
+        desc: '+25% farm production',
+        cost: 20,
+        tier: 1,
+        requires: null,
+        effect: () => 0.25
+      },
+      efficientMarkets: {
+        id: 'efficientMarkets',
+        name: 'Efficient Markets',
+        icon: '💰',
+        desc: '+25% market income',
+        cost: 20,
+        tier: 1,
+        requires: null,
+        effect: () => 0.25
+      },
+      basicMedicine: {
+        id: 'basicMedicine',
+        name: 'Basic Medicine',
+        icon: '🏥',
+        desc: 'Disease damage -50%',
+        cost: 15,
+        tier: 1,
+        requires: null,
+        effect: () => 0.5
+      },
+      welcomingCulture: {
+        id: 'welcomingCulture',
+        name: 'Welcoming Culture',
+        icon: '👥',
+        desc: '+2 pop from refugee events',
+        cost: 15,
+        tier: 1,
+        requires: null,
+        effect: () => 2
+      },
+      
+      // Tier 2
+      irrigation: {
+        id: 'irrigation',
+        name: 'Irrigation',
+        icon: '🌾',
+        desc: '+50% farm production',
+        cost: 50,
+        tier: 2,
+        requires: 'advancedFarming',
+        effect: () => 0.5
+      },
+      tradeRoutes: {
+        id: 'tradeRoutes',
+        name: 'Trade Routes',
+        icon: '💰',
+        desc: '+50% market income',
+        cost: 50,
+        tier: 2,
+        requires: 'efficientMarkets',
+        effect: () => 0.5
+      },
+      hospitals: {
+        id: 'hospitals',
+        name: 'Hospitals',
+        icon: '🏥',
+        desc: 'Disease damage -75%',
+        cost: 40,
+        tier: 2,
+        requires: 'basicMedicine',
+        effect: () => 0.75
+      },
+      urbanPlanning: {
+        id: 'urbanPlanning',
+        name: 'Urban Planning',
+        icon: '🏙️',
+        desc: '+2 max pop per house',
+        cost: 40,
+        tier: 2,
+        requires: null,
+        effect: () => 2
+      },
+      
+      // Tier 3
+      agriculturalRevolution: {
+        id: 'agriculturalRevolution',
+        name: 'Agricultural Revolution',
+        icon: '🌾',
+        desc: '+100% farm production',
+        cost: 100,
+        tier: 3,
+        requires: 'irrigation',
+        effect: () => 1.0
+      },
+      economicProsperity: {
+        id: 'economicProsperity',
+        name: 'Economic Prosperity',
+        icon: '💰',
+        desc: '+100% market income',
+        cost: 100,
+        tier: 3,
+        requires: 'tradeRoutes',
+        effect: () => 1.0
+      },
+      publicHealth: {
+        id: 'publicHealth',
+        name: 'Public Health',
+        icon: '🏥',
+        desc: 'Immunity to disease',
+        cost: 80,
+        tier: 3,
+        requires: 'hospitals',
+        effect: () => 1.0
+      },
+      metropolitanGrowth: {
+        id: 'metropolitanGrowth',
+        name: 'Metropolitan Growth',
+        icon: '👑',
+        desc: '2x population growth',
+        cost: 80,
+        tier: 3,
+        requires: 'urbanPlanning',
+        effect: () => 2.0
+      }
+    };
+
+    // ===================================
+    // ACHIEVEMENT DEFINITIONS
+    // ===================================
+    
+    const achievements = [
+      // Survival Achievements
+      { id: 'survive_5min', icon: '🥉', name: 'First Steps', desc: 'Survive 5 minutes', check: () => gameState.time >= 300 },
+      { id: 'survive_15min', icon: '🥈', name: 'Endurance', desc: 'Survive 15 minutes', check: () => gameState.time >= 900 },
+      { id: 'survive_30min', icon: '🥇', name: 'Resilient', desc: 'Survive 30 minutes', check: () => gameState.time >= 1800 },
+      { id: 'survive_1hour', icon: '💎', name: 'Legendary', desc: 'Survive 1 hour', check: () => gameState.time >= 3600 },
+      
+      // Building Achievements
+      { id: 'build_5', icon: '🗺️', name: 'Architect', desc: 'Build 5 buildings', check: () => gameState.statistics.totalBuildingsBuilt >= 5 },
+      { id: 'build_20', icon: '🏙️', name: 'Town Planner', desc: 'Build 20 buildings', check: () => gameState.statistics.totalBuildingsBuilt >= 20 },
+      { id: 'build_50', icon: '🏰', name: 'Master Builder', desc: 'Build 50 buildings (all-time)', check: () => allTimeStats.totalBuildingsBuilt >= 50 },
+      
+      // Population Achievements
+      { id: 'pop_25', icon: '👥', name: 'Village', desc: 'Reach 25 population', check: () => gameState.statistics.maxPopulationReached >= 25 },
+      { id: 'pop_50', icon: '🏙️', name: 'Town', desc: 'Reach 50 population', check: () => gameState.statistics.maxPopulationReached >= 50 },
+      { id: 'pop_100', icon: '👑', name: 'Kingdom', desc: 'Reach 100 population', check: () => gameState.statistics.maxPopulationReached >= 100 },
+      
+      // Resource Achievements
+      { id: 'gold_1000', icon: '💰', name: 'Wealthy', desc: 'Earn 1000 gold', check: () => gameState.statistics.totalGoldEarned >= 1000 },
+      { id: 'gold_10000', icon: '💎', name: 'Prosperous', desc: 'Earn 10000 gold (all-time)', check: () => allTimeStats.totalGoldEarned >= 10000 },
+      { id: 'food_1000', icon: '🌾', name: 'Well Fed', desc: 'Produce 1000 food', check: () => gameState.statistics.totalFoodProduced >= 1000 },
+      
+      // Technology Achievements
+      { id: 'tech_1', icon: '🔬', name: 'Scholar', desc: 'Research 1 technology', check: () => gameState.statistics.technologiesPurchased >= 1 },
+      { id: 'tech_5', icon: '📚', name: 'Innovator', desc: 'Research 5 technologies', check: () => gameState.statistics.technologiesPurchased >= 5 },
+      { id: 'tech_all', icon: '🎓', name: 'Renaissance', desc: 'Research all technologies', check: () => gameState.statistics.technologiesPurchased >= Object.keys(technologies).length },
+      
+      // Special Achievements
+      { id: 'games_10', icon: '🔄', name: 'Persistent', desc: 'Play 10 games', check: () => allTimeStats.gamesPlayed >= 10 },
+      { id: 'farm_10', icon: '🌾', name: 'Farmer King', desc: 'Build 10 farms', check: () => gameState.buildings.farm >= 10 },
+      { id: 'house_10', icon: '🏠', name: 'Housing Baron', desc: 'Build 10 houses', check: () => gameState.buildings.house >= 10 },
+      { id: 'library_5', icon: '📚', name: 'Enlightened', desc: 'Build 5 libraries', check: () => gameState.buildings.library >= 5 }
+    ];
+
+    let unlockedAchievements = [];
+
+    // ===================================
+    // RANDOM EVENTS SYSTEM
+    // ===================================
+    
+    const randomEvents = [
+      {
+        id: 'abundant_harvest',
+        title: '🌾 Abundant Harvest',
+        description: 'Your farms have yielded an exceptional harvest this season!',
+        effect: () => {
+          gameState.food += 50;
+        },
+        weight: 15
+      },
+      {
+        id: 'traveling_merchant',
+        title: '💰 Traveling Merchant',
+        description: 'A wealthy merchant passes through, offering to buy your goods.',
+        choices: [
+          {
+            text: 'Sell 30 Food for 20 Gold',
+            condition: () => gameState.food >= 30,
+            effect: () => {
+              gameState.food -= 30;
+              gameState.gold += 20;
+            }
+          },
+          {
+            text: 'Politely decline',
+            effect: () => {}
+          }
+        ],
+        weight: 12
+      },
+      {
+        id: 'refugees',
+        title: '👥 Refugees Arrive',
+        description: 'A group of refugees from a distant land seeks shelter in your kingdom.',
+        choices: [
+          {
+            getText: () => `Welcome them (+${5 + getRefugeeBonus()} Population, -20 Food)`,
+            condition: () => gameState.food >= 20,
+            effect: () => {
+              gameState.population += 5 + getRefugeeBonus();
+              gameState.food -= 20;
+              if (gameState.population > gameState.maxPopulation) {
+                gameState.maxPopulation = gameState.population;
+              }
+            }
+          },
+          {
+            text: 'Turn them away',
+            effect: () => {}
+          }
+        ],
+        weight: 10
+      },
+      {
+        id: 'gold_discovery',
+        title: '✨ Gold Discovery',
+        description: 'Your people discover a small cache of gold while working the fields!',
+        effect: () => {
+          gameState.gold += 30;
+        },
+        weight: 8
+      },
+      {
+        id: 'harsh_winter',
+        title: '❄️ Harsh Winter',
+        description: 'An unexpectedly harsh winter destroys part of your food stores.',
+        effect: () => {
+          const loss = Math.floor(gameState.food * 0.3);
+          gameState.food -= loss;
+        },
+        weight: 10
+      },
+      {
+        id: 'disease_outbreak',
+        title: '💀 Disease Outbreak',
+        description: 'A sickness spreads through your population!',
+        effect: () => {
+          const damageReduction = getDiseaseDamageReduction();
+          const baseLoss = Math.floor(gameState.population * 0.2);
+          const actualLoss = Math.floor(baseLoss * (1 - damageReduction));
+          gameState.population -= actualLoss;
+          
+          // Show immunity message if applicable
+          if (damageReduction >= 1.0) {
+            addCustomEventToLog({
+              id: 'disease_prevented',
+              title: '✅ Disease Prevented',
+              description: 'Thanks to Public Health research, your people are immune!'
+            }, 'positive');
+          }
+        },
+        condition: () => gameState.population >= 5 && getDiseaseDamageReduction() < 1.0,
+        weight: 8
+      },
+      {
+        id: 'bandit_raid',
+        title: '⚔️ Bandit Raid',
+        description: 'Bandits raid your kingdom, stealing resources!',
+        effect: () => {
+          gameState.gold = Math.max(0, gameState.gold - 25);
+          gameState.food = Math.max(0, gameState.food - 15);
+        },
+        condition: () => gameState.gold >= 10 || gameState.food >= 10,
+        weight: 12
+      },
+      {
+        id: 'farm_fire',
+        title: '🔥 Farm Fire',
+        description: 'A fire breaks out in one of your farms, destroying crops!',
+        effect: () => {
+          gameState.food = Math.max(0, gameState.food - 30);
+        },
+        condition: () => gameState.buildings.farm >= 1,
+        weight: 9
+      },
+      {
+        id: 'wandering_scholar',
+        title: '📜 Wandering Scholar',
+        description: 'A scholar offers to teach your people farming techniques for a fee.',
+        choices: [
+          {
+            text: 'Pay 40 Gold (+20 food immediately)',
+            condition: () => gameState.gold >= 40,
+            effect: () => {
+              gameState.gold -= 40;
+              gameState.food += 20;
+            }
+          },
+          {
+            text: 'Decline the offer',
+            effect: () => {}
+          }
+        ],
+        weight: 8
+      },
+      {
+        id: 'festival_proposal',
+        title: '🎭 Festival Proposal',
+        description: 'Your people wish to hold a festival to boost morale.',
+        choices: [
+          {
+            text: 'Host Festival (30 Food, 20 Gold) - Attract +3 settlers',
+            condition: () => gameState.food >= 30 && gameState.gold >= 20,
+            effect: () => {
+              gameState.food -= 30;
+              gameState.gold -= 20;
+              gameState.population += 3;
+              if (gameState.population > gameState.maxPopulation) {
+                gameState.maxPopulation = gameState.population;
+              }
+            }
+          },
+          {
+            text: 'Times are too hard for festivities',
+            effect: () => {}
+          }
+        ],
+        condition: () => gameState.population >= 10,
+        weight: 7
+      }
+    ];
+
+    // ===================================
+    // UTILITY FUNCTIONS
+    // ===================================
+    
+    function debugLog(category, message, data = null) {
+      if (!DEBUG_MODE) return;
+      
+      const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
+      console.log(`[${timestamp}] [${category}]`, message, data || '');
+    }
+
+    function isButtonOnCooldown(buttonId) {
+      const lastClick = buttonCooldowns.get(buttonId);
+      if (!lastClick) return false;
+      return Date.now() - lastClick < BALANCE.BUTTON_COOLDOWN;
+    }
+
+    function setButtonCooldown(buttonId) {
+      buttonCooldowns.set(buttonId, Date.now());
+    }
+
+    function formatTime(seconds) {
+      const totalSeconds = Math.floor(seconds);
+      
+      if (totalSeconds < 1) {
+        return 'Just started';
+      }
+      
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const secs = totalSeconds % 60;
+      
+      if (days > 0) {
+        return `${days}d ${hours}h ${minutes}m`;
+      } else if (hours > 0) {
+        return `${hours}h ${minutes}m ${secs}s`;
+      } else if (minutes > 0) {
+        return `${minutes}m ${secs}s`;
+      } else {
+        return `${secs}s`;
+      }
+    }
+
+    function showResourceChange(message) {
+      const feedback = document.createElement('div');
+      feedback.style.position = 'fixed';
+      feedback.style.top = '50%';
+      feedback.style.left = '50%';
+      feedback.style.transform = 'translate(-50%, -50%)';
+      feedback.style.backgroundColor = 'rgba(22, 22, 33, 0.95)';
+      feedback.style.color = '#ffe082';
+      feedback.style.padding = '15px 30px';
+      feedback.style.borderRadius = '8px';
+      feedback.style.border = '2px solid #ffe082';
+      feedback.style.zIndex = '9999';
+      feedback.style.fontSize = '1.1rem';
+      feedback.style.fontWeight = 'bold';
+      feedback.textContent = message;
+      document.body.appendChild(feedback);
+      
+      setTimeout(() => {
+        feedback.style.transition = 'opacity 0.3s ease';
+        feedback.style.opacity = '0';
+        setTimeout(() => feedback.remove(), 300);
+      }, 1500);
+    }
+
+    // ===================================
+    // TECHNOLOGY FUNCTIONS
+    // ===================================
+    
+    function hasTech(techId) {
+      return gameState.technologies[techId] === true;
+    }
+
+    function canPurchaseTechChain(tech) {
+      if (tech.requires && !hasTech(tech.requires)) {
+        return false;
+      }
+      return true;
+    }
+
+    function canPurchaseTech(tech) {
+      if (hasTech(tech.id)) return false;
+      if (gameState.research < tech.cost) return false;
+      
+      // Recursively check requirement chain
+      if (tech.requires) {
+        if (!hasTech(tech.requires)) return false;
+        
+        // Check if the required tech's requirements are also met
+        const requiredTech = technologies[tech.requires];
+        if (requiredTech && !canPurchaseTechChain(requiredTech)) return false;
+      }
+      
+      return true;
+    }
+
+    function purchaseTechnology(techId) {
+      const tech = technologies[techId];
+      if (!canPurchaseTech(tech)) return;
+      
+      gameState.research -= tech.cost;
+      gameState.technologies[techId] = true;
+      gameState.statistics.technologiesPurchased++;
+      
+      debugLog('TECH', 'Purchased technology', { id: techId, cost: tech.cost });
+      
+      saveGame();
+      updateResearchDisplay();
+      updateDisplay();
+      checkAchievements();
+      
+      showTechToast(tech);
+    }
+
+    function showTechToast(tech) {
+      const toast = document.createElement('div');
+      toast.style.position = 'fixed';
+      toast.style.bottom = '20px';
+      toast.style.right = '20px';
+      toast.style.backgroundColor = '#161621';
+      toast.style.border = '2px solid #ba68c8';
+      toast.style.borderRadius = '8px';
+      toast.style.padding = '15px 20px';
+      toast.style.zIndex = '2000';
+      toast.style.boxShadow = '0 0 20px rgba(186, 104, 200, 0.5)';
+      toast.style.animation = 'slideInRight 0.3s ease';
+      toast.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <div style="font-size: 2rem;">${tech.icon}</div>
+          <div>
+            <div style="color: #ba68c8; font-weight: bold; margin-bottom: 4px;">Technology Researched!</div>
+            <div style="color: #f5f5f5; font-size: 0.9rem;">${tech.name}</div>
+            <div style="color: #ccc; font-size: 0.8rem;">${tech.desc}</div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function showResearch() {
+      updateResearchDisplay();
+      document.getElementById('researchPopup').classList.add('active');
+      gameState.paused = true;
+    }
+
+    function hideResearch() {
+      document.getElementById('researchPopup').classList.remove('active');
+      gameState.paused = false;
+    }
+
+    function updateResearchDisplay() {
+      document.getElementById('researchAvailable').textContent = Math.floor(gameState.research);
+      
+      const tier1 = Object.values(technologies).filter(t => t.tier === 1);
+      const tier2 = Object.values(technologies).filter(t => t.tier === 2);
+      const tier3 = Object.values(technologies).filter(t => t.tier === 3);
+      
+      renderTechTier('tier1Grid', tier1);
+      renderTechTier('tier2Grid', tier2);
+      renderTechTier('tier3Grid', tier3);
+    }
+
+    function renderTechTier(gridId, techs) {
+      const grid = document.getElementById(gridId);
+      grid.innerHTML = '';
+      
+      techs.forEach(tech => {
+        const isPurchased = hasTech(tech.id);
+        const canPurchase = canPurchaseTech(tech);
+        const isLocked = !canPurchase && !isPurchased;
+        
+        const card = document.createElement('div');
+        card.className = `tech-card ${isPurchased ? 'tech-purchased' : ''} ${isLocked ? 'tech-locked' : ''}`;
+        
+        let requirementText = '';
+        if (tech.requires && !hasTech(tech.requires)) {
+          const reqTech = technologies[tech.requires];
+          requirementText = `<div class="tech-requirement">Requires: ${reqTech.name}</div>`;
+        }
+        
+        let costText = isPurchased ? 'RESEARCHED ✓' : `${tech.cost} RP`;
+        
+        card.innerHTML = `
+          <div class="tech-icon">${tech.icon}</div>
+          <div class="tech-name">${tech.name}</div>
+          <div class="tech-desc">${tech.desc}</div>
+          <div class="tech-cost">${costText}</div>
+          ${requirementText}
+        `;
+        
+        if (canPurchase) {
+          card.style.cursor = 'pointer';
+          card.onclick = () => purchaseTechnology(tech.id);
+        }
+        
+        grid.appendChild(card);
+      });
+    }
+
+    function getFarmMultiplier() {
+      let multiplier = 1.0;
+      if (hasTech('advancedFarming')) multiplier += technologies.advancedFarming.effect();
+      if (hasTech('irrigation')) multiplier += technologies.irrigation.effect();
+      if (hasTech('agriculturalRevolution')) multiplier += technologies.agriculturalRevolution.effect();
+      return multiplier;
+    }
+
+    function getMarketMultiplier() {
+      let multiplier = 1.0;
+      if (hasTech('efficientMarkets')) multiplier += technologies.efficientMarkets.effect();
+      if (hasTech('tradeRoutes')) multiplier += technologies.tradeRoutes.effect();
+      if (hasTech('economicProsperity')) multiplier += technologies.economicProsperity.effect();
+      return multiplier;
+    }
+
+    function getHouseBonus() {
+      let bonus = 0;
+      if (hasTech('urbanPlanning')) bonus += technologies.urbanPlanning.effect();
+      return bonus;
+    }
+
+    function getPopGrowthMultiplier() {
+      let multiplier = 1.0;
+      if (hasTech('metropolitanGrowth')) multiplier *= technologies.metropolitanGrowth.effect();
+      return multiplier;
+    }
+
+    function getDiseaseDamageReduction() {
+      if (hasTech('publicHealth')) return 1.0;
+      let reduction = 0;
+      if (hasTech('basicMedicine')) reduction = Math.max(reduction, technologies.basicMedicine.effect());
+      if (hasTech('hospitals')) reduction = Math.max(reduction, technologies.hospitals.effect());
+      return reduction;
+    }
+
+    function getRefugeeBonus() {
+      let bonus = 0;
+      if (hasTech('welcomingCulture')) bonus += technologies.welcomingCulture.effect();
+      return bonus;
+    }
+
+    // ===================================
+    // SAVE/LOAD FUNCTIONS
+    // ===================================
+    
+    function saveGame() {
+      try {
+        gameState.lastSaveTime = Date.now();
+        const saveData = JSON.stringify(gameState);
+        localStorage.setItem('medievalKingdomSave', saveData);
+        debugLog('SAVE', 'Game saved successfully', { size: saveData.length });
+      } catch (e) {
+        console.error('Failed to save game:', e);
+        debugLog('ERROR', 'Save failed', e);
+      }
+    }
+
+    function migrateSaveData(loaded) {
+      const oldVersion = loaded.version || "1.0.0";
+      let migrated = false;
+      
+      if (loaded.research === undefined) {
+        loaded.research = 0;
+        migrated = true;
+      }
+      
+      if (!loaded.buildings.library) {
+        loaded.buildings.library = 0;
+        migrated = true;
+      }
+      
+      if (!loaded.technologies) {
+        loaded.technologies = {};
+        migrated = true;
+      }
+      
+      if (loaded.statistics && loaded.statistics.technologiesPurchased === undefined) {
+        loaded.statistics.technologiesPurchased = 0;
+        migrated = true;
+      }
+      
+      loaded.version = GAME_VERSION;
+      
+      if (migrated) {
+        debugLog('MIGRATION', `Save data migrated from v${oldVersion} to v${GAME_VERSION}`);
+      }
+      
+      return loaded;
+    }
+
+    function loadGame() {
+      try {
+        const saveData = localStorage.getItem('medievalKingdomSave');
+        if (saveData) {
+          let loaded = JSON.parse(saveData);
+          
+          loaded = migrateSaveData(loaded);
+          
+          const now = Date.now();
+          const timeSinceLastSave = (now - loaded.lastSaveTime) / 1000;
+          
+          if (timeSinceLastSave > 5) {
+            calculateOfflineProgress(loaded, timeSinceLastSave);
+          }
+          
+          Object.assign(gameState, loaded);
+          gameState.activeEvent = null;
+          gameState.paused = false;
+          gameState.gameOver = false;
+          
+          debugLog('LOAD', 'Game loaded successfully');
+          
+          return true;
+        }
+      } catch (e) {
+        console.error('Failed to load game:', e);
+        debugLog('ERROR', 'Load failed', e);
+      }
+      return false;
+    }
+
+    function calculateOfflineProgress(savedState, timeAway) {
+      const cappedTime = Math.min(timeAway, BALANCE.MAX_OFFLINE_TIME);
+      
+      const tempTechs = savedState.technologies || {};
+      const oldTechs = gameState.technologies;
+      gameState.technologies = tempTechs;
+      
+      const farmMultiplier = getFarmMultiplier();
+      const marketMultiplier = getMarketMultiplier();
+      
+      gameState.technologies = oldTechs;
+      
+      const farmRate = savedState.buildings.farm * BALANCE.FARM_FOOD_RATE * farmMultiplier;
+      const marketRate = savedState.buildings.market * BALANCE.MARKET_GOLD_RATE * marketMultiplier;
+      const libraryRate = savedState.buildings.library * BALANCE.LIBRARY_RESEARCH_RATE;
+      const popTax = savedState.population * BALANCE.POPULATION_TAX_RATE;
+      const foodConsumption = savedState.population * BALANCE.POPULATION_FOOD_CONSUMPTION;
+      
+      const netFoodRate = farmRate - foodConsumption;
+      const netGoldRate = marketRate + popTax;
+      
+      const offlineGold = Math.max(0, netGoldRate * cappedTime);
+      const offlineFood = Math.max(0, netFoodRate * cappedTime);
+      const offlineResearch = Math.max(0, libraryRate * cappedTime);
+      
+      let offlinePopulation = 0;
+      if (savedState.food > 20 && savedState.population < savedState.maxPopulation) {
+        const avgPopGrowth = 0.1 * getPopGrowthMultiplier();
+        offlinePopulation = Math.min(
+          avgPopGrowth * cappedTime,
+          savedState.maxPopulation - savedState.population
+        );
+      }
+      
+      showWelcomeBack(cappedTime, offlineGold, offlineFood, offlinePopulation, offlineResearch);
+      
+      savedState.gold += offlineGold;
+      savedState.food += offlineFood;
+      savedState.research += offlineResearch;
+      savedState.population = Math.min(
+        savedState.population + offlinePopulation,
+        savedState.maxPopulation
+      );
+      savedState.time += cappedTime;
+      savedState.totalTimePlayed += cappedTime;
+      
+      savedState.statistics.totalGoldEarned += offlineGold;
+      savedState.statistics.totalFoodProduced += offlineFood;
+      savedState.statistics.maxPopulationReached = Math.max(
+        savedState.statistics.maxPopulationReached,
+        Math.floor(savedState.population)
+      );
+    }
+
+    function showWelcomeBack(timeAway, gold, food, population, research) {
+      const popup = document.getElementById('eventPopup');
+      document.getElementById('eventTitle').textContent = '🏰 Welcome Back!';
+      
+      const timeAwayFormatted = formatTime(timeAway);
+      let description = `You were away for ${timeAwayFormatted}.\n\nWhile you were gone, your kingdom produced:\n\n`;
+      
+      if (gold > 0) description += `💰 +${Math.floor(gold)} Gold\n`;
+      if (food > 0) description += `🌾 +${Math.floor(food)} Food\n`;
+      if (population > 0) description += `👥 +${Math.floor(population)} Population\n`;
+      if (research > 0) description += `📚 +${Math.floor(research)} Research\n`;
+      
+      if (gold === 0 && food === 0 && population === 0 && research === 0) {
+        description = `You were away for ${timeAwayFormatted}.\n\nYour kingdom maintained its current state.`;
+      }
+      
+      document.getElementById('eventDescription').textContent = description;
+      
+      const choicesDiv = document.getElementById('eventChoices');
+      choicesDiv.innerHTML = '';
+      
+      const button = document.createElement('button');
+      button.className = 'event-choice-btn';
+      button.textContent = 'Continue Ruling';
+      button.onclick = () => {
+        popup.classList.remove('active');
+        gameState.paused = false;
+      };
+      
+      choicesDiv.appendChild(button);
+      popup.classList.add('active');
+      gameState.paused = true;
+    }
+
+    function loadAllTimeStats() {
+      try {
+        const saved = localStorage.getItem('medievalKingdomAllTime');
+        if (saved) {
+          Object.assign(allTimeStats, JSON.parse(saved));
+        }
+        const savedAchievements = localStorage.getItem('medievalKingdomAchievements');
+        if (savedAchievements) {
+          unlockedAchievements = JSON.parse(savedAchievements);
+        }
+        debugLog('LOAD', 'All-time stats loaded');
+      } catch (e) {
+        console.error('Failed to load all-time stats:', e);
+        debugLog('ERROR', 'All-time stats load failed', e);
+      }
+    }
+
+    function saveAllTimeStats() {
+      try {
+        localStorage.setItem('medievalKingdomAllTime', JSON.stringify(allTimeStats));
+        localStorage.setItem('medievalKingdomAchievements', JSON.stringify(unlockedAchievements));
+        debugLog('SAVE', 'All-time stats saved');
+      } catch (e) {
+        console.error('Failed to save all-time stats:', e);
+        debugLog('ERROR', 'All-time stats save failed', e);
+      }
+    }
+
+    function updateAllTimeStats() {
+      allTimeStats.longestSurvival = Math.max(allTimeStats.longestSurvival, Math.floor(gameState.time));
+      allTimeStats.totalGoldEarned = Math.max(allTimeStats.totalGoldEarned, gameState.statistics.totalGoldEarned);
+      allTimeStats.totalFoodProduced = Math.max(allTimeStats.totalFoodProduced, gameState.statistics.totalFoodProduced);
+      allTimeStats.totalBuildingsBuilt = Math.max(allTimeStats.totalBuildingsBuilt, gameState.statistics.totalBuildingsBuilt);
+      allTimeStats.highestPopulation = Math.max(allTimeStats.highestPopulation, gameState.statistics.maxPopulationReached);
+      saveAllTimeStats();
+    }
+
+    // ===================================
+    // ACHIEVEMENT FUNCTIONS
+    // ===================================
+    
+    function checkAchievements() {
+      let newUnlocks = false;
+      achievements.forEach(achievement => {
+        if (!unlockedAchievements.includes(achievement.id) && achievement.check()) {
+          unlockedAchievements.push(achievement.id);
+          newUnlocks = true;
+          showAchievementToast(achievement);
+          debugLog('ACHIEVEMENT', 'Unlocked', achievement.name);
+        }
+      });
+      if (newUnlocks) {
+        saveAllTimeStats();
+      }
+    }
+
+    function showAchievementToast(achievement) {
+      const toast = document.createElement('div');
+      toast.style.position = 'fixed';
+      toast.style.bottom = '20px';
+      toast.style.right = '20px';
+      toast.style.backgroundColor = '#161621';
+      toast.style.border = '2px solid #ffe082';
+      toast.style.borderRadius = '8px';
+      toast.style.padding = '15px 20px';
+      toast.style.zIndex = '2000';
+      toast.style.boxShadow = '0 0 20px rgba(255, 224, 130, 0.5)';
+      toast.style.animation = 'slideInRight 0.3s ease';
+      toast.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <div style="font-size: 2rem;">${achievement.icon}</div>
+          <div>
+            <div style="color: #ffe082; font-weight: bold; margin-bottom: 4px;">Achievement Unlocked!</div>
+            <div style="color: #f5f5f5; font-size: 0.9rem;">${achievement.name}</div>
+            <div style="color: #ccc; font-size: 0.8rem;">${achievement.desc}</div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function showStatistics() {
+      updateStatisticsDisplay();
+      document.getElementById('statisticsPopup').classList.add('active');
+      gameState.paused = true;
+    }
+
+    function hideStatistics() {
+      document.getElementById('statisticsPopup').classList.remove('active');
+      gameState.paused = false;
+    }
+
+    function confirmResetAll() {
+      const confirmed = confirm(
+        "⚠️ WARNING ⚠️\n\n" +
+        "This will permanently delete:\n" +
+        "• All saved games\n" +
+        "• All-time statistics\n" +
+        "• All unlocked achievements\n" +
+        "• Everything will be lost!\n\n" +
+        "Are you absolutely sure?"
+      );
+      
+      if (confirmed) {
+        const doubleConfirmed = confirm(
+          "🗑️ FINAL WARNING 🗑️\n\n" +
+          "This action CANNOT be undone!\n\n" +
+          "Click OK to DELETE EVERYTHING\n" +
+          "Click Cancel to keep your progress"
+        );
+        
+        if (doubleConfirmed) {
+          resetAllProgress();
+        }
+      }
+    }
+
+    function resetAllProgress() {
+      localStorage.removeItem('medievalKingdomSave');
+      localStorage.removeItem('medievalKingdomAllTime');
+      localStorage.removeItem('medievalKingdomAchievements');
+      
+      allTimeStats = {
+        longestSurvival: 0,
+        totalGoldEarned: 0,
+        totalFoodProduced: 0,
+        totalBuildingsBuilt: 0,
+        highestPopulation: 0,
+        gamesPlayed: 0
+      };
+      
+      unlockedAchievements = [];
+      
+      gameState = {
+        version: GAME_VERSION,
+        gold: BALANCE.STARTING_GOLD,
+        food: 0,
+        population: 0,
+        maxPopulation: BALANCE.STARTING_MAX_POPULATION,
+        research: 0,
+        buildings: {
+          farm: 0,
+          house: 0,
+          market: 0,
+          library: 0
+        },
+        technologies: {},
+        time: 0,
+        gameOver: false,
+        hasHadPopulation: false,
+        paused: false,
+        lastEventTime: 0,
+        nextEventInterval: BALANCE.EVENT_MIN_INTERVAL + Math.random() * (BALANCE.EVENT_MAX_INTERVAL - BALANCE.EVENT_MIN_INTERVAL),
+        activeEvent: null,
+        eventLog: [],
+        lastSaveTime: Date.now(),
+        totalTimePlayed: 0,
+        statistics: {
+          totalGoldEarned: 0,
+          totalFoodProduced: 0,
+          totalBuildingsBuilt: 0,
+          maxPopulationReached: 0,
+          longestSurvival: 0,
+          technologiesPurchased: 0
+        }
+      };
+      
+      hideStatistics();
+      updateEventLog();
+      updateDisplay();
+      
+      alert("✅ All progress has been reset!\n\nYour kingdom starts anew.");
+      debugLog('RESET', 'All progress reset');
+    }
+
+    function updateStatisticsDisplay() {
+      document.getElementById('statCurrentTime').textContent = formatTime(gameState.time);
+      document.getElementById('statCurrentGold').textContent = Math.floor(gameState.statistics.totalGoldEarned).toLocaleString();
+      document.getElementById('statCurrentFood').textContent = Math.floor(gameState.statistics.totalFoodProduced).toLocaleString();
+      document.getElementById('statCurrentBuildings').textContent = gameState.statistics.totalBuildingsBuilt;
+      document.getElementById('statCurrentPopulation').textContent = gameState.statistics.maxPopulationReached;
+      document.getElementById('statCurrentTech').textContent = gameState.statistics.technologiesPurchased;
+
+      document.getElementById('statAllTimeTime').textContent = formatTime(allTimeStats.longestSurvival);
+      document.getElementById('statAllTimeGold').textContent = Math.floor(allTimeStats.totalGoldEarned).toLocaleString();
+      document.getElementById('statAllTimeFood').textContent = Math.floor(allTimeStats.totalFoodProduced).toLocaleString();
+      document.getElementById('statAllTimeBuildings').textContent = allTimeStats.totalBuildingsBuilt;
+      document.getElementById('statAllTimePopulation').textContent = allTimeStats.highestPopulation;
+
+      const achievementsList = document.getElementById('achievementsList');
+      achievementsList.innerHTML = '';
+      
+      const extractTarget = (desc) => {
+        const cleanDesc = desc.replace(/,/g, '');
+        const match = cleanDesc.match(/\d+/);
+        return match ? parseInt(match[0]) : null;
+      };
+      
+      achievements.forEach(achievement => {
+        const isUnlocked = unlockedAchievements.includes(achievement.id);
+        const card = document.createElement('div');
+        card.className = `achievement-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+        
+        let progressText = '';
+        if (!isUnlocked) {
+          if (achievement.id.includes('survive')) {
+            const target = extractTarget(achievement.desc);
+            if (target) {
+              const current = Math.floor(gameState.time / 60);
+              progressText = `<div class="achievement-progress">${current}/${target} min</div>`;
+            }
+          } else if (achievement.id.includes('build')) {
+            const target = extractTarget(achievement.desc);
+            if (target) {
+              const current = achievement.id === 'build_50' ? allTimeStats.totalBuildingsBuilt : gameState.statistics.totalBuildingsBuilt;
+              progressText = `<div class="achievement-progress">${current}/${target}</div>`;
+            }
+          } else if (achievement.id.includes('pop')) {
+            const target = extractTarget(achievement.desc);
+            if (target) {
+              const current = gameState.statistics.maxPopulationReached;
+              progressText = `<div class="achievement-progress">${current}/${target}</div>`;
+            }
+          } else if (achievement.id.includes('gold')) {
+            const target = extractTarget(achievement.desc);
+            if (target) {
+              const current = achievement.id === 'gold_10000' ? Math.floor(allTimeStats.totalGoldEarned) : Math.floor(gameState.statistics.totalGoldEarned);
+              progressText = `<div class="achievement-progress">${current.toLocaleString()}/${target.toLocaleString()}</div>`;
+            }
+          } else if (achievement.id.includes('food')) {
+            const target = extractTarget(achievement.desc);
+            if (target) {
+              const current = Math.floor(gameState.statistics.totalFoodProduced);
+              progressText = `<div class="achievement-progress">${current.toLocaleString()}/${target.toLocaleString()}</div>`;
+            }
+          } else if (achievement.id.includes('tech')) {
+            if (achievement.id === 'tech_all') {
+              const target = Object.keys(technologies).length;
+              const current = gameState.statistics.technologiesPurchased;
+              progressText = `<div class="achievement-progress">${current}/${target}</div>`;
+            } else {
+              const target = extractTarget(achievement.desc);
+              if (target) {
+                const current = gameState.statistics.technologiesPurchased;
+                progressText = `<div class="achievement-progress">${current}/${target}</div>`;
+              }
+            }
+          } else if (achievement.id.includes('farm') || achievement.id.includes('house') || achievement.id.includes('library')) {
+            const target = extractTarget(achievement.desc);
+            if (target) {
+              let current = 0;
+              if (achievement.id.includes('farm')) current = gameState.buildings.farm;
+              else if (achievement.id.includes('house')) current = gameState.buildings.house;
+              else if (achievement.id.includes('library')) current = gameState.buildings.library;
+              progressText = `<div class="achievement-progress">${current}/${target}</div>`;
+            }
+          } else if (achievement.id.includes('games')) {
+            const target = extractTarget(achievement.desc);
+            if (target) {
+              progressText = `<div class="achievement-progress">${allTimeStats.gamesPlayed}/${target}</div>`;
+            }
+          }
+        }
+        
+        card.innerHTML = `
+          <div class="achievement-icon">${achievement.icon}</div>
+          <div class="achievement-name">${achievement.name}</div>
+          <div class="achievement-desc">${achievement.desc}</div>
+          ${progressText}
+        `;
+        achievementsList.appendChild(card);
+      });
+    }
+
+    // ===================================
+    // EVENT FUNCTIONS
+    // ===================================
+    
+    function triggerRandomEvent() {
+      const availableEvents = randomEvents.filter(event => 
+        !event.condition || event.condition()
+      );
+      
+      if (availableEvents.length === 0) return;
+      
+      const totalWeight = availableEvents.reduce((sum, event) => sum + event.weight, 0);
+      let random = Math.random() * totalWeight;
+      
+      for (const event of availableEvents) {
+        random -= event.weight;
+        if (random <= 0) {
+          showEvent(event);
+          debugLog('EVENT', 'Triggering event', event.title);
+          break;
+        }
+      }
+    }
+
+    function showEvent(event) {
+      gameState.activeEvent = event;
+      gameState.paused = true;
+      
+      addEventToLog(event);
+      
+      const popup = document.getElementById('eventPopup');
+      document.getElementById('eventTitle').textContent = event.title;
+      document.getElementById('eventDescription').textContent = event.description;
+      
+      const choicesDiv = document.getElementById('eventChoices');
+      choicesDiv.innerHTML = '';
+      
+      if (event.choices) {
+        event.choices.forEach((choice, index) => {
+          const button = document.createElement('button');
+          button.className = 'event-choice-btn';
+          
+          const canChoose = !choice.condition || choice.condition();
+          
+          const choiceText = choice.getText ? choice.getText() : choice.text;
+          
+          if (!canChoose) {
+            button.disabled = true;
+            button.style.opacity = '0.5';
+            let requirement = '';
+            if (choiceText.includes('Food')) {
+              const foodMatch = choiceText.match(/(\d+)\s*Food/);
+              if (foodMatch && gameState.food < parseInt(foodMatch[1])) {
+                requirement = ` (Need ${foodMatch[1]} Food, have ${Math.floor(gameState.food)})`;
+              }
+            }
+            if (choiceText.includes('Gold')) {
+              const goldMatch = choiceText.match(/(\d+)\s*Gold/);
+              if (goldMatch && gameState.gold < parseInt(goldMatch[1])) {
+                requirement = ` (Need ${goldMatch[1]} Gold, have ${Math.floor(gameState.gold)})`;
+              }
+            }
+            button.textContent = choiceText + requirement;
+          } else {
+            button.textContent = choiceText;
+          }
+          
+          button.onclick = () => {
+            if (canChoose) {
+              choice.effect();
+              closeEvent();
+            }
+          };
+          
+          choicesDiv.appendChild(button);
+        });
+      } else {
+        const button = document.createElement('button');
+        button.className = 'event-choice-btn';
+        button.textContent = 'Continue';
+        button.onclick = () => {
+          event.effect();
+          closeEvent();
+        };
+        choicesDiv.appendChild(button);
+      }
+      
+      popup.classList.add('active');
+    }
+
+    function addEventToLog(event) {
+      let eventType = 'neutral';
+      if (['abundant_harvest', 'traveling_merchant', 'refugees', 'gold_discovery'].includes(event.id)) {
+        eventType = 'positive';
+      } else if (['harsh_winter', 'disease_outbreak', 'bandit_raid', 'farm_fire'].includes(event.id)) {
+        eventType = 'negative';
+      }
+      
+      const logEntry = {
+        title: event.title,
+        description: event.description,
+        time: formatTime(gameState.time),
+        type: eventType
+      };
+      
+      gameState.eventLog.unshift(logEntry);
+      
+      if (gameState.eventLog.length > BALANCE.MAX_EVENT_LOG_ENTRIES) {
+        gameState.eventLog.pop();
+      }
+      
+      updateEventLog();
+    }
+
+    function addCustomEventToLog(event, type = 'neutral') {
+      const logEntry = {
+        title: event.title,
+        description: event.description,
+        time: formatTime(gameState.time),
+        type: type
+      };
+      
+      gameState.eventLog.unshift(logEntry);
+      
+      if (gameState.eventLog.length > BALANCE.MAX_EVENT_LOG_ENTRIES) {
+        gameState.eventLog.pop();
+      }
+      
+      updateEventLog();
+    }
+
+    function updateEventLog() {
+      const logDiv = document.getElementById('eventLog');
+      
+      if (gameState.eventLog.length === 0) {
+        logDiv.innerHTML = '<p class="event-log-empty">No events yet. Your kingdom awaits its fate...</p>';
+        return;
+      }
+      
+      logDiv.innerHTML = '';
+      
+      gameState.eventLog.forEach(entry => {
+        const entryDiv = document.createElement('div');
+        entryDiv.className = `event-log-entry ${entry.type}`;
+        
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'event-log-title';
+        titleDiv.textContent = entry.title;
+        
+        const descDiv = document.createElement('div');
+        descDiv.className = 'event-log-desc';
+        descDiv.textContent = entry.description;
+        
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'event-log-time';
+        timeDiv.textContent = `Time: ${entry.time}`;
+        
+        entryDiv.appendChild(titleDiv);
+        entryDiv.appendChild(descDiv);
+        entryDiv.appendChild(timeDiv);
+        
+        logDiv.appendChild(entryDiv);
+      });
+    }
+
+    function closeEvent() {
+      document.getElementById('eventPopup').classList.remove('active');
+      gameState.activeEvent = null;
+      gameState.paused = false;
+      updateDisplay();
+    }
+
+    // ===================================
+    // BUILDING FUNCTIONS
+    // ===================================
+    
+    const buildings = {
+      farm: { baseCost: BALANCE.FARM_BASE_COST, foodRate: BALANCE.FARM_FOOD_RATE },
+      house: { baseCost: BALANCE.HOUSE_BASE_COST, popIncrease: BALANCE.HOUSE_POPULATION },
+      market: { baseCost: BALANCE.MARKET_BASE_COST, goldRate: BALANCE.MARKET_GOLD_RATE },
+      library: { baseCost: BALANCE.LIBRARY_BASE_COST, researchRate: BALANCE.LIBRARY_RESEARCH_RATE }
+    };
+
+    function getBuildingCost(type) {
+      const basePrice = buildings[type].baseCost;
+      const owned = gameState.buildings[type];
+      return Math.floor(basePrice * Math.pow(BALANCE.BUILDING_COST_MULTIPLIER, owned));
+    }
+
+    function getPopGrowthRate() {
+      if (gameState.population <= 0) return 0;
+      
+      if (gameState.food < BALANCE.FOOD_STARVATION_THRESHOLD) return BALANCE.POPULATION_STARVATION_PENALTY;
+      
+      if (gameState.population >= gameState.maxPopulation) return 0;
+      
+      const food = gameState.food;
+      let baseRate = BALANCE.POP_GROWTH_RATE_NONE;
+      if (food < BALANCE.FOOD_GROWTH_THRESHOLD_LOW) baseRate = BALANCE.POP_GROWTH_RATE_NONE;
+      else if (food < BALANCE.FOOD_GROWTH_THRESHOLD_MED) baseRate = BALANCE.POP_GROWTH_RATE_LOW;
+      else if (food < BALANCE.FOOD_GROWTH_THRESHOLD_HIGH) baseRate = BALANCE.POP_GROWTH_RATE_MED;
+      else baseRate = BALANCE.POP_GROWTH_RATE_HIGH;
+      
+      return baseRate * getPopGrowthMultiplier();
+    }
+
+    function calculateRates() {
+      const farmMultiplier = getFarmMultiplier();
+      const marketMultiplier = getMarketMultiplier();
+      
+      const farms = gameState.buildings.farm || 0;
+      const markets = gameState.buildings.market || 0;
+      const libraries = gameState.buildings.library || 0;
+      const population = gameState.population || 0;
+      
+      const foodRate = farms * buildings.farm.foodRate * farmMultiplier - population * BALANCE.POPULATION_FOOD_CONSUMPTION;
+      const goldRate = markets * buildings.market.goldRate * marketMultiplier + population * BALANCE.POPULATION_TAX_RATE;
+      const researchRate = libraries * buildings.library.researchRate;
+      const popRate = getPopGrowthRate();
+      
+      return { foodRate, goldRate, researchRate, popRate };
+    }
+
+    function buyBuilding(type) {
+      const buttonId = `buy_${type}`;
+      
+      if (isButtonOnCooldown(buttonId)) return;
+      setButtonCooldown(buttonId);
+      
+      const cost = getBuildingCost(type);
+      
+      if (gameState.gold >= cost && !gameState.gameOver) {
+        gameState.gold -= cost;
+        gameState.buildings[type]++;
+        gameState.statistics.totalBuildingsBuilt++;
+        
+        if (type === 'house') {
+          const houseBonus = getHouseBonus();
+          gameState.maxPopulation += buildings.house.popIncrease + houseBonus;
+        }
+        
+        const typeName = type.charAt(0).toUpperCase() + type.slice(1);
+        showResourceChange(`Built ${typeName}!`);
+        
+        debugLog('BUILDING', `Built ${type}`, { cost, total: gameState.buildings[type] });
+        
+        saveGame();
+        updateDisplay();
+        checkAchievements();
+      }
+    }
+
+    // ===================================
+    // TRADE FUNCTIONS
+    // ===================================
+    
+    function sellFood() {
+      const inputValue = document.getElementById('sellAmount').value;
+      let amount = parseInt(inputValue) || 0;
+      
+      amount = Math.max(0, Math.min(amount, Math.floor(gameState.food)));
+      
+      document.getElementById('sellAmount').value = amount;
+      
+      if (amount > 0 && !gameState.gameOver) {
+        gameState.food -= amount;
+        gameState.gold += amount * BALANCE.FOOD_TO_GOLD_RATE;
+        
+        showResourceChange(`Sold ${amount} food for ${(amount * BALANCE.FOOD_TO_GOLD_RATE).toFixed(1)} gold`);
+        
+        debugLog('TRADE', 'Sold food', { amount, gold: amount * BALANCE.FOOD_TO_GOLD_RATE });
+        
+        saveGame();
+        updateDisplay();
+      }
+    }
+
+    function quickSell(amount) {
+      if (amount === 'all') {
+        document.getElementById('sellAmount').value = Math.floor(gameState.food);
+      } else {
+        document.getElementById('sellAmount').value = amount;
+      }
+      sellFood();
+    }
+
+    // ===================================
+    // DISPLAY FUNCTIONS
+    // ===================================
+    
+    function updateDisplay() {
+      const rates = calculateRates();
+      
+      document.getElementById('gold').textContent = Math.floor(gameState.gold);
+      document.getElementById('food').textContent = Math.floor(gameState.food);
+      document.getElementById('population').textContent = Math.floor(gameState.population);
+      document.getElementById('research').textContent = Math.floor(gameState.research);
+      document.getElementById('time').textContent = formatTime(gameState.time);
+      
+      document.getElementById('goldRate').textContent = `${rates.goldRate >= 0 ? '+' : ''}${rates.goldRate.toFixed(1)}/sec`;
+      document.getElementById('foodRate').textContent = `${rates.foodRate >= 0 ? '+' : ''}${rates.foodRate.toFixed(1)}/sec`;
+      document.getElementById('researchRate').textContent = `${rates.researchRate >= 0 ? '+' : ''}${rates.researchRate.toFixed(1)}/sec`;
+      document.getElementById('popRate').textContent = `${rates.popRate >= 0 ? '+' : ''}${rates.popRate.toFixed(2)}/sec`;
+      
+      const farmMultiplier = getFarmMultiplier();
+      const marketMultiplier = getMarketMultiplier();
+      const houseBonus = getHouseBonus();
+      
+      const foodProduction = gameState.buildings.farm * buildings.farm.foodRate * farmMultiplier;
+      const foodConsumption = gameState.population * BALANCE.POPULATION_FOOD_CONSUMPTION;
+      const netFood = foodProduction - foodConsumption;
+      const taxIncome = gameState.population * BALANCE.POPULATION_TAX_RATE;
+      
+      document.getElementById('summaryPopulation').textContent = Math.floor(gameState.population);
+      document.getElementById('summaryTaxIncome').textContent = `+${taxIncome.toFixed(2)}/sec`;
+      document.getElementById('summaryFoodConsume').textContent = `-${foodConsumption.toFixed(1)}/sec`;
+      document.getElementById('summaryFarms').textContent = gameState.buildings.farm;
+      document.getElementById('summaryHouses').textContent = gameState.buildings.house;
+      document.getElementById('summaryMarkets').textContent = gameState.buildings.market;
+      document.getElementById('summaryLibraries').textContent = gameState.buildings.library;
+      document.getElementById('summaryFoodProd').textContent = 
+        `Net: ${netFood >= 0 ? '+' : ''}${netFood.toFixed(1)}/sec (${foodProduction.toFixed(1)} - ${foodConsumption.toFixed(1)})`;
+      document.getElementById('summaryPopCap').textContent = gameState.maxPopulation;
+      document.getElementById('summaryGoldIncome').textContent = `+${(gameState.buildings.market * buildings.market.goldRate * marketMultiplier).toFixed(1)}/sec`;
+      document.getElementById('summaryResearchRate').textContent = `+${rates.researchRate.toFixed(1)}/sec`;
+      
+      document.getElementById('farmCount').textContent = gameState.buildings.farm;
+      document.getElementById('houseCount').textContent = gameState.buildings.house;
+      document.getElementById('marketCount').textContent = gameState.buildings.market;
+      document.getElementById('libraryCount').textContent = gameState.buildings.library;
+      
+      const farmCost = getBuildingCost('farm');
+      const houseCost = getBuildingCost('house');
+      const marketCost = getBuildingCost('market');
+      const libraryCost = getBuildingCost('library');
+      
+      const farmProduction = (buildings.farm.foodRate * farmMultiplier).toFixed(1);
+      const marketIncome = (buildings.market.goldRate * marketMultiplier).toFixed(1);
+      const housePop = buildings.house.popIncrease + houseBonus;
+      
+      document.getElementById('farmCost').textContent = `Cost: ${farmCost} Gold | +${farmProduction} Food/sec`;
+      document.getElementById('houseCost').textContent = `Cost: ${houseCost} Gold | +${housePop} Max Pop`;
+      document.getElementById('marketCost').textContent = `Cost: ${marketCost} Gold | +${marketIncome} Gold/sec`;
+      document.getElementById('libraryCost').textContent = `Cost: ${libraryCost} Gold | +0.1 Research/sec`;
+      
+      document.querySelectorAll('.buy-btn').forEach((btn, index) => {
+        const types = ['farm', 'house', 'market', 'library'];
+        const cost = getBuildingCost(types[index]);
+        btn.disabled = gameState.gold < cost;
+      });
+      
+      const sellAmount = parseInt(document.getElementById('sellAmount').value) || 0;
+      document.getElementById('sellBtn').disabled = sellAmount <= 0 || sellAmount > gameState.food;
+      document.getElementById('sellBtn').textContent = 
+        `Sell ${sellAmount} Food → +${(sellAmount * BALANCE.FOOD_TO_GOLD_RATE).toFixed(1)} Gold`;
+    }
+
+    // ===================================
+    // GAME LOOP
+    // ===================================
+    
+    function gameLoop() {
+      if (gameState.gameOver || gameState.paused) return;
+      
+      const rates = calculateRates();
+      const delta = BALANCE.GAME_LOOP_INTERVAL / 1000;
+      
+      const prevGold = gameState.gold;
+      const prevFood = gameState.food;
+      
+      gameState.gold += rates.goldRate * delta;
+      gameState.food += rates.foodRate * delta;
+      gameState.research += rates.researchRate * delta;
+      gameState.population += rates.popRate * delta;
+      gameState.time += delta;
+      gameState.totalTimePlayed += delta;
+      
+      if (gameState.gold > prevGold) {
+        gameState.statistics.totalGoldEarned += (gameState.gold - prevGold);
+      }
+      if (gameState.food > prevFood) {
+        gameState.statistics.totalFoodProduced += (gameState.food - prevFood);
+      }
+      gameState.statistics.maxPopulationReached = Math.max(
+        gameState.statistics.maxPopulationReached,
+        Math.floor(gameState.population)
+      );
+      gameState.statistics.longestSurvival = Math.max(
+        gameState.statistics.longestSurvival,
+        Math.floor(gameState.time)
+      );
+      
+      gameState.gold = Math.max(0, gameState.gold);
+      gameState.food = Math.max(0, gameState.food);
+      gameState.research = Math.max(0, gameState.research);
+      gameState.population = Math.max(0, Math.min(gameState.population, gameState.maxPopulation));
+      
+      if (gameState.population >= 1) {
+        gameState.hasHadPopulation = true;
+      }
+      
+      if (Math.floor(gameState.time * 10) % (BALANCE.SAVE_INTERVAL / 100) === 0) {
+        saveGame();
+        updateAllTimeStats();
+        checkAchievements();
+      }
+      
+      const timeSinceLastEvent = gameState.time - gameState.lastEventTime;
+      
+      if (timeSinceLastEvent >= gameState.nextEventInterval && !gameState.activeEvent && gameState.time > BALANCE.EVENT_START_DELAY) {
+        triggerRandomEvent();
+        gameState.lastEventTime = gameState.time;
+        gameState.nextEventInterval = BALANCE.EVENT_MIN_INTERVAL + Math.random() * (BALANCE.EVENT_MAX_INTERVAL - BALANCE.EVENT_MIN_INTERVAL);
+      }
+      
+      if (gameState.hasHadPopulation && gameState.population < 0.1) {
+        endGame();
+      }
+      
+      updateDisplay();
+    }
+
+    // ===================================
+    // GAME END/RESTART
+    // ===================================
+    
+    function endGame() {
+      gameState.gameOver = true;
+      clearInterval(gameInterval);
+      
+      updateAllTimeStats();
+      allTimeStats.gamesPlayed++;
+      saveAllTimeStats();
+      checkAchievements();
+      
+      debugLog('GAME', 'Game over', { time: gameState.time, buildings: gameState.statistics.totalBuildingsBuilt });
+      
+      document.getElementById('finalStats').innerHTML = 
+        `You survived <strong style="color: var(--gold)">${formatTime(gameState.time)}</strong><br>` +
+        `Built <strong style="color: var(--gold)">${gameState.buildings.farm + gameState.buildings.house + gameState.buildings.market + gameState.buildings.library}</strong> buildings<br>` +
+        `Reached <strong style="color: var(--gold)">${Math.floor(gameState.population)}</strong> population<br>` +
+        `Researched <strong style="color: var(--purple)">${gameState.statistics.technologiesPurchased}</strong> technologies`;
+      document.getElementById('gameOver').classList.add('active');
+    }
+
+    function restartGame() {
+      localStorage.removeItem('medievalKingdomSave');
+      
+      gameState = {
+        version: GAME_VERSION,
+        gold: BALANCE.STARTING_GOLD,
+        food: 0,
+        population: 0,
+        maxPopulation: BALANCE.STARTING_MAX_POPULATION,
+        research: 0,
+        buildings: {
+          farm: 0,
+          house: 0,
+          market: 0,
+          library: 0
+        },
+        technologies: {},
+        time: 0,
+        gameOver: false,
+        hasHadPopulation: false,
+        paused: false,
+        lastEventTime: 0,
+        nextEventInterval: BALANCE.EVENT_MIN_INTERVAL + Math.random() * (BALANCE.EVENT_MAX_INTERVAL - BALANCE.EVENT_MIN_INTERVAL),
+        activeEvent: null,
+        eventLog: [],
+        lastSaveTime: Date.now(),
+        totalTimePlayed: 0,
+        statistics: {
+          totalGoldEarned: 0,
+          totalFoodProduced: 0,
+          totalBuildingsBuilt: 0,
+          maxPopulationReached: 0,
+          longestSurvival: 0,
+          technologiesPurchased: 0
+        }
+      };
+      
+      document.getElementById('gameOver').classList.remove('active');
+      document.getElementById('eventPopup').classList.remove('active');
+      updateEventLog();
+      updateDisplay();
+      gameInterval = setInterval(gameLoop, BALANCE.GAME_LOOP_INTERVAL);
+      saveGame();
+      
+      debugLog('GAME', 'Game restarted');
+    }
+
+    // ===================================
+    // ABOUT POPUP
+    // ===================================
+    
+    function showAbout() {
+      document.getElementById('aboutPopup').classList.add('active');
+      gameState.paused = true;
+    }
+
+    function hideAbout() {
+      document.getElementById('aboutPopup').classList.remove('active');
+      gameState.paused = false;
+    }
+
+    function toggleChangelog(element) {
+      element.classList.toggle('expanded');
+    }
+
+    // ===================================
+    // INITIALIZATION
+    // ===================================
+    
+    document.getElementById('sellAmount').addEventListener('input', updateDisplay);
+
+    loadAllTimeStats();
+    const hasLoadedGame = loadGame();
+    
+    gameInterval = setInterval(gameLoop, BALANCE.GAME_LOOP_INTERVAL);
+    updateEventLog();
+    updateDisplay();
+
+    debugLog('GAME', 'Game initialized', { version: GAME_VERSION, loadedSave: hasLoadedGame });
+  </script>
+</body>
+</html>
