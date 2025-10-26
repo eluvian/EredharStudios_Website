@@ -109,31 +109,29 @@ function updateDisplay() {
   document.getElementById('summaryGoldIncome').textContent = `+${(gameState.buildings.market * buildings.market.goldRate * marketMultiplier).toFixed(1)}/sec`;
   document.getElementById('summaryResearchRate').textContent = `+${rates.researchRate.toFixed(1)}/sec`;
   
+  // Update building counts
   document.getElementById('farmCount').textContent = gameState.buildings.farm;
   document.getElementById('houseCount').textContent = gameState.buildings.house;
   document.getElementById('marketCount').textContent = gameState.buildings.market;
   document.getElementById('libraryCount').textContent = gameState.buildings.library;
   
+  // Update build button states
   const farmCost = getBuildingCost('farm');
   const houseCost = getBuildingCost('house');
   const marketCost = getBuildingCost('market');
   const libraryCost = getBuildingCost('library');
   
-  const farmProduction = (buildings.farm.foodRate * farmMultiplier).toFixed(1);
-  const marketIncome = (buildings.market.goldRate * marketMultiplier).toFixed(1);
-  const housePop = buildings.house.popIncrease + houseBonus;
+  const farmBtn = document.getElementById('farmBuildBtn');
+  const houseBtn = document.getElementById('houseBuildBtn');
+  const marketBtn = document.getElementById('marketBuildBtn');
+  const libraryBtn = document.getElementById('libraryBuildBtn');
   
-  document.getElementById('farmCost').textContent = `Cost: ${farmCost} Gold | +${farmProduction} Food/sec`;
-  document.getElementById('houseCost').textContent = `Cost: ${houseCost} Gold | +${housePop} Max Pop`;
-  document.getElementById('marketCost').textContent = `Cost: ${marketCost} Gold | +${marketIncome} Gold/sec`;
-  document.getElementById('libraryCost').textContent = `Cost: ${libraryCost} Gold | +0.1 Research/sec`;
+  if (farmBtn) farmBtn.disabled = gameState.gold < farmCost;
+  if (houseBtn) houseBtn.disabled = gameState.gold < houseCost;
+  if (marketBtn) marketBtn.disabled = gameState.gold < marketCost;
+  if (libraryBtn) libraryBtn.disabled = gameState.gold < libraryCost;
   
-  document.querySelectorAll('.buy-btn').forEach((btn, index) => {
-    const types = ['farm', 'house', 'market', 'library'];
-    const cost = getBuildingCost(types[index]);
-    btn.disabled = gameState.gold < cost;
-  });
-  
+  // Update sell button
   const sellAmount = parseInt(document.getElementById('sellAmount').value) || 0;
   document.getElementById('sellBtn').disabled = sellAmount <= 0 || sellAmount > gameState.food;
   document.getElementById('sellBtn').textContent = 
