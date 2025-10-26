@@ -101,17 +101,12 @@
           <div class="building-card">
             <div class="building-image">
               <img src="medieval-simulator/images/building-farm.png" alt="Farm">
+              <span class="building-count-badge" id="farmCount">0</span>
             </div>
-            <div class="building-content">
-              <div class="building-info">
-                <h3>🌾 Farm</h3>
-                <p>Produces food for your people</p>
-                <p style="color: var(--gold); font-size: 0.85rem;" id="farmCost">Cost: 50 Gold | +0.5 Food/sec</p>
-              </div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span class="building-count" id="farmCount">0</span>
-                <button class="buy-btn" onclick="buyBuilding('farm')">Build</button>
-              </div>
+            <div class="building-name">🌾 Farm</div>
+            <div class="building-actions">
+              <button class="building-info-btn" onclick="showBuildingInfo('farm')" title="Building Info">ℹ️</button>
+              <button class="building-build-btn" onclick="buyBuilding('farm')" id="farmBuildBtn">+ Build</button>
             </div>
           </div>
 
@@ -119,17 +114,12 @@
           <div class="building-card">
             <div class="building-image">
               <img src="medieval-simulator/images/building-house.png" alt="House">
+              <span class="building-count-badge" id="houseCount">0</span>
             </div>
-            <div class="building-content">
-              <div class="building-info">
-                <h3>🏠 House</h3>
-                <p>Increases population capacity</p>
-                <p style="color: var(--gold); font-size: 0.85rem;" id="houseCost">Cost: 40 Gold | +5 Max Pop</p>
-              </div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span class="building-count" id="houseCount">0</span>
-                <button class="buy-btn" onclick="buyBuilding('house')">Build</button>
-              </div>
+            <div class="building-name">🏠 House</div>
+            <div class="building-actions">
+              <button class="building-info-btn" onclick="showBuildingInfo('house')" title="Building Info">ℹ️</button>
+              <button class="building-build-btn" onclick="buyBuilding('house')" id="houseBuildBtn">+ Build</button>
             </div>
           </div>
 
@@ -137,17 +127,12 @@
           <div class="building-card">
             <div class="building-image">
               <img src="medieval-simulator/images/building-market.png" alt="Market">
+              <span class="building-count-badge" id="marketCount">0</span>
             </div>
-            <div class="building-content">
-              <div class="building-info">
-                <h3>🏪 Market</h3>
-                <p>Generates passive gold income</p>
-                <p style="color: var(--gold); font-size: 0.85rem;" id="marketCost">Cost: 60 Gold | +0.2 Gold/sec</p>
-              </div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span class="building-count" id="marketCount">0</span>
-                <button class="buy-btn" onclick="buyBuilding('market')">Build</button>
-              </div>
+            <div class="building-name">🏪 Market</div>
+            <div class="building-actions">
+              <button class="building-info-btn" onclick="showBuildingInfo('market')" title="Building Info">ℹ️</button>
+              <button class="building-build-btn" onclick="buyBuilding('market')" id="marketBuildBtn">+ Build</button>
             </div>
           </div>
 
@@ -155,17 +140,12 @@
           <div class="building-card">
             <div class="building-image">
               <img src="medieval-simulator/images/building-library.png" alt="Library">
+              <span class="building-count-badge" id="libraryCount">0</span>
             </div>
-            <div class="building-content">
-              <div class="building-info">
-                <h3>📚 Library</h3>
-                <p>Generates research points</p>
-                <p style="color: var(--gold); font-size: 0.85rem;" id="libraryCost">Cost: 80 Gold | +0.1 Research/sec</p>
-              </div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span class="building-count" id="libraryCount">0</span>
-                <button class="buy-btn" onclick="buyBuilding('library')">Build</button>
-              </div>
+            <div class="building-name">📚 Library</div>
+            <div class="building-actions">
+              <button class="building-info-btn" onclick="showBuildingInfo('library')" title="Building Info">ℹ️</button>
+              <button class="building-build-btn" onclick="buyBuilding('library')" id="libraryBuildBtn">+ Build</button>
             </div>
           </div>
         </div>
@@ -201,6 +181,17 @@
     <!-- Back Link -->
     <div class="back-link">
       <a href="index.html">← Back to Eredhar Studios</a>
+    </div>
+  </div>
+
+  <!-- Building Info Modal -->
+  <div class="building-info-modal" id="buildingInfoModal">
+    <div class="building-info-content">
+      <button class="close-modal-btn" onclick="closeBuildingInfo()">✕</button>
+      <img class="modal-building-image" id="modalBuildingImage" src="" alt="">
+      <h2 class="modal-building-title" id="modalBuildingTitle"></h2>
+      <p class="modal-building-desc" id="modalBuildingDesc"></p>
+      <div class="modal-building-stats" id="modalBuildingStats"></div>
     </div>
   </div>
 
@@ -498,6 +489,7 @@
   <script src="medieval-simulator/js/trade.js"></script>
   <script src="medieval-simulator/js/save-load.js"></script>
   <script src="medieval-simulator/js/display.js"></script>
+  <script src="medieval-simulator/js/building-info.js"></script>
   <script src="medieval-simulator/js/popups.js"></script>
   <script src="medieval-simulator/js/game-loop.js"></script>
   <script src="medieval-simulator/js/main.js"></script>
