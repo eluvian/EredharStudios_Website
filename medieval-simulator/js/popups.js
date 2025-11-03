@@ -54,21 +54,16 @@ function renderTechTier(gridId, techs) {
   });
 }
 
-// Statistics Display
+// Statistics Display - FIXED VERSION
 function updateStatisticsDisplay() {
-  document.getElementById('statCurrentTime').textContent = formatTime(gameState.time);
-  document.getElementById('statCurrentGold').textContent = Math.floor(gameState.statistics.totalGoldEarned).toLocaleString();
-  document.getElementById('statCurrentFood').textContent = Math.floor(gameState.statistics.totalFoodProduced).toLocaleString();
-  document.getElementById('statCurrentBuildings').textContent = gameState.statistics.totalBuildingsBuilt;
-  document.getElementById('statCurrentPopulation').textContent = gameState.statistics.maxPopulationReached;
-  document.getElementById('statCurrentTech').textContent = gameState.statistics.technologiesPurchased;
-
+  // Update all-time statistics (these IDs DO exist in the HTML)
   document.getElementById('statAllTimeTime').textContent = formatTime(allTimeStats.longestSurvival);
   document.getElementById('statAllTimeGold').textContent = Math.floor(allTimeStats.totalGoldEarned).toLocaleString();
   document.getElementById('statAllTimeFood').textContent = Math.floor(allTimeStats.totalFoodProduced).toLocaleString();
   document.getElementById('statAllTimeBuildings').textContent = allTimeStats.totalBuildingsBuilt;
   document.getElementById('statAllTimePopulation').textContent = allTimeStats.highestPopulation;
 
+  // Update achievements list
   const achievementsList = document.getElementById('achievementsList');
   if (!achievementsList) return;
   
