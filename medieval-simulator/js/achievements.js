@@ -29,11 +29,22 @@ const achievements = [
   { id: 'tech_5', icon: '📚', name: 'Innovator', desc: 'Research 5 technologies', check: () => gameState.statistics.technologiesPurchased >= 5 },
   { id: 'tech_all', icon: '🎓', name: 'Renaissance', desc: 'Research all technologies', check: () => gameState.statistics.technologiesPurchased >= Object.keys(technologies).length },
   
-  // Special Achievements
-  { id: 'games_10', icon: '🔄', name: 'Persistent', desc: 'Play 10 games', check: () => allTimeStats.gamesPlayed >= 10 },
+  // Specific Building Achievements
   { id: 'farm_10', icon: '🌾', name: 'Farmer King', desc: 'Build 10 farms', check: () => gameState.buildings.farm >= 10 },
   { id: 'house_10', icon: '🏠', name: 'Housing Baron', desc: 'Build 10 houses', check: () => gameState.buildings.house >= 10 },
-  { id: 'library_5', icon: '📚', name: 'Enlightened', desc: 'Build 5 libraries', check: () => gameState.buildings.library >= 5 }
+  { id: 'library_5', icon: '📚', name: 'Enlightened', desc: 'Build 5 libraries', check: () => gameState.buildings.library >= 5 },
+  { id: 'barracks_5', icon: '⚔️', name: 'Warlord', desc: 'Build 5 barracks', check: () => gameState.buildings.barracks >= 5 },
+  { id: 'temple_5', icon: '⛪', name: 'Faithful', desc: 'Build 5 temples', check: () => gameState.buildings.temple >= 5 },
+  
+  // Defense & Faith Achievements
+  { id: 'repel_raid', icon: '🛡️', name: 'Defender', desc: 'Successfully repel a raid', check: () => gameState.statistics.raidsRepelled >= 1 },
+  { id: 'repel_10_raids', icon: '🏰', name: 'Fortress', desc: 'Repel 10 raids (all-time)', check: () => allTimeStats.totalRaidsRepelled >= 10 },
+  { id: 'heal_disease', icon: '✨', name: 'Healer', desc: 'Reduce disease impact with faith', check: () => gameState.statistics.diseasesHealed >= 1 },
+  
+  // Special Achievements
+  { id: 'games_10', icon: '🔄', name: 'Persistent', desc: 'Play 10 games', check: () => allTimeStats.gamesPlayed >= 10 },
+  { id: 'defense_50', icon: '🛡️', name: 'Impenetrable', desc: 'Reach 50 defense', check: () => gameState.defense >= 50 },
+  { id: 'faith_30', icon: '✨', name: 'Divine', desc: 'Reach 30 faith', check: () => gameState.faith >= 30 }
 ];
 
 let unlockedAchievements = [];

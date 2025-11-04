@@ -6,7 +6,9 @@ const buildings = {
   farm: { baseCost: BALANCE.FARM_BASE_COST, foodRate: BALANCE.FARM_FOOD_RATE },
   house: { baseCost: BALANCE.HOUSE_BASE_COST, popIncrease: BALANCE.HOUSE_POPULATION },
   market: { baseCost: BALANCE.MARKET_BASE_COST, goldRate: BALANCE.MARKET_GOLD_RATE },
-  library: { baseCost: BALANCE.LIBRARY_BASE_COST, researchRate: BALANCE.LIBRARY_RESEARCH_RATE }
+  library: { baseCost: BALANCE.LIBRARY_BASE_COST, researchRate: BALANCE.LIBRARY_RESEARCH_RATE },
+  barracks: { baseCost: BALANCE.BARRACKS_BASE_COST, defenseRate: BALANCE.BARRACKS_DEFENSE_RATE },
+  temple: { baseCost: BALANCE.TEMPLE_BASE_COST, faithRate: BALANCE.TEMPLE_FAITH_RATE }
 };
 
 function getBuildingCost(type) {
@@ -43,14 +45,30 @@ function calculateRates() {
   const farms = gameState.buildings.farm || 0;
   const markets = gameState.buildings.market || 0;
   const libraries = gameState.buildings.library || 0;
+  const barracks = gameState.buildings.barracks || 0;
+  const temples = gameState.buildings.temple || 0;
   const population = gameState.population || 0;
   
   const foodRate = farms * buildings.farm.foodRate * farmMultiplier - population * BALANCE.POPULATION_FOOD_CONSUMPTION;
   const goldRate = markets * buildings.market.goldRate * marketMultiplier + population * BALANCE.POPULATION_TAX_RATE;
   const researchRate = libraries * buildings.library.researchRate;
+  const defenseRate = barracks * buildings.barracks.defenseRate;
+  const faithRate = temples * buildings.temple.faithRate;
   const popRate = getPopGrowthRate();
   
-  return { foodRate, goldRate, researchRate, popRate };
+  return { foodRate, goldRate, researchRate, defenseRate, faithRate, popRate };
+}
+
+function getDefenseReduction() {
+  const defense = gameState.defense || 0;
+  const reduction = Math.min(defense * BALANCE.DEFENSE_RAID_REDUCTION_RATE, BALANCE.DEFENSE_MAX_REDUCTION);
+  return reduction;
+}
+
+function getFaithReduction() {
+  const faith = gameState.faith || 0;
+  const reduction = Math.min(faith * BALANCE.FAITH_EVENT_REDUCTION_RATE, BALANCE.FAITH_MAX_REDUCTION);
+  return reduction;
 }
 
 function buyBuilding(type) {

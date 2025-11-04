@@ -69,8 +69,18 @@ const randomEvents = [
     title: '❄️ Harsh Winter',
     description: 'An unexpectedly harsh winter destroys part of your food stores.',
     effect: () => {
-      const loss = Math.floor(gameState.food * 0.3);
-      gameState.food -= loss;
+      const faithReduction = getFaithReduction();
+      const baseLoss = Math.floor(gameState.food * 0.3);
+      const actualLoss = Math.floor(baseLoss * (1 - faithReduction));
+      gameState.food -= actualLoss;
+      
+      if (faithReduction > 0.3) {
+        addCustomEventToLog({
+          id: 'faith_protection',
+          title: '✨ Faith Protects',
+          description: `Your people's faith reduced the winter's impact! (${Math.floor(faithReduction * 100)}% reduction)`
+        }, 'positive');
+      }
     },
     weight: 10
   },
@@ -79,30 +89,68 @@ const randomEvents = [
     title: '💀 Disease Outbreak',
     description: 'A sickness spreads through your population!',
     effect: () => {
-      const damageReduction = getDiseaseDamageReduction();
+      const techReduction = getDiseaseDamageReduction();
+      const faithReduction = getFaithReduction();
+      const totalReduction = Math.min(techReduction + faithReduction, 1.0);
+      
       const baseLoss = Math.floor(gameState.population * 0.2);
-      const actualLoss = Math.floor(baseLoss * (1 - damageReduction));
+      const actualLoss = Math.floor(baseLoss * (1 - totalReduction));
       gameState.population -= actualLoss;
       
-      // Show immunity message if applicable
-      if (damageReduction >= 1.0) {
+      // Track if faith helped
+      if (faithReduction > 0.2) {
+        gameState.statistics.diseasesHealed++;
+      }
+      
+      // Show immunity/protection message if applicable
+      if (totalReduction >= 1.0) {
         addCustomEventToLog({
           id: 'disease_prevented',
           title: '✅ Disease Prevented',
-          description: 'Thanks to Public Health research, your people are immune!'
+          description: 'Thanks to medicine and faith, your people are protected!'
+        }, 'positive');
+      } else if (faithReduction > 0.2) {
+        addCustomEventToLog({
+          id: 'faith_healing',
+          title: '✨ Faith Heals',
+          description: `Your temples helped reduce disease impact! (${Math.floor(faithReduction * 100)}% reduction)`
         }, 'positive');
       }
     },
-    condition: () => gameState.population >= 5 && getDiseaseDamageReduction() < 1.0,
+    condition: () => gameState.population >= 5,
     weight: 8
   },
   {
     id: 'bandit_raid',
     title: '⚔️ Bandit Raid',
-    description: 'Bandits raid your kingdom, stealing resources!',
+    description: 'Bandits raid your kingdom!',
     effect: () => {
-      gameState.gold = Math.max(0, gameState.gold - 25);
-      gameState.food = Math.max(0, gameState.food - 15);
+      const defenseReduction = getDefenseReduction();
+      
+      const baseGoldLoss = 25;
+      const baseFoodLoss = 15;
+      
+      const actualGoldLoss = Math.floor(baseGoldLoss * (1 - defenseReduction));
+      const actualFoodLoss = Math.floor(baseFoodLoss * (1 - defenseReduction));
+      
+      gameState.gold = Math.max(0, gameState.gold - actualGoldLoss);
+      gameState.food = Math.max(0, gameState.food - actualFoodLoss);
+      
+      // Track successful defense
+      if (defenseReduction >= 0.5) {
+        gameState.statistics.raidsRepelled++;
+        addCustomEventToLog({
+          id: 'raid_repelled',
+          title: '🛡️ Raid Repelled!',
+          description: `Your barracks defended the kingdom! (${Math.floor(defenseReduction * 100)}% damage reduced)`
+        }, 'positive');
+      } else if (defenseReduction > 0.2) {
+        addCustomEventToLog({
+          id: 'partial_defense',
+          title: '⚔️ Defenders Stand',
+          description: `Your defenses reduced the raid's impact! (${Math.floor(defenseReduction * 100)}% reduction)`
+        }, 'neutral');
+      }
     },
     condition: () => gameState.gold >= 10 || gameState.food >= 10,
     weight: 12
@@ -112,7 +160,18 @@ const randomEvents = [
     title: '🔥 Farm Fire',
     description: 'A fire breaks out in one of your farms, destroying crops!',
     effect: () => {
-      gameState.food = Math.max(0, gameState.food - 30);
+      const faithReduction = getFaithReduction();
+      const baseLoss = 30;
+      const actualLoss = Math.floor(baseLoss * (1 - faithReduction));
+      gameState.food = Math.max(0, gameState.food - actualLoss);
+      
+      if (faithReduction > 0.3) {
+        addCustomEventToLog({
+          id: 'fire_protection',
+          title: '✨ Divine Intervention',
+          description: `Faith helped contain the fire! (${Math.floor(faithReduction * 100)}% reduction)`
+        }, 'positive');
+      }
     },
     condition: () => gameState.buildings.farm >= 1,
     weight: 9
@@ -160,6 +219,41 @@ const randomEvents = [
       }
     ],
     condition: () => gameState.population >= 10,
+    weight: 7
+  },
+  {
+    id: 'military_parade',
+    title: '🎺 Military Parade',
+    description: 'Your guards wish to host a parade to show the kingdom\'s strength.',
+    choices: [
+      {
+        text: 'Host Parade (-15 Gold, +5 Defense temporarily)',
+        condition: () => gameState.gold >= 15 && gameState.buildings.barracks >= 1,
+        effect: () => {
+          gameState.gold -= 15;
+          gameState.defense += 5;
+        }
+      },
+      {
+        text: 'Not today',
+        effect: () => {}
+      }
+    ],
+    condition: () => gameState.buildings.barracks >= 2,
+    weight: 6
+  },
+  {
+    id: 'religious_pilgrimage',
+    title: '🙏 Pilgrimage Arrives',
+    description: 'Pilgrims visit your temples, bringing donations and faith.',
+    effect: () => {
+      const temples = gameState.buildings.temple || 0;
+      const goldGain = temples * 5;
+      const faithGain = temples * 2;
+      gameState.gold += goldGain;
+      gameState.faith += faithGain;
+    },
+    condition: () => gameState.buildings.temple >= 1,
     weight: 7
   }
 ];
@@ -256,7 +350,7 @@ function showEvent(event) {
 
 function addEventToLog(event) {
   let eventType = 'neutral';
-  if (['abundant_harvest', 'traveling_merchant', 'refugees', 'gold_discovery'].includes(event.id)) {
+  if (['abundant_harvest', 'traveling_merchant', 'refugees', 'gold_discovery', 'military_parade', 'religious_pilgrimage'].includes(event.id)) {
     eventType = 'positive';
   } else if (['harsh_winter', 'disease_outbreak', 'bandit_raid', 'farm_fire'].includes(event.id)) {
     eventType = 'negative';

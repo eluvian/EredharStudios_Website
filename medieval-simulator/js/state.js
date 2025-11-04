@@ -9,11 +9,15 @@ let gameState = {
   population: 0,
   maxPopulation: BALANCE.STARTING_MAX_POPULATION,
   research: 0,
+  defense: 0,
+  faith: 0,
   buildings: {
     farm: 0,
     house: 0,
     market: 0,
-    library: 0
+    library: 0,
+    barracks: 0,
+    temple: 0
   },
   technologies: {},
   time: 0,
@@ -32,7 +36,9 @@ let gameState = {
     totalBuildingsBuilt: 0,
     maxPopulationReached: 0,
     longestSurvival: 0,
-    technologiesPurchased: 0
+    technologiesPurchased: 0,
+    raidsRepelled: 0,
+    diseasesHealed: 0
   }
 };
 
@@ -45,7 +51,9 @@ let allTimeStats = {
   totalFoodProduced: 0,
   totalBuildingsBuilt: 0,
   highestPopulation: 0,
-  gamesPlayed: 0
+  gamesPlayed: 0,
+  totalRaidsRepelled: 0,
+  totalDiseasesHealed: 0
 };
 
 // Rate limiting for button clicks

@@ -14,6 +14,8 @@ function gameLoop() {
   gameState.gold += rates.goldRate * delta;
   gameState.food += rates.foodRate * delta;
   gameState.research += rates.researchRate * delta;
+  gameState.defense += rates.defenseRate * delta;
+  gameState.faith += rates.faithRate * delta;
   gameState.population += rates.popRate * delta;
   gameState.time += delta;
   gameState.totalTimePlayed += delta;
@@ -36,6 +38,8 @@ function gameLoop() {
   gameState.gold = Math.max(0, gameState.gold);
   gameState.food = Math.max(0, gameState.food);
   gameState.research = Math.max(0, gameState.research);
+  gameState.defense = Math.max(0, gameState.defense);
+  gameState.faith = Math.max(0, gameState.faith);
   gameState.population = Math.max(0, Math.min(gameState.population, gameState.maxPopulation));
   
   if (gameState.population >= 1) {
@@ -78,9 +82,13 @@ function endGame() {
   
   debugLog('GAME', 'Game over', { time: gameState.time, buildings: gameState.statistics.totalBuildingsBuilt });
   
+  const totalBuildings = gameState.buildings.farm + gameState.buildings.house + 
+                        gameState.buildings.market + gameState.buildings.library +
+                        gameState.buildings.barracks + gameState.buildings.temple;
+  
   document.getElementById('finalStats').innerHTML = 
     `You survived <strong style="color: var(--gold)">${formatTime(gameState.time)}</strong><br>` +
-    `Built <strong style="color: var(--gold)">${gameState.buildings.farm + gameState.buildings.house + gameState.buildings.market + gameState.buildings.library}</strong> buildings<br>` +
+    `Built <strong style="color: var(--gold)">${totalBuildings}</strong> buildings<br>` +
     `Reached <strong style="color: var(--gold)">${Math.floor(gameState.population)}</strong> population<br>` +
     `Researched <strong style="color: var(--purple)">${gameState.statistics.technologiesPurchased}</strong> technologies`;
   document.getElementById('gameOver').classList.add('active');
@@ -96,11 +104,15 @@ function restartGame() {
     population: 0,
     maxPopulation: BALANCE.STARTING_MAX_POPULATION,
     research: 0,
+    defense: 0,
+    faith: 0,
     buildings: {
       farm: 0,
       house: 0,
       market: 0,
-      library: 0
+      library: 0,
+      barracks: 0,
+      temple: 0
     },
     technologies: {},
     time: 0,
@@ -119,7 +131,9 @@ function restartGame() {
       totalBuildingsBuilt: 0,
       maxPopulationReached: 0,
       longestSurvival: 0,
-      technologiesPurchased: 0
+      technologiesPurchased: 0,
+      raidsRepelled: 0,
+      diseasesHealed: 0
     }
   };
   

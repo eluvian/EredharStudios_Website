@@ -23,8 +23,28 @@ function migrateSaveData(loaded) {
     migrated = true;
   }
   
+  if (loaded.defense === undefined) {
+    loaded.defense = 0;
+    migrated = true;
+  }
+  
+  if (loaded.faith === undefined) {
+    loaded.faith = 0;
+    migrated = true;
+  }
+  
   if (!loaded.buildings.library) {
     loaded.buildings.library = 0;
+    migrated = true;
+  }
+  
+  if (!loaded.buildings.barracks) {
+    loaded.buildings.barracks = 0;
+    migrated = true;
+  }
+  
+  if (!loaded.buildings.temple) {
+    loaded.buildings.temple = 0;
     migrated = true;
   }
   
@@ -33,9 +53,19 @@ function migrateSaveData(loaded) {
     migrated = true;
   }
   
-  if (loaded.statistics && loaded.statistics.technologiesPurchased === undefined) {
-    loaded.statistics.technologiesPurchased = 0;
-    migrated = true;
+  if (loaded.statistics) {
+    if (loaded.statistics.technologiesPurchased === undefined) {
+      loaded.statistics.technologiesPurchased = 0;
+      migrated = true;
+    }
+    if (loaded.statistics.raidsRepelled === undefined) {
+      loaded.statistics.raidsRepelled = 0;
+      migrated = true;
+    }
+    if (loaded.statistics.diseasesHealed === undefined) {
+      loaded.statistics.diseasesHealed = 0;
+      migrated = true;
+    }
   }
   
   loaded.version = GAME_VERSION;
@@ -93,6 +123,8 @@ function calculateOfflineProgress(savedState, timeAway) {
   const farmRate = savedState.buildings.farm * BALANCE.FARM_FOOD_RATE * farmMultiplier;
   const marketRate = savedState.buildings.market * BALANCE.MARKET_GOLD_RATE * marketMultiplier;
   const libraryRate = savedState.buildings.library * BALANCE.LIBRARY_RESEARCH_RATE;
+  const barracksRate = (savedState.buildings.barracks || 0) * BALANCE.BARRACKS_DEFENSE_RATE;
+  const templeRate = (savedState.buildings.temple || 0) * BALANCE.TEMPLE_FAITH_RATE;
   const popTax = savedState.population * BALANCE.POPULATION_TAX_RATE;
   const foodConsumption = savedState.population * BALANCE.POPULATION_FOOD_CONSUMPTION;
   
@@ -102,6 +134,8 @@ function calculateOfflineProgress(savedState, timeAway) {
   const offlineGold = Math.max(0, netGoldRate * cappedTime);
   const offlineFood = Math.max(0, netFoodRate * cappedTime);
   const offlineResearch = Math.max(0, libraryRate * cappedTime);
+  const offlineDefense = Math.max(0, barracksRate * cappedTime);
+  const offlineFaith = Math.max(0, templeRate * cappedTime);
   
   let offlinePopulation = 0;
   if (savedState.food > 20 && savedState.population < savedState.maxPopulation) {
@@ -112,11 +146,13 @@ function calculateOfflineProgress(savedState, timeAway) {
     );
   }
   
-  showWelcomeBack(cappedTime, offlineGold, offlineFood, offlinePopulation, offlineResearch);
+  showWelcomeBack(cappedTime, offlineGold, offlineFood, offlinePopulation, offlineResearch, offlineDefense, offlineFaith);
   
   savedState.gold += offlineGold;
   savedState.food += offlineFood;
   savedState.research += offlineResearch;
+  savedState.defense = (savedState.defense || 0) + offlineDefense;
+  savedState.faith = (savedState.faith || 0) + offlineFaith;
   savedState.population = Math.min(
     savedState.population + offlinePopulation,
     savedState.maxPopulation
@@ -132,7 +168,7 @@ function calculateOfflineProgress(savedState, timeAway) {
   );
 }
 
-function showWelcomeBack(timeAway, gold, food, population, research) {
+function showWelcomeBack(timeAway, gold, food, population, research, defense, faith) {
   const popup = document.getElementById('eventPopup');
   document.getElementById('eventTitle').textContent = '🏰 Welcome Back!';
   
@@ -143,8 +179,10 @@ function showWelcomeBack(timeAway, gold, food, population, research) {
   if (food > 0) description += `🌾 +${Math.floor(food)} Food\n`;
   if (population > 0) description += `👥 +${Math.floor(population)} Population\n`;
   if (research > 0) description += `📚 +${Math.floor(research)} Research\n`;
+  if (defense > 0) description += `🛡️ +${Math.floor(defense)} Defense\n`;
+  if (faith > 0) description += `✨ +${Math.floor(faith)} Faith\n`;
   
-  if (gold === 0 && food === 0 && population === 0 && research === 0) {
+  if (gold === 0 && food === 0 && population === 0 && research === 0 && defense === 0 && faith === 0) {
     description = `You were away for ${timeAwayFormatted}.\n\nYour kingdom maintained its current state.`;
   }
   
@@ -170,7 +208,16 @@ function loadAllTimeStats() {
   try {
     const saved = localStorage.getItem('medievalKingdomAllTime');
     if (saved) {
-      Object.assign(allTimeStats, JSON.parse(saved));
+      const loaded = JSON.parse(saved);
+      Object.assign(allTimeStats, loaded);
+      
+      // Migrate all-time stats if needed
+      if (allTimeStats.totalRaidsRepelled === undefined) {
+        allTimeStats.totalRaidsRepelled = 0;
+      }
+      if (allTimeStats.totalDiseasesHealed === undefined) {
+        allTimeStats.totalDiseasesHealed = 0;
+      }
     }
     const savedAchievements = localStorage.getItem('medievalKingdomAchievements');
     if (savedAchievements) {
@@ -200,5 +247,7 @@ function updateAllTimeStats() {
   allTimeStats.totalFoodProduced = Math.max(allTimeStats.totalFoodProduced, gameState.statistics.totalFoodProduced);
   allTimeStats.totalBuildingsBuilt = Math.max(allTimeStats.totalBuildingsBuilt, gameState.statistics.totalBuildingsBuilt);
   allTimeStats.highestPopulation = Math.max(allTimeStats.highestPopulation, gameState.statistics.maxPopulationReached);
+  allTimeStats.totalRaidsRepelled = Math.max(allTimeStats.totalRaidsRepelled, gameState.statistics.raidsRepelled);
+  allTimeStats.totalDiseasesHealed = Math.max(allTimeStats.totalDiseasesHealed, gameState.statistics.diseasesHealed);
   saveAllTimeStats();
 }

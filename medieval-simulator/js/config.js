@@ -2,7 +2,7 @@
 // GAME VERSION & CONSTANTS
 // ===================================
 
-const GAME_VERSION = "2.0.2"; // v2.0.2 - Hotfix: Population Growth
+const GAME_VERSION = "2.1.0"; // v2.1.0 - New Buildings: Barracks & Temple
 
 // Debug mode (set to true to enable logging)
 const DEBUG_MODE = false;
@@ -28,6 +28,12 @@ const BALANCE = {
   LIBRARY_BASE_COST: 80,
   LIBRARY_RESEARCH_RATE: 0.1,
   
+  BARRACKS_BASE_COST: 100,
+  BARRACKS_DEFENSE_RATE: 0.5,
+  
+  TEMPLE_BASE_COST: 90,
+  TEMPLE_FAITH_RATE: 0.2,
+  
   // Population mechanics
   POPULATION_TAX_RATE: 0.05,
   POPULATION_FOOD_CONSUMPTION: 0.1,
@@ -44,6 +50,14 @@ const BALANCE = {
   FOOD_GROWTH_THRESHOLD_LOW: 20,
   FOOD_GROWTH_THRESHOLD_MED: 50,
   FOOD_GROWTH_THRESHOLD_HIGH: 100,
+  
+  // Defense system
+  DEFENSE_RAID_REDUCTION_RATE: 0.05,  // 5% reduction per defense point
+  DEFENSE_MAX_REDUCTION: 0.9,          // Max 90% damage reduction
+  
+  // Faith system
+  FAITH_EVENT_REDUCTION_RATE: 0.03,   // 3% reduction per faith point
+  FAITH_MAX_REDUCTION: 0.8,            // Max 80% damage reduction
   
   // Trade
   FOOD_TO_GOLD_RATE: 0.5,

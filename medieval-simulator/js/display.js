@@ -78,6 +78,8 @@ function updateDisplay() {
   document.getElementById('topFood').textContent = Math.floor(gameState.food);
   document.getElementById('topPopulation').textContent = Math.floor(gameState.population);
   document.getElementById('topResearch').textContent = Math.floor(gameState.research);
+  document.getElementById('topDefense').textContent = Math.floor(gameState.defense);
+  document.getElementById('topFaith').textContent = Math.floor(gameState.faith);
   document.getElementById('topTime').textContent = formatTime(gameState.time);
   
   // Update detailed stats in overlay
@@ -85,11 +87,15 @@ function updateDisplay() {
   document.getElementById('food').textContent = Math.floor(gameState.food);
   document.getElementById('population').textContent = Math.floor(gameState.population);
   document.getElementById('research').textContent = Math.floor(gameState.research);
+  document.getElementById('defense').textContent = Math.floor(gameState.defense);
+  document.getElementById('faith').textContent = Math.floor(gameState.faith);
   document.getElementById('time').textContent = formatTime(gameState.time);
   
   document.getElementById('goldRate').textContent = `${rates.goldRate >= 0 ? '+' : ''}${rates.goldRate.toFixed(1)}/sec`;
   document.getElementById('foodRate').textContent = `${rates.foodRate >= 0 ? '+' : ''}${rates.foodRate.toFixed(1)}/sec`;
   document.getElementById('researchRate').textContent = `${rates.researchRate >= 0 ? '+' : ''}${rates.researchRate.toFixed(1)}/sec`;
+  document.getElementById('defenseRate').textContent = `${rates.defenseRate >= 0 ? '+' : ''}${rates.defenseRate.toFixed(1)}/sec`;
+  document.getElementById('faithRate').textContent = `${rates.faithRate >= 0 ? '+' : ''}${rates.faithRate.toFixed(1)}/sec`;
   
   // Show 0 growth when population is 0 (cleaner display than negative)
   const displayPopRate = (gameState.population <= 0 && rates.popRate < 0) ? 0 : rates.popRate;
@@ -111,21 +117,35 @@ function updateDisplay() {
   document.getElementById('summaryHouses').textContent = gameState.buildings.house;
   document.getElementById('summaryMarkets').textContent = gameState.buildings.market;
   document.getElementById('summaryLibraries').textContent = gameState.buildings.library;
+  document.getElementById('summaryBarracks').textContent = gameState.buildings.barracks;
+  document.getElementById('summaryTemples').textContent = gameState.buildings.temple;
   document.getElementById('summaryFoodProd').textContent = 
     `Net: ${netFood >= 0 ? '+' : ''}${netFood.toFixed(1)}/sec (${foodProduction.toFixed(1)} - ${foodConsumption.toFixed(1)})`;
   document.getElementById('summaryPopCap').textContent = gameState.maxPopulation;
   document.getElementById('summaryGoldIncome').textContent = `+${(gameState.buildings.market * buildings.market.goldRate * marketMultiplier).toFixed(1)}/sec`;
   document.getElementById('summaryResearchRate').textContent = `+${rates.researchRate.toFixed(1)}/sec`;
+  document.getElementById('summaryDefenseRate').textContent = `+${rates.defenseRate.toFixed(1)}/sec`;
+  document.getElementById('summaryFaithRate').textContent = `+${rates.faithRate.toFixed(1)}/sec`;
+  
+  // Update defense and faith bonuses
+  const defenseReduction = getDefenseReduction();
+  const faithReduction = getFaithReduction();
+  document.getElementById('defenseBonus').textContent = `${(defenseReduction * 100).toFixed(0)}% raid reduction`;
+  document.getElementById('faithBonus').textContent = `${(faithReduction * 100).toFixed(0)}% event reduction`;
   
   document.getElementById('farmCount').textContent = gameState.buildings.farm;
   document.getElementById('houseCount').textContent = gameState.buildings.house;
   document.getElementById('marketCount').textContent = gameState.buildings.market;
   document.getElementById('libraryCount').textContent = gameState.buildings.library;
+  document.getElementById('barracksCount').textContent = gameState.buildings.barracks;
+  document.getElementById('templeCount').textContent = gameState.buildings.temple;
   
   const farmCost = getBuildingCost('farm');
   const houseCost = getBuildingCost('house');
   const marketCost = getBuildingCost('market');
   const libraryCost = getBuildingCost('library');
+  const barracksCost = getBuildingCost('barracks');
+  const templeCost = getBuildingCost('temple');
   
   const farmProduction = (buildings.farm.foodRate * farmMultiplier).toFixed(1);
   const marketIncome = (buildings.market.goldRate * marketMultiplier).toFixed(1);
@@ -135,9 +155,11 @@ function updateDisplay() {
   document.getElementById('houseCost').textContent = `Cost: ${houseCost} Gold | +${housePop} Max Pop`;
   document.getElementById('marketCost').textContent = `Cost: ${marketCost} Gold | +${marketIncome} Gold/sec`;
   document.getElementById('libraryCost').textContent = `Cost: ${libraryCost} Gold | +0.1 Research/sec`;
+  document.getElementById('barracksCost').textContent = `Cost: ${barracksCost} Gold | +0.5 Defense/sec`;
+  document.getElementById('templeCost').textContent = `Cost: ${templeCost} Gold | +0.2 Faith/sec`;
   
   document.querySelectorAll('.buy-btn').forEach((btn, index) => {
-    const types = ['farm', 'house', 'market', 'library'];
+    const types = ['farm', 'house', 'market', 'library', 'barracks', 'temple'];
     const cost = getBuildingCost(types[index]);
     btn.disabled = gameState.gold < cost;
   });
