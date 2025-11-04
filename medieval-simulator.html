@@ -38,6 +38,14 @@
             <span class="stat-value" id="topResearch">0</span>
           </div>
           <div class="stat-display">
+            <span class="stat-icon">🛡️</span>
+            <span class="stat-value" id="topDefense">0</span>
+          </div>
+          <div class="stat-display">
+            <span class="stat-icon">✨</span>
+            <span class="stat-value" id="topFaith">0</span>
+          </div>
+          <div class="stat-display">
             <span class="stat-icon">⏱️</span>
             <span class="stat-value" id="topTime">0s</span>
           </div>
@@ -130,6 +138,42 @@
                 </div>
               </div>
             </div>
+
+            <!-- Barracks -->
+            <div class="building-card">
+              <div class="building-image">
+                <img src="medieval-simulator/images/building-barracks.png" alt="Barracks">
+              </div>
+              <div class="building-content">
+                <div class="building-info">
+                  <h3>⚔️ Barracks</h3>
+                  <p>Trains guards to defend your kingdom</p>
+                  <p class="building-cost" id="barracksCost">Cost: 100 Gold | +0.5 Defense/sec</p>
+                </div>
+                <div class="building-actions">
+                  <span class="building-count" id="barracksCount">0</span>
+                  <button class="buy-btn" onclick="buyBuilding('barracks')">Build</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Temple -->
+            <div class="building-card">
+              <div class="building-image">
+                <img src="medieval-simulator/images/building-temple.png" alt="Temple">
+              </div>
+              <div class="building-content">
+                <div class="building-info">
+                  <h3>⛪ Temple</h3>
+                  <p>Provides faith and spiritual protection</p>
+                  <p class="building-cost" id="templeCost">Cost: 90 Gold | +0.2 Faith/sec</p>
+                </div>
+                <div class="building-actions">
+                  <span class="building-count" id="templeCount">0</span>
+                  <button class="buy-btn" onclick="buyBuilding('temple')">Build</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -165,6 +209,16 @@
               <div class="summary-item">
                 <h4>📚 Libraries: <span id="summaryLibraries">0</span></h4>
                 <p>Research Rate: <span id="summaryResearchRate">+0/sec</span></p>
+              </div>
+              <div class="summary-item">
+                <h4>⚔️ Barracks: <span id="summaryBarracks">0</span></h4>
+                <p>Defense Rate: <span id="summaryDefenseRate">+0/sec</span></p>
+                <p><span id="defenseBonus">0% raid reduction</span></p>
+              </div>
+              <div class="summary-item">
+                <h4>⛪ Temples: <span id="summaryTemples">0</span></h4>
+                <p>Faith Rate: <span id="summaryFaithRate">+0/sec</span></p>
+                <p><span id="faithBonus">0% event reduction</span></p>
               </div>
             </div>
           </div>
@@ -203,6 +257,22 @@
                   <div class="stat-label-small">Research</div>
                   <div class="stat-value-small" id="research">0</div>
                   <div class="stat-rate-small" id="researchRate">+0/sec</div>
+                </div>
+              </div>
+              <div class="stat-card-small">
+                <div class="stat-icon">🛡️</div>
+                <div class="stat-info">
+                  <div class="stat-label-small">Defense</div>
+                  <div class="stat-value-small" id="defense">0</div>
+                  <div class="stat-rate-small" id="defenseRate">+0/sec</div>
+                </div>
+              </div>
+              <div class="stat-card-small">
+                <div class="stat-icon">✨</div>
+                <div class="stat-info">
+                  <div class="stat-label-small">Faith</div>
+                  <div class="stat-value-small" id="faith">0</div>
+                  <div class="stat-rate-small" id="faithRate">+0/sec</div>
                 </div>
               </div>
               <div class="stat-card-small">
@@ -356,7 +426,7 @@
               Medieval Kingdom Simulator is an idle kingdom management game where you build and grow your settlement through strategic decisions. Balance resources, expand your population, research technologies, and survive random events to create a thriving medieval kingdom.
             </p>
             <p class="about-intro" style="font-size: 0.95rem; color: #888;">
-              Version 2.0.2 - Hotfix: Population Growth
+              Version 2.1.0 - New Buildings: Barracks & Temple
             </p>
           </div>
 
@@ -368,7 +438,7 @@
             </div>
           </div>
 
-          <!-- RESET BUTTON SECTION - NEW -->
+          <!-- RESET BUTTON SECTION -->
           <div class="about-section" style="margin-top: 30px;">
             <h3 class="stats-section-title">⚠️ Danger Zone</h3>
             <div style="background-color: rgba(244, 67, 54, 0.1); border: 2px solid #f44336; border-radius: 8px; padding: 20px; text-align: center;">
@@ -384,7 +454,6 @@
               </button>
             </div>
           </div>
-          <!-- END RESET BUTTON SECTION -->
 
           <div style="text-align: center; margin-top: 30px;">
             <a href="index.html" style="color: var(--blue-link); text-decoration: none; font-size: 1.1rem;">
