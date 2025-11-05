@@ -430,152 +430,160 @@
             </p>
           </div>
 
-          <!-- CHANGELOG SECTION -->
+          <!-- COLLAPSIBLE CHANGELOG SECTION -->
           <div class="about-section">
-            <h3 class="stats-section-title">📋 Changelog</h3>
-            <div class="changelog-container">
-              
-              <!-- Version 2.1.0 -->
-              <div class="changelog-entry" onclick="toggleChangelog(this)">
-                <div class="changelog-header">
-                  <span class="changelog-version">v2.1.0 - New Buildings: Barracks & Temple</span>
-                  <span class="changelog-arrow">▼</span>
-                </div>
-                <div class="changelog-content">
-                  <p class="changelog-category">🏗️ New Buildings:</p>
-                  <ul>
-                    <li><strong>⚔️ Barracks:</strong> Train guards to defend your kingdom. Generates 0.5 Defense/sec</li>
-                    <li><strong>⛪ Temple:</strong> Provides spiritual protection. Generates 0.2 Faith/sec</li>
-                  </ul>
-                  <p class="changelog-category">🛡️ Defense System:</p>
-                  <ul>
-                    <li>Each defense point reduces raid damage by 5% (max 90%)</li>
-                    <li>Successfully repelling raids tracked in statistics</li>
-                    <li>New achievements for defense milestones</li>
-                  </ul>
-                  <p class="changelog-category">✨ Faith System:</p>
-                  <ul>
-                    <li>Each faith point reduces negative event damage by 3% (max 80%)</li>
-                    <li>Protects against harsh winters, diseases, and fires</li>
-                    <li>New pilgrimage event for temples</li>
-                  </ul>
-                  <p class="changelog-category">🎯 New Achievements:</p>
-                  <ul>
-                    <li>Warlord - Build 5 barracks</li>
-                    <li>Faithful - Build 5 temples</li>
-                    <li>Defender - Successfully repel a raid</li>
-                    <li>Fortress - Repel 10 raids (all-time)</li>
-                    <li>Healer - Reduce disease impact with faith</li>
-                    <li>Impenetrable - Reach 50 defense</li>
-                    <li>Divine - Reach 30 faith</li>
-                  </ul>
-                  <p class="changelog-category">⚙️ Balance Changes:</p>
-                  <ul>
-                    <li>Adjusted event weights for better gameplay flow</li>
-                    <li>Added new military parade event</li>
-                    <li>Enhanced event feedback for defense/faith protection</li>
-                  </ul>
-                </div>
+            <div class="changelog-main-section" onclick="toggleChangelogSection(this)">
+              <div class="changelog-main-header">
+                <h3 class="stats-section-title" style="margin: 0;">📋 Changelog</h3>
+                <span class="changelog-main-arrow">▼</span>
               </div>
+            </div>
+            
+            <div class="changelog-main-content">
+              <div class="changelog-container">
+                
+                <!-- Version 2.1.0 -->
+                <div class="changelog-entry" onclick="toggleChangelog(this)">
+                  <div class="changelog-header">
+                    <span class="changelog-version">v2.1.0 - New Buildings: Barracks & Temple</span>
+                    <span class="changelog-arrow">▼</span>
+                  </div>
+                  <div class="changelog-content">
+                    <p class="changelog-category">🏗️ New Buildings:</p>
+                    <ul>
+                      <li><strong>⚔️ Barracks:</strong> Train guards to defend your kingdom. Generates 0.5 Defense/sec</li>
+                      <li><strong>⛪ Temple:</strong> Provides spiritual protection. Generates 0.2 Faith/sec</li>
+                    </ul>
+                    <p class="changelog-category">🛡️ Defense System:</p>
+                    <ul>
+                      <li>Each defense point reduces raid damage by 5% (max 90%)</li>
+                      <li>Successfully repelling raids tracked in statistics</li>
+                      <li>New achievements for defense milestones</li>
+                    </ul>
+                    <p class="changelog-category">✨ Faith System:</p>
+                    <ul>
+                      <li>Each faith point reduces negative event damage by 3% (max 80%)</li>
+                      <li>Protects against harsh winters, diseases, and fires</li>
+                      <li>New pilgrimage event for temples</li>
+                    </ul>
+                    <p class="changelog-category">🎯 New Achievements:</p>
+                    <ul>
+                      <li>Warlord - Build 5 barracks</li>
+                      <li>Faithful - Build 5 temples</li>
+                      <li>Defender - Successfully repel a raid</li>
+                      <li>Fortress - Repel 10 raids (all-time)</li>
+                      <li>Healer - Reduce disease impact with faith</li>
+                      <li>Impenetrable - Reach 50 defense</li>
+                      <li>Divine - Reach 30 faith</li>
+                    </ul>
+                    <p class="changelog-category">⚙️ Balance Changes:</p>
+                    <ul>
+                      <li>Adjusted event weights for better gameplay flow</li>
+                      <li>Added new military parade event</li>
+                      <li>Enhanced event feedback for defense/faith protection</li>
+                    </ul>
+                  </div>
+                </div>
 
-              <!-- Version 2.0.0 -->
-              <div class="changelog-entry" onclick="toggleChangelog(this)">
-                <div class="changelog-header">
-                  <span class="changelog-version">v2.0.0 - Technology & Research System</span>
-                  <span class="changelog-arrow">▼</span>
+                <!-- Version 2.0.0 -->
+                <div class="changelog-entry" onclick="toggleChangelog(this)">
+                  <div class="changelog-header">
+                    <span class="changelog-version">v2.0.0 - Technology & Research System</span>
+                    <span class="changelog-arrow">▼</span>
+                  </div>
+                  <div class="changelog-content">
+                    <p class="changelog-category">🔬 Research System:</p>
+                    <ul>
+                      <li>Added Libraries that generate Research Points</li>
+                      <li>12 technologies across 3 tiers</li>
+                      <li>Technologies provide powerful bonuses to production and protection</li>
+                    </ul>
+                    <p class="changelog-category">📚 Technology Tree:</p>
+                    <ul>
+                      <li><strong>Tier 1:</strong> Advanced Farming, Efficient Markets, Basic Medicine, Welcoming Culture</li>
+                      <li><strong>Tier 2:</strong> Irrigation, Trade Routes, Hospitals, Urban Planning</li>
+                      <li><strong>Tier 3:</strong> Agricultural Revolution, Economic Prosperity, Public Health, Metropolitan Growth</li>
+                    </ul>
+                    <p class="changelog-category">🎯 New Achievements:</p>
+                    <ul>
+                      <li>Scholar - Research 1 technology</li>
+                      <li>Innovator - Research 5 technologies</li>
+                      <li>Renaissance - Research all technologies</li>
+                      <li>Enlightened - Build 5 libraries</li>
+                    </ul>
+                    <p class="changelog-category">🎨 UI Improvements:</p>
+                    <ul>
+                      <li>New overlay system for better organization</li>
+                      <li>Research panel with technology cards</li>
+                      <li>Enhanced visual feedback for unlocks</li>
+                    </ul>
+                  </div>
                 </div>
-                <div class="changelog-content">
-                  <p class="changelog-category">🔬 Research System:</p>
-                  <ul>
-                    <li>Added Libraries that generate Research Points</li>
-                    <li>12 technologies across 3 tiers</li>
-                    <li>Technologies provide powerful bonuses to production and protection</li>
-                  </ul>
-                  <p class="changelog-category">📚 Technology Tree:</p>
-                  <ul>
-                    <li><strong>Tier 1:</strong> Advanced Farming, Efficient Markets, Basic Medicine, Welcoming Culture</li>
-                    <li><strong>Tier 2:</strong> Irrigation, Trade Routes, Hospitals, Urban Planning</li>
-                    <li><strong>Tier 3:</strong> Agricultural Revolution, Economic Prosperity, Public Health, Metropolitan Growth</li>
-                  </ul>
-                  <p class="changelog-category">🎯 New Achievements:</p>
-                  <ul>
-                    <li>Scholar - Research 1 technology</li>
-                    <li>Innovator - Research 5 technologies</li>
-                    <li>Renaissance - Research all technologies</li>
-                    <li>Enlightened - Build 5 libraries</li>
-                  </ul>
-                  <p class="changelog-category">🎨 UI Improvements:</p>
-                  <ul>
-                    <li>New overlay system for better organization</li>
-                    <li>Research panel with technology cards</li>
-                    <li>Enhanced visual feedback for unlocks</li>
-                  </ul>
+
+                <!-- Version 1.5.0 -->
+                <div class="changelog-entry" onclick="toggleChangelog(this)">
+                  <div class="changelog-header">
+                    <span class="changelog-version">v1.5.0 - Events & Achievements</span>
+                    <span class="changelog-arrow">▼</span>
+                  </div>
+                  <div class="changelog-content">
+                    <p class="changelog-category">📜 Random Events:</p>
+                    <ul>
+                      <li>10+ unique random events with choices</li>
+                      <li>Events affect resources and population</li>
+                      <li>Event log to track kingdom history</li>
+                    </ul>
+                    <p class="changelog-category">🏆 Achievement System:</p>
+                    <ul>
+                      <li>25+ achievements to unlock</li>
+                      <li>Track progress across multiple playthroughs</li>
+                      <li>All-time statistics system</li>
+                    </ul>
+                    <p class="changelog-category">💾 Save System:</p>
+                    <ul>
+                      <li>Auto-save every 10 seconds</li>
+                      <li>Offline progress calculation (up to 8 hours)</li>
+                      <li>Welcome back popup showing offline gains</li>
+                    </ul>
+                  </div>
                 </div>
+
+                <!-- Version 1.0.0 -->
+                <div class="changelog-entry" onclick="toggleChangelog(this)">
+                  <div class="changelog-header">
+                    <span class="changelog-version">v1.0.0 - Initial Release</span>
+                    <span class="changelog-arrow">▼</span>
+                  </div>
+                  <div class="changelog-content">
+                    <p class="changelog-category">🎮 Core Gameplay:</p>
+                    <ul>
+                      <li>Build 4 types of buildings: Farms, Houses, Markets, Libraries</li>
+                      <li>Manage resources: Gold, Food, Population</li>
+                      <li>Population growth based on food availability</li>
+                      <li>Tax income from population</li>
+                    </ul>
+                    <p class="changelog-category">💱 Trading System:</p>
+                    <ul>
+                      <li>Sell food for gold at the Trade Market</li>
+                      <li>Quick-sell buttons for convenience</li>
+                    </ul>
+                    <p class="changelog-category">📊 Statistics:</p>
+                    <ul>
+                      <li>Track current kingdom stats</li>
+                      <li>Building production rates</li>
+                      <li>Population capacity management</li>
+                    </ul>
+                    <p class="changelog-category">🎨 Visual Design:</p>
+                    <ul>
+                      <li>Medieval-themed UI with gold accents</li>
+                      <li>Framed viewport design</li>
+                      <li>Building cards with images</li>
+                      <li>Responsive layout for all devices</li>
+                    </ul>
+                  </div>
+                </div>
+
               </div>
-
-              <!-- Version 1.5.0 -->
-              <div class="changelog-entry" onclick="toggleChangelog(this)">
-                <div class="changelog-header">
-                  <span class="changelog-version">v1.5.0 - Events & Achievements</span>
-                  <span class="changelog-arrow">▼</span>
-                </div>
-                <div class="changelog-content">
-                  <p class="changelog-category">📜 Random Events:</p>
-                  <ul>
-                    <li>10+ unique random events with choices</li>
-                    <li>Events affect resources and population</li>
-                    <li>Event log to track kingdom history</li>
-                  </ul>
-                  <p class="changelog-category">🏆 Achievement System:</p>
-                  <ul>
-                    <li>25+ achievements to unlock</li>
-                    <li>Track progress across multiple playthroughs</li>
-                    <li>All-time statistics system</li>
-                  </ul>
-                  <p class="changelog-category">💾 Save System:</p>
-                  <ul>
-                    <li>Auto-save every 10 seconds</li>
-                    <li>Offline progress calculation (up to 8 hours)</li>
-                    <li>Welcome back popup showing offline gains</li>
-                  </ul>
-                </div>
-              </div>
-
-              <!-- Version 1.0.0 -->
-              <div class="changelog-entry" onclick="toggleChangelog(this)">
-                <div class="changelog-header">
-                  <span class="changelog-version">v1.0.0 - Initial Release</span>
-                  <span class="changelog-arrow">▼</span>
-                </div>
-                <div class="changelog-content">
-                  <p class="changelog-category">🎮 Core Gameplay:</p>
-                  <ul>
-                    <li>Build 4 types of buildings: Farms, Houses, Markets, Libraries</li>
-                    <li>Manage resources: Gold, Food, Population</li>
-                    <li>Population growth based on food availability</li>
-                    <li>Tax income from population</li>
-                  </ul>
-                  <p class="changelog-category">💱 Trading System:</p>
-                  <ul>
-                    <li>Sell food for gold at the Trade Market</li>
-                    <li>Quick-sell buttons for convenience</li>
-                  </ul>
-                  <p class="changelog-category">📊 Statistics:</p>
-                  <ul>
-                    <li>Track current kingdom stats</li>
-                    <li>Building production rates</li>
-                    <li>Population capacity management</li>
-                  </ul>
-                  <p class="changelog-category">🎨 Visual Design:</p>
-                  <ul>
-                    <li>Medieval-themed UI with gold accents</li>
-                    <li>Framed viewport design</li>
-                    <li>Building cards with images</li>
-                    <li>Responsive layout for all devices</li>
-                  </ul>
-                </div>
-              </div>
-
             </div>
           </div>
 
