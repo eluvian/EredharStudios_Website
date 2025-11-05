@@ -199,11 +199,15 @@ function resetAllProgress() {
     population: 0,
     maxPopulation: BALANCE.STARTING_MAX_POPULATION,
     research: 0,
+    defense: 0,
+    faith: 0,
     buildings: {
       farm: 0,
       house: 0,
       market: 0,
-      library: 0
+      library: 0,
+      barracks: 0,
+      temple: 0
     },
     technologies: {},
     time: 0,
@@ -222,7 +226,9 @@ function resetAllProgress() {
       totalBuildingsBuilt: 0,
       maxPopulationReached: 0,
       longestSurvival: 0,
-      technologiesPurchased: 0
+      technologiesPurchased: 0,
+      raidsRepelled: 0,
+      diseasesHealed: 0
     }
   };
   
@@ -234,6 +240,14 @@ function resetAllProgress() {
   debugLog('RESET', 'All progress reset');
 }
 
+// Toggle main changelog section (expand/collapse entire changelog)
+function toggleChangelogSection(element) {
+  element.classList.toggle('expanded');
+}
+
+// Toggle individual changelog version entries
 function toggleChangelog(element) {
+  // Stop event propagation to prevent triggering parent toggleChangelogSection
+  event.stopPropagation();
   element.classList.toggle('expanded');
 }
