@@ -1,380 +1,6 @@
 /* ========================================================================================
-   🎨 Web Creator Persona Stylesheet for Eredhar Studios
-   ----------------------------------------------------------------------------------------
-   Description: Unified, elegant styling for the Eredhar Studios website including layout, 
-   transitions, card systems, typography, responsiveness, and visual polish.
+   MEDIEVAL KINGDOM SIMULATOR - COMPLETE STYLESHEET
    ======================================================================================== */
-
-/* ------------------------------ 🌐 Base Styles ------------------------------ */
-body {
-  margin: 0 0 120px;    /* reserve more space for the fixed footer */
-  font-family: 'Playfair Display', serif;
-  background-color: #0e0e14;
-  color: #f5f5f5;
-  line-height: 1.6;
-  font-size: 16px;
-  
-}
-
-h2 {
-  color: #ffe082;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 1.4rem;
-}
-
-h3 {
-  color: #ffe082;
-  margin-top: 10px;
-  font-size: 1.1rem;
-}
-
-a {
-  color: #81d4fa;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #ffe082;
-  text-decoration: underline;
-}
-
-
-/* ------------------------------ 🧭 Header Styles ------------------------------ */
-/* ---------- Header Base ---------- */
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #1a1a25;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  height: 160px; /* ⬅️ fixed base height */
-  transition: height 0.3s ease;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* ---------- Shrinked Header ---------- */
-.hero.shrink {
-  height: 90px; /* ⬅️ reduced height */
-}
-
-/* ---------- Logo ---------- */
-.logo {
-  height: 140px; /* ⬅️ use fixed height instead of transform scale */
-  transition: height 0.3s ease;
-}
-
-.hero.shrink .logo {
-  height: 100px; /* ⬅️ shrinks cleanly, affecting layout */
-  margin-top: 30px;
-}
-
-/* ---------- Tagline ---------- */
-.tagline {
-  font-style: italic;
-  color: #ffe082;
-  font-size: 1rem;
-  margin: 0;
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.hero.shrink .tagline {
-  opacity: 0;
-  pointer-events: none;
-}
-
-
-/* ------------------------------ 📐 Section Layout ------------------------------ */
-section {
-  max-width: 1100px;
-  margin: 60px auto;
-  padding: 0 20px;
-}
-
-.about p, .contact p {
-  color: #ccc;
-}
-
-
-/* ------------------------------ 🧱 Card Grid Layout ------------------------------ */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 30px;
-  margin: 40px 0;
-}
-
-.card-base {
-  background-color: #161621;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 20px 15px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid #ffe082;
-}
-
-.card-base:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 0 25px rgba(255, 224, 130, 0.3);
-}
-
-.card-base img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  aspect-ratio: 16 / 9; /* ✨ Force a cinematic aspect ratio */
-}
-
-
-.card-base p {
-  font-size: 0.9rem;
-  margin: 10px 0 15px;
-  color: #ddd;
-}
-
-.card-base a {
-  background-color: #ffe082;
-  color: #1a1a25;
-  padding: 8px 14px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.card-base a:hover {
-  background-color: #ffcc33;
-}
-
-
-/* ------------------------------ 📖 Book Entry ------------------------------ */
-.book-entry {
-  display: flex;
-  align-items: flex-start;
-  background-color: #161621;
-  border-radius: 12px;
-  padding: 15px 20px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
-  margin: 30px 0 30px 20px;
-  max-width: 480px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.book-entry:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 0 25px rgba(255, 224, 130, 0.3);
-}
-
-.book-entry img.book-cover {
-  width: 160px;
-  aspect-ratio: 2 / 3;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid #ffe082;
-  flex-shrink: 0;
-}
-
-.book-entry .book-info {
-  margin-left: 15px;
-  flex: 1;
-}
-
-.book-entry .book-info h3 {
-  margin-top: 0;
-  color: #ffe082;
-  font-size: 1.1rem;
-}
-
-.book-entry .book-info p {
-  margin: 10px 0;
-  color: #ddd;
-  font-size: 0.95rem;
-}
-
-.book-entry .book-info a {
-  display: inline-block;
-  margin-top: 10px;
-  background-color: #ffe082;
-  color: #1a1a25;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.book-entry .book-info a:hover {
-  background-color: #ffcc33;
-}
-
-
-/* ------------------------------ 🎥 Minerva Card ------------------------------ */
-.minerva-card {
-  max-width: 400px;
-  margin: 30px 0 30px 20px;
-}
-
-.minerva-card img {
-  aspect-ratio: 4 / 2.2; /* Slightly wider than others */
-  object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid #ffe082;
-  width: 100%;
-}
-
-
-
-/* ------------------------------ 📞 Contact ------------------------------ */
-.contact p {
-  margin-top: 10px;
-  color: #ccc;
-}
-
-
-/* ------------------------------ 📚 Accordion Drawer Styles ------------------------------ */
-
-/* Accordion section wrapper */
-/* Limit accordion width to match content */
-.accordion-section {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* Accordion clickable header */
-.accordion-header {
-  width: 100%;
-  text-align: left;
-  padding: 15px 25px;
-  font-size: 1.3rem;
-  font-weight: bold;
-  background-color: #1a1a25;
-  color: #ffe082;
-  border: none;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  max-width: 100%;
-  box-shadow: 0 0 10px rgba(255, 224, 130, 0.1);
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Arrow style */
-.accordion-header .arrow {
-  display: inline-block;
-  transition: transform 0.3s ease;
-  font-size: 1.2rem;
-}
-
-/* Rotate arrow when section is open */
-.accordion-header.active .arrow {
-  transform: rotate(90deg);
-}
-
-/* Hover effect for better UX */
-.accordion-header:hover {
-  background-color: #29293d;
-  box-shadow: 0 0 15px rgba(255, 224, 130, 0.3);
-}
-
-/* Content area (drawer) */
-.accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease, padding 0.3s ease;
-  padding: 0 20px; /* Small padding for smooth opening */
-}
-
-/* Active (opened) drawer */
-.accordion-content.active {
-  max-height: 2000px; /* Big enough to reveal content without cutting */
-  padding-top: 20px;
-}
-
-/* Ensure inner elements inside the content have normal behavior */
-.accordion-content > * {
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-/* When hidden, child elements fade out visually */
-.accordion-content:not(.active) > * {
-  opacity: 0;
-}
-
-
-/* ------------------------------ ⌛ Fixed Footer ------------------------------ */
-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  padding: 30px;
-  background-color: #0a0a0f;
-  color: #777;
-  font-size: 0.9rem;
-}
-
-
-
-/* ------------------------------ 📱 Mobile Tweaks ------------------------------ */
-@media screen and (max-width: 400px) {
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .logo {
-    width: 120px;
-  }
-}
-
-/* Project pages: landscape covers */
-.book-entry.project-entry {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 800px;
-  margin: 30px auto;
-}
-.book-entry.project-entry img.book-cover {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-}
-.book-entry.project-entry .book-info {
-  margin: 20px 0 0;
-  text-align: center;
-}
-
-/* When a section is expanded, pad its content so the next header sits below it */
-.accordion-content.active {
-  padding-bottom: 20px;  /* adjust as needed, e.g. 20–30px */
-}
-
-/* on small screens, give the opened accordion a much larger bottom-margin */
-@media screen and (max-width: 600px) {
-  .accordion-content.active {
-    margin-bottom: 300px; /* feel free to tweak this value */
-  }
-}
-
-/* ============================================
-   MEDIEVAL KINGDOM SIMULATOR - FRAMED VIEWPORT
-   ============================================ */
 
 /* Eredhar Studios Theme Variables */
 :root {
@@ -1264,7 +890,58 @@ body {
 }
 
 /* ============================================
-   CHANGELOG SECTION
+   CHANGELOG SECTION - Main Collapsible
+   ============================================ */
+
+.about-section {
+  margin-bottom: 30px;
+}
+
+.changelog-main-section {
+  cursor: pointer;
+  padding: 15px 20px;
+  background-color: rgba(26, 26, 37, 0.8);
+  border: 2px solid rgba(255, 224, 130, 0.3);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.changelog-main-section:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 15px rgba(255, 224, 130, 0.3);
+  background-color: rgba(26, 26, 37, 0.95);
+}
+
+.changelog-main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.changelog-main-arrow {
+  color: var(--gold);
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.changelog-main-section.expanded .changelog-main-arrow {
+  transform: rotate(180deg);
+}
+
+.changelog-main-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.changelog-main-section.expanded + .changelog-main-content {
+  max-height: 3000px;
+  margin-top: 15px;
+}
+
+/* ============================================
+   CHANGELOG SECTION - Version Entries
    ============================================ */
 
 .changelog-container {
