@@ -2,7 +2,7 @@
 // GAME VERSION & CONSTANTS
 // ===================================
 
-const GAME_VERSION = "2.2.1"; // v2.2.1 - Fixed time tracking for consistent progression
+const GAME_VERSION = "2.1.1"; // v2.1.1 - Mobile Optimization
 
 // Debug mode (set to true to enable logging)
 const DEBUG_MODE = false;
