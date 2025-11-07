@@ -2,7 +2,7 @@
 // GAME VERSION & CONSTANTS
 // ===================================
 
-const GAME_VERSION = "2.1.0"; // v2.1.0 - New Buildings: Barracks & Temple
+const GAME_VERSION = "2.2.0"; // v2.2.0 - Event Expansion
 
 // Debug mode (set to true to enable logging)
 const DEBUG_MODE = false;
