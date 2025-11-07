@@ -2,7 +2,7 @@
 // GAME VERSION & CONSTANTS
 // ===================================
 
-const GAME_VERSION = "2.2.0"; // v2.2.0 - Event Expansion
+const GAME_VERSION = "2.2.1"; // v2.2.1 - Fixed time tracking for consistent progression
 
 // Debug mode (set to true to enable logging)
 const DEBUG_MODE = false;

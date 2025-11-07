@@ -5,8 +5,17 @@
 function gameLoop() {
   if (gameState.gameOver || gameState.paused) return;
   
+  // Calculate actual elapsed time since last update (in seconds)
+  const now = Date.now();
+  const deltaTime = (now - gameState.lastUpdateTime) / 1000;
+  gameState.lastUpdateTime = now;
+  
+  // Cap delta to prevent exploits and handle edge cases
+  // Max 5 seconds per update (prevents time manipulation)
+  // Min 0.001 seconds (prevents division by zero)
+  const delta = Math.max(0.001, Math.min(deltaTime, 5));
+  
   const rates = calculateRates();
-  const delta = BALANCE.GAME_LOOP_INTERVAL / 1000;
   
   const prevGold = gameState.gold;
   const prevFood = gameState.food;
@@ -124,6 +133,7 @@ function restartGame() {
     activeEvent: null,
     eventLog: [],
     lastSaveTime: Date.now(),
+    lastUpdateTime: Date.now(),
     totalTimePlayed: 0,
     statistics: {
       totalGoldEarned: 0,

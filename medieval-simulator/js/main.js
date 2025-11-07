@@ -10,6 +10,9 @@ if (sellAmountInput) {
 loadAllTimeStats();
 const hasLoadedGame = loadGame();
 
+// Initialize lastUpdateTime to current time
+gameState.lastUpdateTime = Date.now();
+
 gameInterval = setInterval(gameLoop, BALANCE.GAME_LOOP_INTERVAL);
 updateEventLog();
 updateDisplay();

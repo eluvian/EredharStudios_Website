@@ -53,6 +53,12 @@ function migrateSaveData(loaded) {
     migrated = true;
   }
   
+  // Add lastUpdateTime for accurate time tracking (v2.2.1+)
+  if (loaded.lastUpdateTime === undefined) {
+    loaded.lastUpdateTime = Date.now();
+    migrated = true;
+  }
+  
   if (loaded.statistics) {
     if (loaded.statistics.technologiesPurchased === undefined) {
       loaded.statistics.technologiesPurchased = 0;
@@ -96,6 +102,9 @@ function loadGame() {
       gameState.activeEvent = null;
       gameState.paused = false;
       gameState.gameOver = false;
+      
+      // Ensure lastUpdateTime is set to now when loading
+      gameState.lastUpdateTime = Date.now();
       
       debugLog('LOAD', 'Game loaded successfully');
       

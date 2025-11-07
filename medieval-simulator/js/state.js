@@ -29,6 +29,7 @@ let gameState = {
   activeEvent: null,
   eventLog: [],
   lastSaveTime: Date.now(),
+  lastUpdateTime: Date.now(), // Real-world timestamp for accurate time tracking
   totalTimePlayed: 0,
   statistics: {
     totalGoldEarned: 0,
