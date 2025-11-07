@@ -426,7 +426,7 @@
               Medieval Kingdom Simulator is an idle kingdom management game where you build and grow your settlement through strategic decisions. Balance resources, expand your population, research technologies, and survive random events to create a thriving medieval kingdom.
             </p>
             <p class="about-intro" style="font-size: 0.95rem; color: #888;">
-              Version 2.2.1 - Time Tracking Fix
+              Version 2.1.1 - Mobile Optimization
             </p>
           </div>
 
@@ -442,59 +442,54 @@
             <div class="changelog-main-content">
               <div class="changelog-container">
                 
-                <!-- Version 2.2.1 -->
+                <!-- Version 2.1.1 - NEW! -->
                 <div class="changelog-entry" onclick="toggleChangelog(this)">
                   <div class="changelog-header">
-                    <span class="changelog-version">v2.2.1 - Time Tracking Fix</span>
+                    <span class="changelog-version">v2.1.1 - Mobile Optimization</span>
                     <span class="changelog-arrow">▼</span>
                   </div>
                   <div class="changelog-content">
-                    <p class="changelog-category">🐛 Critical Bug Fix:</p>
+                    <p class="changelog-category">📱 Mobile Optimization:</p>
                     <ul>
-                      <li><strong>Fixed Time Progression:</strong> Game now runs at consistent speed whether tab is active or inactive</li>
-                      <li>Switched from interval-based to timestamp-based time tracking</li>
-                      <li>No more game "pausing" when you tab out or minimize</li>
+                      <li>Complete responsive design for all mobile devices (phones, tablets)</li>
+                      <li>Touch-friendly buttons with minimum 44x44px tap targets</li>
+                      <li>Optimized layouts for both portrait and landscape orientations</li>
+                      <li>Improved text readability on small screens without zooming</li>
+                      <li>Enhanced scrolling performance with smooth momentum</li>
+                      <li>iOS-specific optimizations (prevented zoom on input, safe areas)</li>
+                      <li>Android-specific optimizations (Material Design tap targets)</li>
+                      <li>Tablet-optimized layouts with hybrid desktop/mobile features</li>
                     </ul>
-                    <p class="changelog-category">🔧 Technical Changes:</p>
+                    <p class="changelog-category">🎨 Layout Improvements:</p>
                     <ul>
-                      <li>Implemented real-time timestamp system for accurate game progression</li>
-                      <li>Game now measures actual elapsed time instead of interval ticks</li>
-                      <li>Consistent with offline progress calculations</li>
-                      <li>Anti-exploit protection: capped at 5 seconds per update</li>
+                      <li>Top bar stats reorganized into grid format on mobile (2-3 columns)</li>
+                      <li>Bottom navigation wraps into 2 rows on small screens</li>
+                      <li>Single-column building cards for easy mobile viewing</li>
+                      <li>Full-width overlays (98%) on mobile for maximum content space</li>
+                      <li>Enlarged close buttons (48x48px) for easy overlay dismissal</li>
+                      <li>Better spacing between all interactive elements</li>
+                      <li>Event popups and dialogs properly sized for mobile</li>
                     </ul>
-                    <p class="changelog-category">📝 Note:</p>
+                    <p class="changelog-category">⚙️ Technical Improvements:</p>
                     <ul>
-                      <li>Save files automatically migrate to new system</li>
-                      <li>No player action required</li>
-                      <li>Fully backward compatible</li>
+                      <li>Prevented automatic zoom on input focus (iOS Safari)</li>
+                      <li>Webkit momentum scrolling for smooth feel</li>
+                      <li>Touch-specific active states (removed hover on touch devices)</li>
+                      <li>Optimized viewport sizing (98vh on mobile)</li>
+                      <li>Better browser cache handling</li>
+                      <li>Prevented text selection on game elements (allowed on text content)</li>
+                      <li>Multiple responsive breakpoints (1200px, 900px, 768px, 480px)</li>
+                    </ul>
+                    <p class="changelog-category">📏 Responsive Breakpoints:</p>
+                    <ul>
+                      <li>Large tablets / small laptops: 1200px and below</li>
+                      <li>Tablets landscape / mobile landscape: 900px and below</li>
+                      <li>Standard mobile portrait: 768px and below</li>
+                      <li>Small mobile devices: 480px and below</li>
                     </ul>
                   </div>
                 </div>
 
-                <!-- Version 2.2.0 -->
-                <div class="changelog-entry" onclick="toggleChangelog(this)">
-                  <div class="changelog-header">
-                    <span class="changelog-version">v2.2.0 - Event Expansion</span>
-                    <span class="changelog-arrow">▼</span>
-                  </div>
-                  <div class="changelog-content">
-                    <p class="changelog-category">📜 New Events:</p>
-                    <ul>
-                      <li>18 new random events added (total: 30+ events)</li>
-                      <li>Event scaling based on kingdom size</li>
-                      <li>Legendary encounters for established kingdoms</li>
-                      <li>More variety in event types and outcomes</li>
-                    </ul>
-                    <p class="changelog-category">⚙️ Event System Improvements:</p>
-                    <ul>
-                      <li>Events now scale with your kingdom's development</li>
-                      <li>Better distribution of positive and negative events</li>
-                      <li>Enhanced event descriptions and flavor text</li>
-                      <li>Improved event log formatting</li>
-                    </ul>
-                  </div>
-                </div>
-                
                 <!-- Version 2.1.0 -->
                 <div class="changelog-entry" onclick="toggleChangelog(this)">
                   <div class="changelog-header">
