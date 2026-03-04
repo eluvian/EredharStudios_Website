@@ -1,109 +1,37 @@
 // ===================================
-// POPUP/OVERLAY FUNCTIONS
+// POPUPS & UI HELPERS
 // ===================================
 
-// Research Display
-function updateResearchDisplay() {
-  document.getElementById('researchAvailable').textContent = Math.floor(gameState.research);
-  
-  const tier1 = Object.values(technologies).filter(t => t.tier === 1);
-  const tier2 = Object.values(technologies).filter(t => t.tier === 2);
-  const tier3 = Object.values(technologies).filter(t => t.tier === 3);
-  
-  renderTechTier('tier1Grid', tier1);
-  renderTechTier('tier2Grid', tier2);
-  renderTechTier('tier3Grid', tier3);
-}
-
-function renderTechTier(gridId, techs) {
-  const grid = document.getElementById(gridId);
-  if (!grid) return;
-  
-  grid.innerHTML = '';
-  
-  techs.forEach(tech => {
-    const isPurchased = hasTech(tech.id);
-    const canPurchase = canPurchaseTech(tech);
-    const isLocked = !canPurchase && !isPurchased;
-    
-    const card = document.createElement('div');
-    card.className = `tech-card ${isPurchased ? 'tech-purchased' : ''} ${isLocked ? 'tech-locked' : ''}`;
-    
-    let requirementText = '';
-    if (tech.requires && !hasTech(tech.requires)) {
-      const reqTech = technologies[tech.requires];
-      requirementText = `<div class="tech-requirement">Requires: ${reqTech.name}</div>`;
-    }
-    
-    let costText = isPurchased ? 'RESEARCHED ✓' : `${tech.cost} RP`;
-    
-    card.innerHTML = `
-      <div class="tech-icon">${tech.icon}</div>
-      <div class="tech-name">${tech.name}</div>
-      <div class="tech-desc">${tech.desc}</div>
-      <div class="tech-cost">${costText}</div>
-      ${requirementText}
-    `;
-    
-    if (canPurchase) {
-      card.style.cursor = 'pointer';
-      card.onclick = () => purchaseTechnology(tech.id);
-    }
-    
-    grid.appendChild(card);
-  });
-}
-
-// Statistics Display - FIXED VERSION
-function updateStatisticsDisplay() {
-  // Update all-time statistics (these IDs DO exist in the HTML)
-  document.getElementById('statAllTimeTime').textContent = formatTime(allTimeStats.longestSurvival);
-  document.getElementById('statAllTimeGold').textContent = Math.floor(allTimeStats.totalGoldEarned).toLocaleString();
-  document.getElementById('statAllTimeFood').textContent = Math.floor(allTimeStats.totalFoodProduced).toLocaleString();
-  document.getElementById('statAllTimeBuildings').textContent = allTimeStats.totalBuildingsBuilt;
-  document.getElementById('statAllTimePopulation').textContent = allTimeStats.highestPopulation;
-
-  // Update achievements list
+// Render the achievements list in the stats overlay
+function renderAchievements() {
   const achievementsList = document.getElementById('achievementsList');
   if (!achievementsList) return;
-  
+
   achievementsList.innerHTML = '';
-  
-  const extractTarget = (desc) => {
-    const cleanDesc = desc.replace(/,/g, '');
-    const match = cleanDesc.match(/\d+/);
-    return match ? parseInt(match[0]) : null;
-  };
-  
+
   achievements.forEach(achievement => {
-    const isUnlocked = unlockedAchievements.includes(achievement.id);
     const card = document.createElement('div');
+    const isUnlocked = unlockedAchievements.includes(achievement.id);
     card.className = `achievement-card ${isUnlocked ? 'unlocked' : 'locked'}`;
-    
+
     let progressText = '';
     if (!isUnlocked) {
-      if (achievement.id.includes('survive')) {
+      function extractTarget(desc) {
+        const match = desc.match(/(\d[\d,]*)/);
+        return match ? parseInt(match[1].replace(',', '')) : null;
+      }
+
+      if (achievement.id.includes('population')) {
         const target = extractTarget(achievement.desc);
         if (target) {
-          const current = Math.floor(gameState.time / 60);
-          progressText = `<div class="achievement-progress">${current}/${target} min</div>`;
+          const current = Math.floor(gameState.population);
+          progressText = `<div class="achievement-progress">${current.toLocaleString()}/${target.toLocaleString()}</div>`;
         }
-      } else if (achievement.id.includes('build')) {
+      } else if (achievement.id.includes('gold') || achievement.id.includes('rich')) {
         const target = extractTarget(achievement.desc);
         if (target) {
-          const current = achievement.id === 'build_50' ? allTimeStats.totalBuildingsBuilt : gameState.statistics.totalBuildingsBuilt;
-          progressText = `<div class="achievement-progress">${current}/${target}</div>`;
-        }
-      } else if (achievement.id.includes('pop')) {
-        const target = extractTarget(achievement.desc);
-        if (target) {
-          const current = gameState.statistics.maxPopulationReached;
-          progressText = `<div class="achievement-progress">${current}/${target}</div>`;
-        }
-      } else if (achievement.id.includes('gold')) {
-        const target = extractTarget(achievement.desc);
-        if (target) {
-          const current = achievement.id === 'gold_10000' ? Math.floor(allTimeStats.totalGoldEarned) : Math.floor(gameState.statistics.totalGoldEarned);
+          const current = achievement.id.includes('all') ?
+            Math.floor(allTimeStats.totalGoldEarned) : Math.floor(gameState.statistics.totalGoldEarned);
           progressText = `<div class="achievement-progress">${current.toLocaleString()}/${target.toLocaleString()}</div>`;
         }
       } else if (achievement.id.includes('food')) {
@@ -140,7 +68,7 @@ function updateStatisticsDisplay() {
         }
       }
     }
-    
+
     card.innerHTML = `
       <div class="achievement-icon">${achievement.icon}</div>
       <div class="achievement-name">${achievement.name}</div>
@@ -161,7 +89,7 @@ function confirmResetAll() {
     "• Everything will be lost!\n\n" +
     "Are you absolutely sure?"
   );
-  
+
   if (confirmed) {
     const doubleConfirmed = confirm(
       "🗑️ FINAL WARNING 🗑️\n\n" +
@@ -169,7 +97,7 @@ function confirmResetAll() {
       "Click OK to DELETE EVERYTHING\n" +
       "Click Cancel to keep your progress"
     );
-    
+
     if (doubleConfirmed) {
       resetAllProgress();
     }
@@ -180,7 +108,7 @@ function resetAllProgress() {
   localStorage.removeItem('medievalKingdomSave');
   localStorage.removeItem('medievalKingdomAllTime');
   localStorage.removeItem('medievalKingdomAchievements');
-  
+
   allTimeStats = {
     longestSurvival: 0,
     totalGoldEarned: 0,
@@ -189,9 +117,9 @@ function resetAllProgress() {
     highestPopulation: 0,
     gamesPlayed: 0
   };
-  
+
   unlockedAchievements = [];
-  
+
   gameState = {
     version: GAME_VERSION,
     gold: BALANCE.STARTING_GOLD,
@@ -231,23 +159,32 @@ function resetAllProgress() {
       diseasesHealed: 0
     }
   };
-  
+
   closeOverlay();
   updateEventLog();
   updateDisplay();
-  
+
   alert("✅ All progress has been reset!\n\nYour kingdom starts anew.");
   debugLog('RESET', 'All progress reset');
 }
 
-// Toggle main changelog section (expand/collapse entire changelog)
+// ─── CHANGELOG TOGGLES ────────────────────────────────────────────────────────
+
+// Toggle the main changelog section (expand/collapse the entire changelog block).
+// The CSS in medieval-simulator.html uses the class "open", so we toggle that.
+// The .changelog-main-content is a SIBLING of .changelog-main-section, so we
+// must explicitly toggle its class too.
 function toggleChangelogSection(element) {
-  element.classList.toggle('expanded');
+  element.classList.toggle('open');
+  const content = element.nextElementSibling;
+  if (content && content.classList.contains('changelog-main-content')) {
+    content.classList.toggle('open');
+  }
 }
 
-// Toggle individual changelog version entries
+// Toggle individual changelog version entries.
 function toggleChangelog(element) {
-  // Stop event propagation to prevent triggering parent toggleChangelogSection
+  // Stop event propagation so the parent toggleChangelogSection doesn't fire.
   event.stopPropagation();
-  element.classList.toggle('expanded');
+  element.classList.toggle('open');
 }
