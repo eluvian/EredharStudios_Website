@@ -81,7 +81,7 @@
     <div class="page-header-content">
       <p class="page-eyebrow">🎮 Games</p>
       <h1 class="page-title">Heroes of<br>the Seas</h1>
-      <span class="page-status"><span class="status-dot"></span>Completed — Fan Project · Community</span>
+      <span class="page-status"><span class="status-dot "></span>Completed — Fan Project · Community</span>
     </div>
   </div>
   <div class="main-content">
@@ -105,11 +105,21 @@
     <span class="footer-brand">Eredhar Studios</span>
   </footer>
   <script>
-    const revealEls = document.querySelectorAll(".reveal");
+    const revealEls = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); } });
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
     }, { threshold: 0.1 });
     revealEls.forEach(el => io.observe(el));
-  <\/script>
+
+    // Immediately reveal elements already visible in the viewport on page load
+    requestAnimationFrame(() => {
+      revealEls.forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) { el.classList.add('visible'); io.unobserve(el); }
+      });
+    });
+  </script>
 </body>
 </html>
