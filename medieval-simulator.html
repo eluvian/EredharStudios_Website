@@ -6,19 +6,1164 @@
   <title>Medieval Kingdom Simulator | Eredhar Studios</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  
-  <!-- Game Styles -->
-  <link rel="stylesheet" href="medieval-simulator/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════════
+       TOKENS
+    ═══════════════════════════════════════ */
+    :root {
+      --black:       #06060a;
+      --deep:        #0b0c10;
+      --surface:     #0f1018;
+      --panel:       #13141d;
+      --panel-light: #1a1b28;
+      --border:      rgba(200, 160, 60, 0.18);
+      --border-mid:  rgba(200, 160, 60, 0.3);
+      --gold:        #c8a03c;
+      --gold-light:  #e8c86a;
+      --gold-dim:    rgba(200, 160, 60, 0.45);
+      --gold-faint:  rgba(200, 160, 60, 0.08);
+      --ember:       #e05c20;
+      --red:         #c0392b;
+      --red-dim:     rgba(192, 57, 43, 0.2);
+      --green:       #27ae60;
+      --green-dim:   rgba(39, 174, 96, 0.15);
+      --teal:        #1a4a52;
+      --purple:      #7c5cbf;
+      --text:        #d8d0c0;
+      --text-dim:    #8a8070;
+      --text-muted:  #4a4840;
+      --blue-link:   #81d4fa;
+      --radius:      4px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Crimson Pro', Georgia, serif;
+      background: var(--black);
+      color: var(--text);
+    }
+
+    /* grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px 256px;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--deep); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+
+    a { color: var(--blue-link); text-decoration: none; }
+    a:hover { color: var(--gold-light); }
+
+    /* ═══════════════════════════════════════
+       GAME FRAME
+    ═══════════════════════════════════════ */
+    .game-frame {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-height: 100vh;
+      background: var(--black);
+    }
+
+    /* ═══════════════════════════════════════
+       TOP BAR
+    ═══════════════════════════════════════ */
+    .top-bar {
+      background: var(--deep);
+      border-bottom: 1px solid var(--border);
+      padding: 0 16px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .top-bar-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 52px;
+      gap: 12px;
+    }
+
+    .top-bar-left {
+      flex-shrink: 0;
+    }
+
+    .game-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.6rem, 1.5vw, 0.9rem);
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .stat-display {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      min-width: 56px;
+    }
+
+    .stat-icon {
+      font-size: 0.85rem;
+      line-height: 1;
+    }
+
+    .stat-value {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      min-width: 28px;
+      text-align: right;
+    }
+
+    /* ═══════════════════════════════════════
+       GAME VIEWPORT
+    ═══════════════════════════════════════ */
+    .game-viewport {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 80%, rgba(26,74,52,0.25) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 40% at 30% 30%, rgba(200,160,60,0.04) 0%, transparent 60%),
+        linear-gradient(160deg, #06060a 0%, #0a0c0e 50%, #07090b 100%);
+    }
+
+    /* ═══════════════════════════════════════
+       OVERLAY PANELS
+    ═══════════════════════════════════════ */
+    .overlay-panel {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(6, 6, 10, 0.97);
+      border: 1px solid var(--border);
+      flex-direction: column;
+      z-index: 50;
+      animation: overlayIn 0.2s ease;
+    }
+
+    .overlay-panel.active {
+      display: flex;
+    }
+
+    @keyframes overlayIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .overlay-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      background: var(--deep);
+    }
+
+    .overlay-header h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .close-overlay-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .close-overlay-btn:hover {
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    .overlay-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+    }
+
+    /* ═══════════════════════════════════════
+       BUILDING GRID
+    ═══════════════════════════════════════ */
+    .building-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .building-card {
+      display: flex;
+      gap: 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .building-card:hover {
+      border-color: var(--border-mid);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .building-image {
+      width: 80px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .building-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.8) saturate(0.7);
+      display: block;
+    }
+
+    .building-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      gap: 10px;
+    }
+
+    .building-info { flex: 1; }
+
+    .building-info h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      margin-bottom: 3px;
+      letter-spacing: 0.05em;
+    }
+
+    .building-info p {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.4;
+      margin: 2px 0;
+    }
+
+    .building-cost {
+      font-size: 0.75rem !important;
+      color: var(--text-muted) !important;
+      font-family: 'Cinzel', serif;
+    }
+
+    .building-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .building-count {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .buy-btn {
+      padding: 6px 16px;
+      background: transparent;
+      border: 1px solid var(--gold-dim);
+      border-radius: var(--radius);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+
+    .buy-btn:hover {
+      background: rgba(200,160,60,0.12);
+      border-color: var(--gold-light);
+      color: var(--gold-light);
+    }
+
+    .buy-btn:disabled {
+      border-color: var(--text-muted);
+      color: var(--text-muted);
+      cursor: not-allowed;
+      background: transparent;
+    }
+
+    /* ═══════════════════════════════════════
+       STATS OVERLAY
+    ═══════════════════════════════════════ */
+    .stats-section {
+      margin-bottom: 28px;
+    }
+
+    .stats-section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .summary-item {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+    }
+
+    .summary-item h4 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      margin-bottom: 6px;
+    }
+
+    .summary-item p {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    #defenseBonus, #faithBonus {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .stat-card-small {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .stat-card-small:hover {
+      border-color: var(--border-mid);
+    }
+
+    .stat-card-small .stat-icon {
+      font-size: 1.3rem;
+    }
+
+    .stat-info { flex: 1; }
+
+    .stat-label-small {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .stat-value-small {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+
+    .stat-rate-small {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 1px;
+    }
+
+    /* Achievements */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .achievement {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .achievement.unlocked {
+      border-color: rgba(200,160,60,0.4);
+      box-shadow: 0 0 12px rgba(200,160,60,0.1);
+    }
+
+    .achievement-icon {
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+    }
+
+    .achievement-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      margin-bottom: 4px;
+    }
+
+    .achievement-desc {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+
+    .achievement:not(.unlocked) {
+      opacity: 0.4;
+      filter: grayscale(0.7);
+    }
+
+    /* ═══════════════════════════════════════
+       EVENT LOG
+    ═══════════════════════════════════════ */
+    .event-log {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .event-log-empty {
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 1rem;
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .event-entry {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold-dim);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .event-entry.negative {
+      border-left-color: var(--red);
+    }
+
+    .event-entry.positive {
+      border-left-color: var(--green);
+    }
+
+    .event-time {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      margin-bottom: 3px;
+    }
+
+    /* ═══════════════════════════════════════
+       TRADE OVERLAY
+    ═══════════════════════════════════════ */
+    .trade-controls {
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .trade-input-group { display: flex; flex-direction: column; gap: 6px; }
+
+    .trade-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'Crimson Pro', serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .trade-input:focus {
+      border-color: var(--gold-dim);
+    }
+
+    .trade-btn {
+      padding: 12px 24px;
+      background: transparent;
+      border: 1px solid var(--gold-dim);
+      border-radius: var(--radius);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .trade-btn:hover {
+      background: rgba(200,160,60,0.1);
+      border-color: var(--gold-light);
+      color: var(--gold-light);
+    }
+
+    .quick-sell-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .quick-sell-btn {
+      flex: 1;
+      padding: 8px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-dim);
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+
+    .quick-sell-btn:hover {
+      border-color: var(--gold-dim);
+      color: var(--gold);
+      background: var(--gold-faint);
+    }
+
+    /* ═══════════════════════════════════════
+       RESEARCH OVERLAY
+    ═══════════════════════════════════════ */
+    .tech-tier {
+      margin-bottom: 28px;
+    }
+
+    .tech-tier-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .tech-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+    }
+
+    .tech-card:hover:not(.researched):not(.locked) {
+      border-color: var(--border-mid);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      transform: translateY(-2px);
+    }
+
+    .tech-card.researched {
+      border-color: rgba(200,160,60,0.4);
+      background: rgba(200,160,60,0.05);
+    }
+
+    .tech-card.locked {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .tech-icon { font-size: 1.4rem; margin-bottom: 8px; }
+
+    .tech-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      margin-bottom: 5px;
+    }
+
+    .tech-desc {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .tech-cost {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      color: var(--purple);
+      letter-spacing: 0.1em;
+    }
+
+    .tech-card.researched .tech-cost {
+      color: var(--green);
+    }
+
+    /* ═══════════════════════════════════════
+       ABOUT OVERLAY
+    ═══════════════════════════════════════ */
+    .about-section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .about-intro {
+      font-size: 1rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    .credits-box {
+      text-align: center;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--gold-faint);
+    }
+
+    .credits-text {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .credits-author {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+    }
+
+    /* Changelog */
+    .changelog-main-section {
+      cursor: pointer;
+      padding: 12px 0;
+    }
+
+    .changelog-main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .changelog-main-arrow {
+      color: var(--gold-dim);
+      font-size: 0.8rem;
+      transition: transform 0.3s;
+    }
+
+    .changelog-main-section.open .changelog-main-arrow {
+      transform: rotate(180deg);
+    }
+
+    .changelog-main-content {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .changelog-main-content.open {
+      display: block;
+    }
+
+    .changelog-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .changelog-entry {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .changelog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      transition: background 0.2s;
+    }
+
+    .changelog-header:hover {
+      background: rgba(200,160,60,0.04);
+    }
+
+    .changelog-version {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+    }
+
+    .changelog-arrow {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      transition: transform 0.3s;
+    }
+
+    .changelog-entry.open .changelog-arrow {
+      transform: rotate(180deg);
+    }
+
+    .changelog-content {
+      display: none;
+      padding: 0 14px 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .changelog-entry.open .changelog-content {
+      display: block;
+    }
+
+    .changelog-category {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin: 12px 0 6px;
+    }
+
+    .changelog-content ul {
+      padding-left: 18px;
+    }
+
+    .changelog-content li {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin-bottom: 2px;
+    }
+
+    .changelog-content strong {
+      color: var(--text);
+    }
+
+    /* ═══════════════════════════════════════
+       BOTTOM NAV
+    ═══════════════════════════════════════ */
+    .bottom-nav {
+      display: flex;
+      align-items: center;
+      background: var(--deep);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .nav-btn {
+      flex: 1;
+      padding: 12px 6px;
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.5rem, 1.2vw, 0.65rem);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-btn:last-child {
+      border-right: none;
+    }
+
+    .nav-btn:hover, .nav-btn.active {
+      color: var(--gold-light);
+      background: var(--gold-faint);
+    }
+
+    /* ═══════════════════════════════════════
+       EVENT POPUP
+    ═══════════════════════════════════════ */
+    .event-popup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(6,6,10,0.9);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .event-popup.active {
+      display: flex;
+      animation: overlayIn 0.3s ease;
+    }
+
+    .event-popup-content {
+      background: var(--panel);
+      border: 1px solid var(--border-mid);
+      border-radius: var(--radius);
+      padding: 32px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 40px rgba(200,160,60,0.08);
+    }
+
+    .event-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+
+    .event-description {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    .event-choices {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .event-choice-btn {
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'Crimson Pro', serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+
+    .event-choice-btn:hover {
+      border-color: var(--gold-dim);
+      color: var(--gold-light);
+      background: var(--gold-faint);
+    }
+
+    /* ═══════════════════════════════════════
+       GAME OVER
+    ═══════════════════════════════════════ */
+    .game-over {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(6,6,10,0.96);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .game-over.active {
+      display: flex;
+    }
+
+    .game-over-content {
+      text-align: center;
+      padding: 48px;
+      max-width: 420px;
+    }
+
+    .game-over-content h2 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2rem;
+      color: var(--ember);
+      margin-bottom: 16px;
+      letter-spacing: 0.08em;
+    }
+
+    .game-over-content p {
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    .game-over-content #finalStats {
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+
+    .restart-btn {
+      padding: 13px 40px;
+      background: transparent;
+      border: 1px solid var(--gold-dim);
+      border-radius: var(--radius);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;
+    }
+
+    .restart-btn:hover {
+      background: rgba(200,160,60,0.1);
+      border-color: var(--gold-light);
+      color: var(--gold-light);
+      box-shadow: 0 0 24px rgba(200,160,60,0.2);
+    }
+
+    /* ═══════════════════════════════════════
+       WELCOME BACK POPUP
+    ═══════════════════════════════════════ */
+    .welcome-back-popup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(6,6,10,0.9);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .welcome-back-popup.active {
+      display: flex;
+    }
+
+    .welcome-back-content {
+      background: var(--panel);
+      border: 1px solid var(--border-mid);
+      border-radius: var(--radius);
+      padding: 32px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+    }
+
+    .welcome-back-content h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      color: var(--gold-light);
+      margin-bottom: 12px;
+    }
+
+    .welcome-back-content p {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .welcome-back-gains {
+      background: var(--gold-faint);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin: 16px 0;
+      text-align: left;
+    }
+
+    .welcome-back-gains p {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .welcome-back-close {
+      padding: 10px 28px;
+      background: transparent;
+      border: 1px solid var(--gold-dim);
+      border-radius: var(--radius);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .welcome-back-close:hover {
+      background: rgba(200,160,60,0.1);
+      border-color: var(--gold-light);
+      color: var(--gold-light);
+    }
+
+    /* ═══════════════════════════════════════
+       MISC UTILITY
+    ═══════════════════════════════════════ */
+    .text-gold   { color: var(--gold); }
+    .text-green  { color: var(--green); }
+    .text-red    { color: var(--red); }
+    .text-purple { color: var(--purple); }
+
+    /* research available counter */
+    #researchAvailable {
+      color: var(--purple);
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    /* ═══════════════════════════════════════
+       MOBILE
+    ═══════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .top-bar-content {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 8px 0;
+        gap: 6px;
+      }
+
+      .top-bar-right {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .stat-display {
+        justify-content: center;
+        min-width: unset;
+      }
+
+      .game-title {
+        font-size: 0.7rem;
+      }
+
+      .building-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-btn {
+        font-size: 0.5rem;
+        padding: 10px 4px;
+      }
+
+      .event-popup-content {
+        padding: 20px;
+      }
+
+      .overlay-content {
+        padding: 14px 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .top-bar-right {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .stat-value {
+        font-size: 0.65rem;
+      }
+
+      .bottom-nav {
+        flex-wrap: wrap;
+      }
+
+      .nav-btn {
+        flex: 0 0 33.333%;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Game Frame Container -->
   <div class="game-frame">
-    <!-- Top Bar: Title and Always-Visible Stats -->
+
+    <!-- TOP BAR -->
     <div class="top-bar">
       <div class="top-bar-content">
         <div class="top-bar-left">
-          <h1 class="game-title">⚔️ MEDIEVAL KINGDOM SIMULATOR</h1>
+          <h1 class="game-title">⚔️ Medieval Kingdom Simulator</h1>
         </div>
         <div class="top-bar-right">
           <div class="stat-display">
@@ -53,13 +1198,10 @@
       </div>
     </div>
 
-    <!-- Main Viewport: Kingdom Background -->
+    <!-- GAME VIEWPORT -->
     <div class="game-viewport" id="gameViewport">
-      <!-- Background image will be visible here -->
-      
-      <!-- Overlay Panels (hidden by default, shown when nav buttons clicked) -->
-      
-      <!-- Buildings Overlay -->
+
+      <!-- BUILDINGS OVERLAY -->
       <div class="overlay-panel" id="buildingsOverlay">
         <div class="overlay-header">
           <h2>🏰 Buildings</h2>
@@ -67,7 +1209,7 @@
         </div>
         <div class="overlay-content">
           <div class="building-grid">
-            <!-- Farm -->
+
             <div class="building-card">
               <div class="building-image">
                 <img src="medieval-simulator/images/building-farm.png" alt="Farm">
@@ -85,7 +1227,6 @@
               </div>
             </div>
 
-            <!-- House -->
             <div class="building-card">
               <div class="building-image">
                 <img src="medieval-simulator/images/building-house.png" alt="House">
@@ -103,7 +1244,6 @@
               </div>
             </div>
 
-            <!-- Market -->
             <div class="building-card">
               <div class="building-image">
                 <img src="medieval-simulator/images/building-market.png" alt="Market">
@@ -121,7 +1261,6 @@
               </div>
             </div>
 
-            <!-- Library -->
             <div class="building-card">
               <div class="building-image">
                 <img src="medieval-simulator/images/building-library.png" alt="Library">
@@ -139,7 +1278,6 @@
               </div>
             </div>
 
-            <!-- Barracks -->
             <div class="building-card">
               <div class="building-image">
                 <img src="medieval-simulator/images/building-barracks.png" alt="Barracks">
@@ -157,7 +1295,6 @@
               </div>
             </div>
 
-            <!-- Temple -->
             <div class="building-card">
               <div class="building-image">
                 <img src="medieval-simulator/images/building-temple.png" alt="Temple">
@@ -174,18 +1311,18 @@
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
 
-      <!-- Stats Overlay -->
+      <!-- STATS OVERLAY -->
       <div class="overlay-panel" id="statsOverlay">
         <div class="overlay-header">
           <h2>📊 Kingdom Statistics</h2>
           <button class="close-overlay-btn" onclick="closeOverlay()">✕</button>
         </div>
         <div class="overlay-content">
-          <!-- Kingdom Summary -->
           <div class="stats-section">
             <h3 class="stats-section-title">📊 Kingdom Overview</h3>
             <div class="summary-grid">
@@ -223,7 +1360,6 @@
             </div>
           </div>
 
-          <!-- Detailed Stats -->
           <div class="stats-section">
             <h3 class="stats-section-title">⚔️ Current Kingdom</h3>
             <div class="stats-grid">
@@ -285,7 +1421,6 @@
             </div>
           </div>
 
-          <!-- All-Time Records -->
           <div class="stats-section">
             <h3 class="stats-section-title">🏆 All-Time Records</h3>
             <div class="stats-grid">
@@ -327,17 +1462,14 @@
             </div>
           </div>
 
-          <!-- Achievements -->
           <div class="stats-section">
             <h3 class="stats-section-title">🎯 Achievements</h3>
-            <div id="achievementsList" class="achievements-grid">
-              <!-- Achievements populated by JavaScript -->
-            </div>
+            <div id="achievementsList" class="achievements-grid"></div>
           </div>
         </div>
       </div>
 
-      <!-- Events Overlay -->
+      <!-- EVENTS OVERLAY -->
       <div class="overlay-panel" id="eventsOverlay">
         <div class="overlay-header">
           <h2>📜 Recent Events</h2>
@@ -345,12 +1477,12 @@
         </div>
         <div class="overlay-content">
           <div class="event-log" id="eventLog">
-            <p class="event-log-empty">No events yet. Your kingdom awaits its fate...</p>
+            <p class="event-log-empty">No events yet. Your kingdom awaits its fate…</p>
           </div>
         </div>
       </div>
 
-      <!-- Trade Overlay -->
+      <!-- TRADE OVERLAY -->
       <div class="overlay-panel" id="tradeOverlay">
         <div class="overlay-header">
           <h2>💱 Trade Market</h2>
@@ -359,17 +1491,17 @@
         <div class="overlay-content">
           <div class="trade-controls">
             <div class="trade-input-group">
-              <input 
-                type="number" 
-                class="trade-input" 
-                id="sellAmount" 
+              <input
+                type="number"
+                class="trade-input"
+                id="sellAmount"
                 placeholder="Amount of food to sell"
                 min="0"
                 value="10"
               >
             </div>
             <button class="trade-btn" id="sellBtn" onclick="sellFood()">
-              Sell Food (1 Food = 0.5 Gold)
+              Sell Food &nbsp;·&nbsp; 1 Food = 0.5 Gold
             </button>
             <div class="quick-sell-buttons">
               <button class="quick-sell-btn" onclick="quickSell(10)">10</button>
@@ -381,31 +1513,25 @@
         </div>
       </div>
 
-      <!-- Research Overlay -->
+      <!-- RESEARCH OVERLAY -->
       <div class="overlay-panel" id="researchOverlay">
         <div class="overlay-header">
           <h2>🔬 Technology Research</h2>
           <button class="close-overlay-btn" onclick="closeOverlay()">✕</button>
         </div>
         <div class="overlay-content">
-          <div style="text-align: center; margin-bottom: 30px; padding: 15px; background-color: rgba(26, 26, 37, 0.8); border-radius: 8px; border: 2px solid var(--purple);">
-            <p style="color: var(--text-gray); margin-bottom: 10px;">Available Research Points</p>
-            <p style="color: var(--purple); font-size: 2rem; font-weight: bold;" id="researchAvailable">0</p>
+          <div style="text-align:center;margin-bottom:24px;padding:16px;background:rgba(124,92,191,0.08);border:1px solid rgba(124,92,191,0.2);border-radius:var(--radius);">
+            <p style="font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Available Research Points</p>
+            <p id="researchAvailable">0</p>
           </div>
-
-          <!-- Tier 1 -->
           <div class="tech-tier">
             <h3 class="tech-tier-title">Tier 1 Technologies</h3>
             <div class="tech-grid" id="tier1Grid"></div>
           </div>
-
-          <!-- Tier 2 -->
           <div class="tech-tier">
             <h3 class="tech-tier-title">Tier 2 Technologies</h3>
             <div class="tech-grid" id="tier2Grid"></div>
           </div>
-
-          <!-- Tier 3 -->
           <div class="tech-tier">
             <h3 class="tech-tier-title">Tier 3 Technologies</h3>
             <div class="tech-grid" id="tier3Grid"></div>
@@ -413,7 +1539,7 @@
         </div>
       </div>
 
-      <!-- About Overlay -->
+      <!-- ABOUT OVERLAY -->
       <div class="overlay-panel" id="aboutOverlay">
         <div class="overlay-header">
           <h2>ℹ️ About</h2>
@@ -423,29 +1549,26 @@
           <div class="about-section">
             <h3 class="stats-section-title">🏰 About the Game</h3>
             <p class="about-intro">
-              Medieval Kingdom Simulator is an idle kingdom management game where you build and grow your settlement through strategic decisions. Balance resources, expand your population, research technologies, and survive random events to create a thriving medieval kingdom.
+              Medieval Kingdom Simulator is an idle kingdom management game where you build and grow your settlement through strategic decisions. Balance resources, expand your population, research technologies, and survive random events.
             </p>
-            <p class="about-intro" style="font-size: 0.95rem; color: #888;">
-              Version 2.2.0 - Event Expansion (Phase 1)
+            <p class="about-intro" style="font-size:0.85rem;color:var(--text-muted);margin-top:8px;">
+              Version 2.2.0 — Event Expansion (Phase 1)
             </p>
           </div>
 
-          <!-- COLLAPSIBLE CHANGELOG SECTION -->
           <div class="about-section">
             <div class="changelog-main-section" onclick="toggleChangelogSection(this)">
               <div class="changelog-main-header">
-                <h3 class="stats-section-title" style="margin: 0;">📋 Changelog</h3>
+                <h3 class="stats-section-title" style="margin:0;">📋 Changelog</h3>
                 <span class="changelog-main-arrow">▼</span>
               </div>
             </div>
-            
             <div class="changelog-main-content">
               <div class="changelog-container">
-                
-                <!-- Version 2.2.0 - NEW! Event Expansion (Phase 1) -->
+
                 <div class="changelog-entry" onclick="toggleChangelog(this)">
                   <div class="changelog-header">
-                    <span class="changelog-version">v2.2.0 - Event Expansion (Phase 1)</span>
+                    <span class="changelog-version">v2.2.0 — Event Expansion (Phase 1)</span>
                     <span class="changelog-arrow">▼</span>
                   </div>
                   <div class="changelog-content">
@@ -458,221 +1581,90 @@
                     </ul>
                     <p class="changelog-category">🎲 Event System Enhancements:</p>
                     <ul>
-                      <li>Events now scale with your kingdom's development (building-specific bonuses)</li>
+                      <li>Events now scale with your kingdom's development</li>
                       <li>Multiple-choice events with risk/reward decisions</li>
-                      <li>Legendary rare events that appear late-game (Dragons, Heroes, Prophecies)</li>
-                      <li>Events that utilize Defense, Faith, and Research in meaningful ways</li>
+                      <li>Legendary rare events that appear late-game</li>
                       <li>Complex event chains with follow-up outcomes</li>
-                      <li>Better event variety and distribution</li>
-                    </ul>
-                    <p class="changelog-category">⚙️ Gameplay Improvements:</p>
-                    <ul>
-                      <li>Defense and Faith systems now have more impactful interactions with events</li>
-                      <li>Building counts affect event outcomes (more buildings = bigger bonuses/risks)</li>
-                      <li>Rare events require specific conditions (time survived, population, buildings)</li>
-                      <li>Event log shows follow-up events (faith protection, successful defenses, etc.)</li>
                     </ul>
                     <p class="changelog-category">🔧 Technical Updates:</p>
                     <ul>
-                      <li>Improved time tracking system using real-world timestamps (fixes tab throttling)</li>
-                      <li>Better delta-time calculations for accurate game progression</li>
-                      <li>Enhanced event weighting system for better randomness</li>
-                    </ul>
-                    <p class="changelog-category">📊 Content Summary:</p>
-                    <ul>
-                      <li>Total Events: 32+ (12 original + 20 new Phase 1 events)</li>
-                      <li>Event variety significantly increased</li>
-                      <li>More strategic depth in decision-making</li>
-                      <li>Improved replayability through diverse event outcomes</li>
+                      <li>Improved time tracking using real-world timestamps</li>
+                      <li>Better delta-time calculations for accurate progression</li>
+                      <li>Enhanced event weighting system</li>
                     </ul>
                   </div>
                 </div>
 
-                <!-- Version 2.1.1 -->
                 <div class="changelog-entry" onclick="toggleChangelog(this)">
                   <div class="changelog-header">
-                    <span class="changelog-version">v2.1.1 - Mobile Optimization</span>
+                    <span class="changelog-version">v2.1.1 — Mobile Optimization</span>
                     <span class="changelog-arrow">▼</span>
                   </div>
                   <div class="changelog-content">
                     <p class="changelog-category">📱 Mobile Optimization:</p>
                     <ul>
-                      <li>Complete responsive design for all mobile devices (phones, tablets)</li>
+                      <li>Complete responsive design for all mobile devices</li>
                       <li>Touch-friendly buttons with minimum 44x44px tap targets</li>
                       <li>Optimized layouts for both portrait and landscape orientations</li>
-                      <li>Improved text readability on small screens without zooming</li>
-                      <li>Enhanced scrolling performance with smooth momentum</li>
-                      <li>iOS-specific optimizations (prevented zoom on input, safe areas)</li>
-                      <li>Android-specific optimizations (Material Design tap targets)</li>
-                      <li>Tablet-optimized layouts with hybrid desktop/mobile features</li>
-                    </ul>
-                    <p class="changelog-category">🎨 Layout Improvements:</p>
-                    <ul>
-                      <li>Top bar stats reorganized into grid format on mobile (2-3 columns)</li>
-                      <li>Bottom navigation wraps into 2 rows on small screens</li>
-                      <li>Single-column building cards for easy mobile viewing</li>
-                      <li>Full-width overlays (98%) on mobile for maximum content space</li>
-                      <li>Enlarged close buttons (48x48px) for easy overlay dismissal</li>
-                      <li>Better spacing between all interactive elements</li>
-                      <li>Event popups and dialogs properly sized for mobile</li>
-                    </ul>
-                    <p class="changelog-category">⚙️ Technical Improvements:</p>
-                    <ul>
-                      <li>Prevented automatic zoom on input focus (iOS Safari)</li>
-                      <li>Webkit momentum scrolling for smooth feel</li>
-                      <li>Touch-specific active states (removed hover on touch devices)</li>
-                      <li>Optimized viewport sizing (98vh on mobile)</li>
-                      <li>Better browser cache handling</li>
-                      <li>Prevented text selection on game elements (allowed on text content)</li>
-                      <li>Multiple responsive breakpoints (1200px, 900px, 768px, 480px)</li>
-                    </ul>
-                    <p class="changelog-category">📏 Responsive Breakpoints:</p>
-                    <ul>
-                      <li>Large tablets / small laptops: 1200px and below</li>
-                      <li>Tablets landscape / mobile landscape: 900px and below</li>
-                      <li>Standard mobile portrait: 768px and below</li>
-                      <li>Small mobile devices: 480px and below</li>
+                      <li>iOS and Android specific optimizations</li>
                     </ul>
                   </div>
                 </div>
 
-                <!-- Version 2.1.0 -->
                 <div class="changelog-entry" onclick="toggleChangelog(this)">
                   <div class="changelog-header">
-                    <span class="changelog-version">v2.1.0 - New Buildings: Barracks & Temple</span>
+                    <span class="changelog-version">v2.1.0 — New Buildings: Barracks &amp; Temple</span>
                     <span class="changelog-arrow">▼</span>
                   </div>
                   <div class="changelog-content">
                     <p class="changelog-category">🏗️ New Buildings:</p>
                     <ul>
-                      <li><strong>⚔️ Barracks:</strong> Train guards to defend your kingdom. Generates 0.5 Defense/sec</li>
-                      <li><strong>⛪ Temple:</strong> Provides spiritual protection. Generates 0.2 Faith/sec</li>
-                    </ul>
-                    <p class="changelog-category">🛡️ Defense System:</p>
-                    <ul>
-                      <li>Each defense point reduces raid damage by 5% (max 90%)</li>
-                      <li>Successfully repelling raids tracked in statistics</li>
-                      <li>New achievements for defense milestones</li>
-                    </ul>
-                    <p class="changelog-category">✨ Faith System:</p>
-                    <ul>
-                      <li>Each faith point reduces negative event damage by 3% (max 80%)</li>
-                      <li>Protects against harsh winters, diseases, and fires</li>
-                      <li>New pilgrimage event for temples</li>
-                    </ul>
-                    <p class="changelog-category">🎯 New Achievements:</p>
-                    <ul>
-                      <li>Warlord - Build 5 barracks</li>
-                      <li>Faithful - Build 5 temples</li>
-                      <li>Defender - Successfully repel a raid</li>
-                      <li>Fortress - Repel 10 raids (all-time)</li>
-                      <li>Healer - Reduce disease impact with faith</li>
-                      <li>Impenetrable - Reach 50 defense</li>
-                      <li>Divine - Reach 30 faith</li>
-                    </ul>
-                    <p class="changelog-category">⚙️ Balance Changes:</p>
-                    <ul>
-                      <li>Adjusted event weights for better gameplay flow</li>
-                      <li>Added new military parade event</li>
-                      <li>Enhanced event feedback for defense/faith protection</li>
+                      <li><strong>⚔️ Barracks:</strong> Generates 0.5 Defense/sec — reduces raid damage by 5% per point</li>
+                      <li><strong>⛪ Temple:</strong> Generates 0.2 Faith/sec — reduces negative event damage by 3% per point</li>
                     </ul>
                   </div>
                 </div>
 
-                <!-- Version 2.0.0 -->
                 <div class="changelog-entry" onclick="toggleChangelog(this)">
                   <div class="changelog-header">
-                    <span class="changelog-version">v2.0.0 - Technology & Research System</span>
+                    <span class="changelog-version">v2.0.0 — Technology &amp; Research System</span>
                     <span class="changelog-arrow">▼</span>
                   </div>
                   <div class="changelog-content">
                     <p class="changelog-category">🔬 Research System:</p>
                     <ul>
-                      <li>Added Libraries that generate Research Points</li>
-                      <li>12 technologies across 3 tiers</li>
-                      <li>Technologies provide powerful bonuses to production and protection</li>
-                    </ul>
-                    <p class="changelog-category">📚 Technology Tree:</p>
-                    <ul>
-                      <li><strong>Tier 1:</strong> Advanced Farming, Efficient Markets, Basic Medicine, Welcoming Culture</li>
-                      <li><strong>Tier 2:</strong> Irrigation, Trade Routes, Hospitals, Urban Planning</li>
-                      <li><strong>Tier 3:</strong> Agricultural Revolution, Economic Prosperity, Public Health, Metropolitan Growth</li>
-                    </ul>
-                    <p class="changelog-category">🎯 New Achievements:</p>
-                    <ul>
-                      <li>Scholar - Research 1 technology</li>
-                      <li>Innovator - Research 5 technologies</li>
-                      <li>Renaissance - Research all technologies</li>
-                      <li>Enlightened - Build 5 libraries</li>
-                    </ul>
-                    <p class="changelog-category">🎨 UI Improvements:</p>
-                    <ul>
-                      <li>New overlay system for better organization</li>
-                      <li>Research panel with technology cards</li>
-                      <li>Enhanced visual feedback for unlocks</li>
+                      <li>Libraries generate Research Points</li>
+                      <li>12 technologies across 3 tiers with powerful production bonuses</li>
                     </ul>
                   </div>
                 </div>
 
-                <!-- Version 1.5.0 -->
                 <div class="changelog-entry" onclick="toggleChangelog(this)">
                   <div class="changelog-header">
-                    <span class="changelog-version">v1.5.0 - Events & Achievements</span>
+                    <span class="changelog-version">v1.5.0 — Events &amp; Achievements</span>
                     <span class="changelog-arrow">▼</span>
                   </div>
                   <div class="changelog-content">
-                    <p class="changelog-category">📜 Random Events:</p>
+                    <p class="changelog-category">📜 Random Events &amp; Achievements:</p>
                     <ul>
                       <li>10+ unique random events with choices</li>
-                      <li>Events affect resources and population</li>
-                      <li>Event log to track kingdom history</li>
-                    </ul>
-                    <p class="changelog-category">🏆 Achievement System:</p>
-                    <ul>
-                      <li>25+ achievements to unlock</li>
-                      <li>Track progress across multiple playthroughs</li>
-                      <li>All-time statistics system</li>
-                    </ul>
-                    <p class="changelog-category">💾 Save System:</p>
-                    <ul>
-                      <li>Auto-save every 10 seconds</li>
-                      <li>Offline progress calculation (up to 8 hours)</li>
-                      <li>Welcome back popup showing offline gains</li>
+                      <li>25+ achievements to unlock across playthroughs</li>
+                      <li>Auto-save every 10 seconds with offline progress (up to 8 hours)</li>
                     </ul>
                   </div>
                 </div>
 
-                <!-- Version 1.0.0 -->
                 <div class="changelog-entry" onclick="toggleChangelog(this)">
                   <div class="changelog-header">
-                    <span class="changelog-version">v1.0.0 - Initial Release</span>
+                    <span class="changelog-version">v1.0.0 — Initial Release</span>
                     <span class="changelog-arrow">▼</span>
                   </div>
                   <div class="changelog-content">
                     <p class="changelog-category">🎮 Core Gameplay:</p>
                     <ul>
-                      <li>Build 4 types of buildings: Farms, Houses, Markets, Libraries</li>
-                      <li>Manage resources: Gold, Food, Population</li>
-                      <li>Population growth based on food availability</li>
-                      <li>Tax income from population</li>
-                    </ul>
-                    <p class="changelog-category">💱 Trading System:</p>
-                    <ul>
+                      <li>Build Farms, Houses, Markets — manage Gold, Food, Population</li>
                       <li>Sell food for gold at the Trade Market</li>
-                      <li>Quick-sell buttons for convenience</li>
-                    </ul>
-                    <p class="changelog-category">📊 Statistics:</p>
-                    <ul>
-                      <li>Track current kingdom stats</li>
-                      <li>Building production rates</li>
-                      <li>Population capacity management</li>
-                    </ul>
-                    <p class="changelog-category">🎨 Visual Design:</p>
-                    <ul>
-                      <li>Medieval-themed UI with gold accents</li>
-                      <li>Framed viewport design</li>
-                      <li>Building cards with images</li>
-                      <li>Responsive layout for all devices</li>
+                      <li>Medieval-themed UI with responsive layout</li>
                     </ul>
                   </div>
                 </div>
@@ -689,56 +1681,41 @@
             </div>
           </div>
 
-          <!-- RESET BUTTON SECTION -->
-          <div class="about-section" style="margin-top: 30px;">
-            <h3 class="stats-section-title">⚠️ Danger Zone</h3>
-            <div style="background-color: rgba(244, 67, 54, 0.1); border: 2px solid #f44336; border-radius: 8px; padding: 20px; text-align: center;">
-              <p style="color: var(--text-gray); margin-bottom: 15px;">
-                This will permanently delete all your progress, statistics, and achievements!
-              </p>
-              <button 
-                onclick="confirmResetAll()" 
-                style="background-color: #f44336; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease;"
-                onmouseover="this.style.backgroundColor='#d32f2f'"
-                onmouseout="this.style.backgroundColor='#f44336'">
-                🗑️ Reset All Progress
-              </button>
-            </div>
+          <div class="about-section" style="border-color:rgba(192,57,43,0.25);">
+            <h3 class="stats-section-title" style="color:rgba(192,57,43,0.7);">⚠️ Danger Zone</h3>
+            <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:14px;">This will permanently delete all progress, statistics, and achievements.</p>
+            <button
+              onclick="confirmResetAll()"
+              style="padding:10px 24px;background:transparent;border:1px solid rgba(192,57,43,0.5);border-radius:var(--radius);color:var(--red);font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:background 0.2s,border-color 0.2s;"
+              onmouseover="this.style.background='rgba(192,57,43,0.12)';this.style.borderColor='rgba(192,57,43,0.8)'"
+              onmouseout="this.style.background='transparent';this.style.borderColor='rgba(192,57,43,0.5)'">
+              🗑️ Reset All Progress
+            </button>
           </div>
 
-          <div style="text-align: center; margin-top: 30px;">
-            <a href="index.html" style="color: var(--blue-link); text-decoration: none; font-size: 1.1rem;">
+          <div style="text-align:center;margin-top:20px;">
+            <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.2em;color:var(--gold-dim);text-transform:uppercase;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='var(--gold-dim)'">
               ← Back to Eredhar Studios
             </a>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Bottom Navigation Bar -->
+    </div><!-- end game-viewport -->
+
+    <!-- BOTTOM NAV -->
     <div class="bottom-nav">
-      <button class="nav-btn" id="navBuildings" onclick="showOverlay('buildingsOverlay')">
-        🏰 Buildings
-      </button>
-      <button class="nav-btn" id="navStats" onclick="showOverlay('statsOverlay')">
-        📊 Stats
-      </button>
-      <button class="nav-btn" id="navEvents" onclick="showOverlay('eventsOverlay')">
-        📜 Events
-      </button>
-      <button class="nav-btn" id="navTrade" onclick="showOverlay('tradeOverlay')">
-        💱 Trade
-      </button>
-      <button class="nav-btn" id="navResearch" onclick="showOverlay('researchOverlay')">
-        🔬 Research
-      </button>
-      <button class="nav-btn" id="navAbout" onclick="showOverlay('aboutOverlay')">
-        ℹ️ About
-      </button>
+      <button class="nav-btn" id="navBuildings" onclick="showOverlay('buildingsOverlay')">🏰 Buildings</button>
+      <button class="nav-btn" id="navStats"     onclick="showOverlay('statsOverlay')">📊 Stats</button>
+      <button class="nav-btn" id="navEvents"    onclick="showOverlay('eventsOverlay')">📜 Events</button>
+      <button class="nav-btn" id="navTrade"     onclick="showOverlay('tradeOverlay')">💱 Trade</button>
+      <button class="nav-btn" id="navResearch"  onclick="showOverlay('researchOverlay')">🔬 Research</button>
+      <button class="nav-btn" id="navAbout"     onclick="showOverlay('aboutOverlay')">ℹ️ About</button>
     </div>
-  </div>
 
-  <!-- Event Popup (for random events) -->
+  </div><!-- end game-frame -->
+
+  <!-- EVENT POPUP -->
   <div class="event-popup" id="eventPopup">
     <div class="event-popup-content">
       <h2 id="eventTitle" class="event-title">Event Title</h2>
@@ -747,17 +1724,17 @@
     </div>
   </div>
 
-  <!-- Game Over Screen -->
+  <!-- GAME OVER -->
   <div class="game-over" id="gameOver">
     <div class="game-over-content">
       <h2>Kingdom Fallen</h2>
-      <p>Your kingdom has perished...</p>
+      <p>Your kingdom has perished…</p>
       <p id="finalStats"></p>
       <button class="restart-btn" onclick="restartGame()">Build Anew</button>
     </div>
   </div>
 
-  <!-- Load JavaScript Modules -->
+  <!-- JS MODULES (unchanged) -->
   <script src="medieval-simulator/js/config.js"></script>
   <script src="medieval-simulator/js/state.js"></script>
   <script src="medieval-simulator/js/technologies.js"></script>
