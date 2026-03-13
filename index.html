@@ -146,7 +146,6 @@
       overflow: hidden;
     }
 
-    /* layered background */
     .hero-bg {
       position: absolute;
       inset: 0;
@@ -157,7 +156,6 @@
         linear-gradient(160deg, #06060a 0%, #0d0e16 40%, #0a1014 70%, #06060a 100%);
     }
 
-    /* stone/texture vignette */
     .hero-vignette {
       position: absolute;
       inset: 0;
@@ -165,7 +163,6 @@
       pointer-events: none;
     }
 
-    /* animated light rays */
     .hero-rays {
       position: absolute;
       inset: 0;
@@ -202,14 +199,12 @@
       50%       { opacity: 0.8; transform: translateX(-180px) rotate(-4deg); }
     }
 
-    /* embers canvas */
     #emberCanvas {
       position: absolute;
       inset: 0;
       pointer-events: none;
     }
 
-    /* hero content */
     .hero-content {
       position: relative;
       z-index: 2;
@@ -286,7 +281,6 @@
 
     .hero-cta:hover::before { opacity: 1; }
 
-    /* scroll indicator */
     .scroll-indicator {
       position: absolute;
       bottom: 36px;
@@ -338,7 +332,6 @@
       padding: 0 40px;
     }
 
-    /* section heading */
     .section-label {
       font-family: 'Cinzel', serif;
       font-size: 0.58rem;
@@ -376,7 +369,6 @@
       margin: 24px 0 48px;
     }
 
-    /* gold ornament */
     .ornament {
       display: flex;
       align-items: center;
@@ -497,7 +489,6 @@
       background: linear-gradient(to right, transparent, var(--border), transparent);
     }
 
-    /* card grid */
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -541,7 +532,6 @@
       filter: brightness(0.6) saturate(0.9);
     }
 
-    /* image overlay gradient */
     .card-img-overlay {
       position: absolute;
       inset: 0;
@@ -549,7 +539,6 @@
       transition: opacity 0.4s;
     }
 
-    /* book card — portrait */
     .book-card .card-img-wrap {
       aspect-ratio: 2/3;
       max-width: 200px;
@@ -571,7 +560,6 @@
       flex: 1;
     }
 
-    /* card body */
     .card-body {
       padding: 24px 24px 22px;
     }
@@ -604,7 +592,6 @@
       margin-bottom: 20px;
     }
 
-    /* CTA button */
     .card-cta {
       display: inline-flex;
       align-items: center;
@@ -786,7 +773,6 @@
     .text-gold { color: var(--gold); }
     .mt-auto { margin-top: auto; }
 
-    /* sticky nav transition */
     nav {
       transition: background 0.4s, border-color 0.4s, backdrop-filter 0.4s;
     }
@@ -1056,7 +1042,7 @@
         <div class="section-rule"></div>
       </div>
 
-      <div class="card-grid single">
+      <div class="card-grid">
 
         <article class="project-card reveal reveal-delay-2">
           <div class="card-img-wrap">
@@ -1068,6 +1054,22 @@
             <h3 class="card-title">Mission to Minerva</h3>
             <p class="card-desc">Created for the #KB3Dchallenge — a cinematic short that launched a thousand imaginations.</p>
             <a href="projects/mission-to-minerva.html" class="card-cta">
+              Watch
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="project-card reveal reveal-delay-3">
+          <div class="card-img-wrap">
+            <img src="assets/images/weathertop-nazgul.jpg" alt="Weathertop — The Nazgûl">
+            <div class="card-img-overlay"></div>
+          </div>
+          <div class="card-body">
+            <p class="card-category">Cinematic · Unreal Engine 5</p>
+            <h3 class="card-title">Weathertop —<br>The Nazgûl</h3>
+            <p class="card-desc">The ancient watchtower of Amon Sûl rebuilt in Unreal Engine 5. The Nine are waiting.</p>
+            <a href="projects/weathertop-nazgul.html" class="card-cta">
               Watch
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
@@ -1181,7 +1183,6 @@
       function tick() {
         ctx.clearRect(0, 0, W, H);
 
-        // spawn new
         if (particles.length < 80 && Math.random() < 0.5) {
           particles.push(spawn());
         }
