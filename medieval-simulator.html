@@ -1735,6 +1735,32 @@
     </div>
   </div>
 
+  <!-- CURSOR SPARKLE TRAIL -->
+  <style>
+    .cursor-spark{position:fixed;border-radius:50%;pointer-events:none;z-index:99998;animation:cSparkFade 0.7s ease-out forwards;}
+    @keyframes cSparkFade{0%{opacity:0.85;transform:scale(1) translateY(0);}100%{opacity:0;transform:scale(0.1) translateY(-10px);}}
+    .game-title{animation:gameTitleGlow 5s ease-in-out infinite;}
+    @keyframes gameTitleGlow{0%,100%{text-shadow:0 0 10px rgba(200,160,60,0.3);}50%{text-shadow:0 0 22px rgba(200,160,60,0.7),0 0 44px rgba(200,160,60,0.3);}}
+  </style>
+  <script>
+    (function(){
+      let lastSpark=0;
+      document.addEventListener('mousemove',function(e){
+        const now=Date.now();
+        if(now-lastSpark<55)return;
+        lastSpark=now;
+        const s=document.createElement('div');
+        s.className='cursor-spark';
+        const ember=Math.random()<0.25;
+        const hue=ember?Math.round(15+Math.random()*15):Math.round(38+Math.random()*12);
+        const sz=Math.round(2+Math.random()*3);
+        s.style.cssText='left:'+(e.clientX-sz/2)+'px;top:'+(e.clientY-sz/2)+'px;width:'+sz+'px;height:'+sz+'px;background:hsla('+hue+',92%,65%,0.8);box-shadow:0 0 '+(sz*2)+'px hsla('+hue+',90%,60%,0.5);';
+        document.body.appendChild(s);
+        setTimeout(function(){s.remove();},700);
+      },{passive:true});
+    })();
+  </script>
+
   <!-- JS MODULES (unchanged) -->
   <script src="medieval-simulator/js/config.js"></script>
   <script src="medieval-simulator/js/state.js"></script>

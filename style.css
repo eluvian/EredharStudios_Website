@@ -1,86 +1,133 @@
 /* ========================================================================================
-   🎨 Web Creator Persona Stylesheet for Eredhar Studios
-   ----------------------------------------------------------------------------------------
-   Description: Unified, elegant styling for the Eredhar Studios website including layout, 
-   transitions, card systems, typography, responsiveness, and visual polish.
+   Eredhar Studios — Legacy / Accordion Page Stylesheet
+   Used by project pages that use the accordion layout (medieval simulator settings page etc.)
    ======================================================================================== */
 
-/* ------------------------------ 🌐 Base Styles ------------------------------ */
-body {
-  margin: 0 0 120px;    /* reserve more space for the fixed footer */
-  font-family: 'Playfair Display', serif;
-  background-color: #0e0e14;
-  color: #f5f5f5;
-  line-height: 1.6;
-  font-size: 16px;
-  
+/* ── Tokens ────────────────────────────────────────────────────────── */
+:root {
+  --black:      #06060a;
+  --deep:       #0b0c10;
+  --surface:    #0f1018;
+  --panel:      #13141d;
+  --border:     rgba(200, 160, 60, 0.18);
+  --gold:       #c8a03c;
+  --gold-light: #e8c86a;
+  --gold-dim:   rgba(200, 160, 60, 0.45);
+  --ember:      #e05c20;
+  --text:       #d8d0c0;
+  --text-dim:   #8a8070;
+  --text-muted: #4a4840;
+  --radius:     4px;
 }
 
+/* ── Base ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  margin: 0 0 120px;
+  font-family: 'Cinzel', 'Crimson Pro', Georgia, serif;
+  background-color: var(--black);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--gold-dim); color: #fff; }
+img { display: block; max-width: 100%; }
+a   { color: var(--gold); text-decoration: none; transition: color 0.3s; }
+a:hover { color: var(--gold-light); text-decoration: none; }
+
+/* Noise grain */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+
+/* ── Typography ────────────────────────────────────────────────────── */
 h2 {
-  color: #ffe082;
+  font-family: 'Cinzel', serif;
+  color: var(--gold-light);
   margin-bottom: 10px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.08em;
   font-size: 1.4rem;
+  background: linear-gradient(90deg, #f0e8d0 30%, var(--gold-light) 50%, #f0e8d0 70%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleShimmer 8s ease-in-out infinite;
+}
+
+@keyframes titleShimmer {
+  0%, 100% { background-position: 0% center; }
+  50%       { background-position: 100% center; }
 }
 
 h3 {
-  color: #ffe082;
+  font-family: 'Cinzel', serif;
+  color: var(--gold);
   margin-top: 10px;
   font-size: 1.1rem;
+  letter-spacing: 0.05em;
 }
 
-a {
-  color: #81d4fa;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #ffe082;
-  text-decoration: underline;
-}
-
-
-/* ------------------------------ 🧭 Header Styles ------------------------------ */
-/* ---------- Header Base ---------- */
+/* ── Header / Hero ─────────────────────────────────────────────────── */
 .hero {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #1a1a25;
+  background: var(--deep);
   position: sticky;
   top: 0;
   z-index: 1000;
-  height: 160px; /* ⬅️ fixed base height */
-  transition: height 0.3s ease;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  height: 160px;
+  transition: height 0.35s ease;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-/* ---------- Shrinked Header ---------- */
-.hero.shrink {
-  height: 90px; /* ⬅️ reduced height */
-}
+.hero.shrink { height: 90px; }
 
-/* ---------- Logo ---------- */
 .logo {
-  height: 140px; /* ⬅️ use fixed height instead of transform scale */
-  transition: height 0.3s ease;
+  height: 140px;
+  transition: height 0.35s ease;
+  filter: drop-shadow(0 0 20px rgba(200,160,60,0.3));
+  animation: logoBreathe 5s ease-in-out infinite;
 }
 
 .hero.shrink .logo {
-  height: 100px; /* ⬅️ shrinks cleanly, affecting layout */
+  height: 100px;
   margin-top: 30px;
 }
 
-/* ---------- Tagline ---------- */
+@keyframes logoBreathe {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(200,160,60,0.25)); }
+  50%       { filter: drop-shadow(0 0 40px rgba(200,160,60,0.55)) drop-shadow(0 0 80px rgba(200,160,60,0.25)); }
+}
+
 .tagline {
+  font-family: 'Cinzel Decorative', serif;
   font-style: italic;
-  color: #ffe082;
-  font-size: 1rem;
+  color: var(--gold-light);
+  font-size: 0.95rem;
   margin: 0;
+  letter-spacing: 0.15em;
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.35s ease;
 }
 
 .hero.shrink .tagline {
@@ -88,261 +135,250 @@ a:hover {
   pointer-events: none;
 }
 
-
-/* ------------------------------ 📐 Section Layout ------------------------------ */
+/* ── Section layout ────────────────────────────────────────────────── */
 section {
   max-width: 1100px;
   margin: 60px auto;
   padding: 0 20px;
 }
 
-.about p, .contact p {
-  color: #ccc;
-}
+.about p, .contact p { color: var(--text-dim); font-family: 'Crimson Pro', serif; font-size: 1.05rem; }
 
-
-/* ------------------------------ 🧱 Card Grid Layout ------------------------------ */
+/* ── Card grid ─────────────────────────────────────────────────────── */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 30px;
+  gap: 28px;
   margin: 40px 0;
 }
 
 .card-base {
-  background-color: #161621;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   padding: 20px 15px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid #ffe082;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  border: 1px solid var(--border);
+  position: relative;
 }
 
-.card-base:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 0 25px rgba(255, 224, 130, 0.3);
+.card-base::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255,220,120,0.05) 50%, transparent 65%);
+  background-size: 300% 300%;
+  background-position: 200% 200%;
+  transition: background-position 0.7s ease;
+  pointer-events: none;
 }
+
+.card-base:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 30px rgba(200,160,60,0.12); border-color: rgba(200,160,60,0.4); }
+.card-base:hover::after { background-position: -50% -50%; }
 
 .card-base img {
   width: 100%;
   height: auto;
   object-fit: cover;
-  aspect-ratio: 16 / 9; /* ✨ Force a cinematic aspect ratio */
+  aspect-ratio: 16/9;
+  filter: brightness(0.8) saturate(0.8);
+  transition: filter 0.5s, transform 0.7s;
 }
 
-
-.card-base p {
-  font-size: 0.9rem;
-  margin: 10px 0 15px;
-  color: #ddd;
+.card-base:hover img {
+  filter: brightness(0.95) saturate(1);
+  transform: scale(1.04);
 }
+
+.card-base p { font-size: 0.9rem; margin: 10px 0 15px; color: var(--text-dim); font-family: 'Crimson Pro', serif; }
 
 .card-base a {
-  background-color: #ffe082;
-  color: #1a1a25;
-  padding: 8px 14px;
-  border-radius: 6px;
+  background: transparent;
+  color: var(--gold);
+  padding: 8px 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--gold-dim);
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
   text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
 }
 
 .card-base a:hover {
-  background-color: #ffcc33;
+  background: rgba(200,160,60,0.1);
+  color: var(--gold-light);
+  border-color: var(--gold-light);
+  box-shadow: 0 0 16px rgba(200,160,60,0.22);
+  text-decoration: none;
 }
 
-
-/* ------------------------------ 📖 Book Entry ------------------------------ */
+/* ── Book entry ────────────────────────────────────────────────────── */
 .book-entry {
   display: flex;
   align-items: flex-start;
-  background-color: #161621;
-  border-radius: 12px;
+  background: var(--panel);
+  border-radius: var(--radius);
   padding: 15px 20px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
   margin: 30px 0 30px 20px;
-  max-width: 480px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-width: 500px;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  border: 1px solid var(--border);
 }
 
 .book-entry:hover {
   transform: translateY(-6px);
-  box-shadow: 0 0 25px rgba(255, 224, 130, 0.3);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 24px rgba(200,160,60,0.12);
+  border-color: rgba(200,160,60,0.35);
 }
 
 .book-entry img.book-cover {
   width: 160px;
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 2/3;
   object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid #ffe082;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
   flex-shrink: 0;
+  filter: brightness(0.88) saturate(0.85);
+  transition: filter 0.5s;
 }
 
-.book-entry .book-info {
-  margin-left: 15px;
-  flex: 1;
-}
-
-.book-entry .book-info h3 {
-  margin-top: 0;
-  color: #ffe082;
-  font-size: 1.1rem;
-}
-
-.book-entry .book-info p {
-  margin: 10px 0;
-  color: #ddd;
-  font-size: 0.95rem;
-}
+.book-entry:hover img.book-cover { filter: brightness(1) saturate(1); }
+.book-entry .book-info { margin-left: 15px; flex: 1; }
+.book-entry .book-info h3 { margin-top: 0; color: var(--gold-light); font-size: 1.1rem; }
+.book-entry .book-info p { margin: 10px 0; color: var(--text-dim); font-size: 0.95rem; font-family: 'Crimson Pro', serif; }
 
 .book-entry .book-info a {
   display: inline-block;
   margin-top: 10px;
-  background-color: #ffe082;
-  color: #1a1a25;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-weight: bold;
+  background: transparent;
+  color: var(--gold);
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--gold-dim);
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
   text-decoration: none;
-  transition: background-color 0.3s ease;
 }
 
 .book-entry .book-info a:hover {
-  background-color: #ffcc33;
+  background: rgba(200,160,60,0.1);
+  color: var(--gold-light);
+  border-color: var(--gold-light);
+  box-shadow: 0 0 14px rgba(200,160,60,0.2);
+  text-decoration: none;
 }
 
-
-/* ------------------------------ 🎥 Minerva Card ------------------------------ */
-.minerva-card {
-  max-width: 400px;
-  margin: 30px 0 30px 20px;
-}
+/* ── Minerva card ──────────────────────────────────────────────────── */
+.minerva-card { max-width: 420px; margin: 30px 0 30px 20px; }
 
 .minerva-card img {
-  aspect-ratio: 4 / 2.2; /* Slightly wider than others */
+  aspect-ratio: 4/2.2;
   object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid #ffe082;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
   width: 100%;
+  filter: brightness(0.85) saturate(0.8);
+  transition: filter 0.5s, transform 0.5s;
 }
 
-
-
-/* ------------------------------ 📞 Contact ------------------------------ */
-.contact p {
-  margin-top: 10px;
-  color: #ccc;
+.minerva-card:hover img {
+  filter: brightness(1) saturate(1);
+  transform: scale(1.02);
 }
 
+/* ── Contact ───────────────────────────────────────────────────────── */
+.contact p { margin-top: 10px; color: var(--text-dim); }
 
-/* ------------------------------ 📚 Accordion Drawer Styles ------------------------------ */
+/* ── Accordion ─────────────────────────────────────────────────────── */
+.accordion-section { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
-/* Accordion section wrapper */
-/* Limit accordion width to match content */
-.accordion-section {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* Accordion clickable header */
 .accordion-header {
   width: 100%;
   text-align: left;
   padding: 15px 25px;
-  font-size: 1.3rem;
-  font-weight: bold;
-  background-color: #1a1a25;
-  color: #ffe082;
-  border: none;
-  border-radius: 8px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.06em;
+  background: var(--panel);
+  color: var(--gold);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   margin-bottom: 10px;
   max-width: 100%;
-  box-shadow: 0 0 10px rgba(255, 224, 130, 0.1);
+  box-shadow: 0 0 12px rgba(200,160,60,0.08);
   cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s, box-shadow 0.3s, border-color 0.3s;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Arrow style */
 .accordion-header .arrow {
   display: inline-block;
   transition: transform 0.3s ease;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  color: var(--gold-dim);
 }
 
-/* Rotate arrow when section is open */
-.accordion-header.active .arrow {
-  transform: rotate(90deg);
-}
+.accordion-header.active .arrow { transform: rotate(90deg); }
 
-/* Hover effect for better UX */
 .accordion-header:hover {
-  background-color: #29293d;
-  box-shadow: 0 0 15px rgba(255, 224, 130, 0.3);
+  background: rgba(200,160,60,0.05);
+  border-color: rgba(200,160,60,0.3);
+  box-shadow: 0 0 20px rgba(200,160,60,0.15);
+  color: var(--gold-light);
 }
 
-/* Content area (drawer) */
 .accordion-content {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.5s ease, padding 0.3s ease;
-  padding: 0 20px; /* Small padding for smooth opening */
+  padding: 0 20px;
 }
 
-/* Active (opened) drawer */
 .accordion-content.active {
-  max-height: 2000px; /* Big enough to reveal content without cutting */
+  max-height: 2000px;
   padding-top: 20px;
 }
 
-/* Ensure inner elements inside the content have normal behavior */
-.accordion-content > * {
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
+.accordion-content > * { opacity: 1; transition: opacity 0.3s ease; }
+.accordion-content:not(.active) > * { opacity: 0; }
 
-/* When hidden, child elements fade out visually */
-.accordion-content:not(.active) > * {
-  opacity: 0;
-}
-
-
-/* ------------------------------ ⌛ Fixed Footer ------------------------------ */
+/* ── Footer ────────────────────────────────────────────────────────── */
 footer {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   text-align: center;
-  padding: 30px;
-  background-color: #0a0a0f;
-  color: #777;
-  font-size: 0.9rem;
+  padding: 24px 40px;
+  background: rgba(6,6,10,0.97);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
-
-
-/* ------------------------------ 📱 Mobile Tweaks ------------------------------ */
-@media screen and (max-width: 400px) {
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .logo {
-    width: 120px;
-  }
-}
-
-/* Project pages: landscape covers */
+/* ── Project pages (landscape covers) ─────────────────────────────── */
 .book-entry.project-entry {
   display: flex;
   flex-direction: column;
@@ -350,24 +386,25 @@ footer {
   max-width: 800px;
   margin: 30px auto;
 }
+
 .book-entry.project-entry img.book-cover {
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9;
-}
-.book-entry.project-entry .book-info {
-  margin: 20px 0 0;
-  text-align: center;
+  aspect-ratio: 16/9;
 }
 
-/* When a section is expanded, pad its content so the next header sits below it */
-.accordion-content.active {
-  padding-bottom: 20px;  /* adjust as needed, e.g. 20–30px */
-}
+.book-entry.project-entry .book-info { margin: 20px 0 0; text-align: center; }
 
-/* on small screens, give the opened accordion a much larger bottom-margin */
+/* Opened accordion bottom padding */
+.accordion-content.active { padding-bottom: 20px; }
+
+/* ── Mobile ─────────────────────────────────────────────────────────── */
 @media screen and (max-width: 600px) {
-  .accordion-content.active {
-    margin-bottom: 300px; /* feel free to tweak this value */
-  }
+  .card-grid { grid-template-columns: 1fr; }
+  .logo { width: 120px; }
+  .accordion-content.active { margin-bottom: 300px; }
+}
+
+@media screen and (max-width: 400px) {
+  .card-grid { grid-template-columns: 1fr; }
 }
