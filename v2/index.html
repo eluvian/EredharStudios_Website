@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Andrei Alexe · Cinematic Artist · Eredhar Studios</title>
+  <meta name="description" content="Andrei Alexe, cinematic artist working in Unreal Engine 5. Short films, MetaHuman performance and lighting. Eredhar Studios.">
+  <link rel="icon" href="../assets/images/eredhar-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>document.documentElement.className += ' js';</script>
+  <style>
+    :root {
+      --bg: #08080a;
+      --bg-2: #0f0f12;
+      --fg: #ece7de;
+      --dim: #a29c90;
+      --line: rgba(236, 231, 222, 0.14);
+      --accent: #d6a648;
+      --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+      --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --gutter: clamp(20px, 4vw, 56px);
+      --max: 1360px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    /* ── nav ─────────────────────────────── */
+    .nav {
+      position: fixed; inset: 0 0 auto 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px var(--gutter);
+      background: linear-gradient(to bottom, rgba(8,8,10,0.75), rgba(8,8,10,0));
+      transition: background 0.3s;
+    }
+    .nav.solid { background: rgba(8,8,10,0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+    .nav-name { font-family: var(--serif); font-size: 1.35rem; text-decoration: none; letter-spacing: 0.01em; }
+    .nav-links { display: flex; gap: clamp(18px, 3vw, 40px); list-style: none; margin: 0; padding: 0; }
+    .nav-links a { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; color: var(--dim); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--fg); }
+
+    /* ── hero ────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh; min-height: 100svh;
+      display: flex; align-items: flex-end;
+      overflow: hidden;
+      background: #000;
+    }
+    .hero-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .hero-video {
+      position: absolute; inset: 0; overflow: hidden;
+      opacity: 0; transition: opacity 1.4s ease;
+    }
+    .hero-video.on { opacity: 1; }
+    .hero-video iframe {
+      --w: max(100vw, 239vh);
+      position: absolute; top: 50%; left: 50%;
+      width: var(--w); height: calc(var(--w) * 0.5625);
+      transform: translate(-50%, -50%);
+      border: 0; pointer-events: none;
+    }
+    .hero::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background:
+        linear-gradient(to top, rgba(8,8,10,0.92) 0%, rgba(8,8,10,0.35) 38%, rgba(8,8,10,0) 62%),
+        linear-gradient(to bottom, rgba(8,8,10,0.55) 0%, rgba(8,8,10,0) 18%);
+    }
+    .hero-inner {
+      position: relative; z-index: 2; width: 100%;
+      max-width: var(--max); margin: 0 auto;
+      padding: 0 var(--gutter) clamp(40px, 8vh, 88px);
+    }
+    .lockup { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; font-size: 0.72rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--dim); }
+    .lockup img { width: 26px; height: 26px; object-fit: contain; }
+    h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(3.2rem, 9vw, 8rem); line-height: 0.95; letter-spacing: -0.01em; margin: 0; }
+    .role { margin: 18px 0 0; font-size: clamp(0.95rem, 1.5vw, 1.15rem); color: var(--dim); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 14px 26px; border-radius: 999px; cursor: pointer;
+      font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
+      border: 1px solid var(--fg); background: var(--fg); color: #0a0a0b;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn:hover { background: transparent; color: var(--fg); }
+    .btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+    .btn.ghost:hover { border-color: var(--fg); }
+    .btn svg { width: 14px; height: 14px; fill: currentColor; }
+    .now-playing { position: absolute; right: var(--gutter); bottom: clamp(40px, 8vh, 88px); z-index: 2; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); text-align: right; }
+    .now-playing b { display: block; color: var(--fg); font-weight: 500; letter-spacing: 0.08em; margin-top: 2px; }
+
+    /* ── sections ────────────────────────── */
+    section { padding: clamp(72px, 11vw, 140px) 0; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+    .eyebrow { font-size: 0.72rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+    h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.05; margin: 0 0 clamp(36px, 5vw, 64px); }
+
+    /* ── films ───────────────────────────── */
+    .film { margin-bottom: clamp(64px, 9vw, 120px); }
+    .frame {
+      position: relative; display: block; width: 100%; padding: 0; border: 0; cursor: pointer;
+      aspect-ratio: 2.39 / 1; overflow: hidden; background: #000; border-radius: 2px;
+    }
+    .frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(.2,.7,.2,1), filter 0.5s; }
+    .frame:hover img { transform: scale(1.025); filter: brightness(0.8); }
+    .play {
+      position: absolute; left: 50%; top: 50%; width: 84px; height: 84px; margin: -42px 0 0 -42px;
+      display: grid; place-items: center; border-radius: 50%;
+      background: rgba(8,8,10,0.55); border: 1px solid rgba(236,231,222,0.5);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      transition: transform 0.3s, background 0.3s;
+    }
+    .play svg { width: 26px; height: 26px; fill: var(--fg); margin-left: 4px; }
+    .frame:hover .play, .frame:focus-visible .play { transform: scale(1.08); background: rgba(8,8,10,0.75); }
+    .cap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(20px, 4vw, 64px); margin-top: 26px; align-items: start; }
+    .cap h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.8rem, 3.2vw, 2.6rem); line-height: 1.05; margin: 0; }
+    .meta { margin: 8px 0 0; font-size: 0.74rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
+    .cap p { margin: 0; color: #cfc9be; max-width: 60ch; }
+    .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px 28px; margin: 22px 0 0; padding-top: 18px; border-top: 1px solid var(--line); }
+    .tools dt { font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
+    .tools dd { margin: 3px 0 0; font-size: 0.92rem; }
+
+    .studies { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); }
+    .studies .film { margin-bottom: 0; }
+    .studies .cap { grid-template-columns: 1fr; gap: 12px; }
+    .note { font-size: 0.84rem; color: var(--dim); max-width: 64ch; margin: -32px 0 48px; }
+
+    /* ── about ───────────────────────────── */
+    .about { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .about-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 6vw, 96px); }
+    .about p { font-size: clamp(1.05rem, 1.6vw, 1.3rem); line-height: 1.6; margin: 0 0 1.1em; max-width: 44ch; }
+    .skills { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+    .skills li { padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 0.98rem; }
+
+    /* ── more + contact ──────────────────── */
+    .more-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+    .contact { text-align: left; }
+    .mail { display: inline-block; font-family: var(--serif); font-size: clamp(1.8rem, 5.2vw, 4rem); line-height: 1.1; text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 6px; word-break: break-word; transition: color 0.2s; }
+    .mail:hover { color: var(--accent); }
+    footer { padding: 28px 0 40px; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--dim); }
+    footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+    /* ── lightbox ────────────────────────── */
+    dialog#player { border: 0; padding: 0; background: #000; width: min(94vw, 1400px); max-width: none; max-height: 92vh; overflow: visible; color: var(--fg); }
+    dialog#player::backdrop { background: rgba(0,0,0,0.9); }
+    .player-box { position: relative; aspect-ratio: 16 / 9; width: 100%; max-height: 88vh; background: #000; }
+    .player-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .player-close {
+      position: absolute; top: -46px; right: 0; background: none; border: 0; cursor: pointer;
+      font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); padding: 8px 0;
+    }
+    .player-close:hover { color: var(--fg); }
+    .player-title { position: absolute; top: -46px; left: 0; margin: 0; padding: 8px 0; font-family: var(--serif); font-size: 1.2rem; }
+
+    /* ── reveal ──────────────────────────── */
+    .js .rv { opacity: 0; transform: translateY(14px); transition: opacity 0.5s ease-out, transform 0.5s ease-out; }
+    .js .rv.in { opacity: 1; transform: none; }
+    .hero-inner > * { animation: rise 0.7s ease-out both; }
+    .hero-inner > *:nth-child(2) { animation-delay: 0.08s; }
+    .hero-inner > *:nth-child(3) { animation-delay: 0.16s; }
+    .hero-inner > *:nth-child(4) { animation-delay: 0.24s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+    @media (max-width: 860px) {
+      .cap, .about-grid { grid-template-columns: 1fr; }
+      .studies { grid-template-columns: 1fr; }
+      .studies .film { margin-bottom: 48px; }
+      .now-playing { display: none; }
+      .frame { aspect-ratio: 16 / 9; }
+      .play { width: 68px; height: 68px; margin: -34px 0 0 -34px; }
+      .nav-links { gap: 16px; }
+    }
+    @media (max-width: 520px) {
+      .nav-name { font-size: 1.1rem; }
+      .nav-links a { font-size: 0.68rem; letter-spacing: 0.1em; }
+      .btn { padding: 13px 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+      .js .rv { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="nav" id="nav">
+    <a class="nav-name" href="#top">Andrei Alexe</a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </header>
+
+  <!-- ═══ HERO ═══ -->
+  <div class="hero" id="top">
+    <img class="hero-poster" src="../assets/images/the-one-who-waits.jpg" alt="Still from The One Who Waits" fetchpriority="high">
+    <div class="hero-video" id="heroVideo" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <div class="lockup"><img src="../assets/images/eredhar-logo.png" alt=""><span>Eredhar Studios</span></div>
+      <h1>Andrei Alexe</h1>
+      <p class="role">Cinematic artist · Unreal Engine 5</p>
+      <div class="hero-actions">
+        <button class="btn" type="button" data-yt="g3okrkPMDy0" data-title="The One Who Waits">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg> Play the film
+        </button>
+        <a class="btn ghost" href="#work">Selected work</a>
+      </div>
+    </div>
+    <div class="now-playing">Playing<b>The One Who Waits</b></div>
+  </div>
+
+  <main>
+    <!-- ═══ WORK ═══ -->
+    <section id="work">
+      <div class="wrap">
+        <p class="eyebrow rv">Selected work</p>
+        <h2 class="rv">Films</h2>
+
+        <article class="film rv">
+          <button class="frame" type="button" data-yt="g3okrkPMDy0" data-title="The One Who Waits" aria-label="Play The One Who Waits">
+            <img src="../assets/images/the-one-who-waits.jpg" alt="" loading="lazy">
+            <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+          </button>
+          <div class="cap">
+            <div>
+              <h3>The One Who Waits</h3>
+              <p class="meta">Horror short · Unreal Engine 5.8</p>
+            </div>
+            <div>
+              <p>A man locked in an argument with himself. The dread lives in a flickering light that is also the line between his two selves. Made for Leartes Studios' Monthly Relight Contest.</p>
+              <dl class="tools">
+                <div><dt>Performance</dt><dd>MetaHuman, facial capture and markerless body mocap</dd></div>
+                <div><dt>Lighting</dt><dd>Real-time, flickering source</dd></div>
+                <div><dt>Post</dt><dd>DaVinci Resolve</dd></div>
+                <div><dt>Audio</dt><dd>ElevenLabs (AI sound design)</dd></div>
+              </dl>
+            </div>
+          </div>
+        </article>
+
+        <article class="film rv">
+          <button class="frame" type="button" data-yt="LCD1RRdazms" data-title="Mission to Minerva" aria-label="Play Mission to Minerva">
+            <img src="../assets/images/mission-to-minerva.jpg" alt="" loading="lazy">
+            <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+          </button>
+          <div class="cap">
+            <div>
+              <h3>Mission to Minerva</h3>
+              <p class="meta">Short film · #KB3Dchallenge</p>
+            </div>
+            <div>
+              <p>A journey into a newly discovered galaxy, told through scale and atmosphere. Made as an entry for the #KB3Dchallenge.</p>
+            </div>
+          </div>
+        </article>
+
+        <h2 class="rv" style="margin-top: clamp(72px, 10vw, 128px);">Environment studies</h2>
+        <p class="note rv">Fan-made, unofficial and non-commercial. Built to practise environments, scanned assets and lighting.</p>
+
+        <div class="studies">
+          <article class="film rv">
+            <button class="frame" type="button" data-yt="Xb2dExFdLss" data-title="Weathertop: The Nazgûl" aria-label="Play Weathertop: The Nazgûl">
+              <img src="../assets/images/weathertop-nazgul.jpg" alt="" loading="lazy">
+              <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+            </button>
+            <div class="cap">
+              <div>
+                <h3>Weathertop: The Nazgûl</h3>
+                <p class="meta">Unreal Engine 5 · Lumen and Nanite</p>
+              </div>
+              <div>
+                <p>Weathertop rebuilt in Unreal Engine 5, with a photogrammetry-scanned Nazgûl figure (RealityScan). Atmosphere over spectacle.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="film rv">
+            <button class="frame" type="button" data-yt="3KOwRnLt_kw" data-title="Pillars of the Kings" aria-label="Play Pillars of the Kings">
+              <img src="../assets/images/argonath.png" alt="" loading="lazy">
+              <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+            </button>
+            <div class="cap">
+              <div>
+                <h3>Pillars of the Kings</h3>
+                <p class="meta">Unreal Engine 5.7</p>
+              </div>
+              <div>
+                <p>The Argonath statues recreated from a 3D-scanned model, lit and rendered in Unreal Engine 5.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ ABOUT ═══ -->
+    <section class="about" id="about">
+      <div class="wrap about-grid">
+        <div class="rv">
+          <p class="eyebrow">About</p>
+          <h2>Working alone, on purpose.</h2>
+          <p>I make short films and small games in Unreal Engine 5. Most of it happens in one setting, Eredhar, a fantasy world I have been writing since 2020 and that started with a novel.</p>
+          <p>I am looking to move into game cinematics, where lighting, camera and character performance are the whole job.</p>
+        </div>
+        <div class="rv">
+          <p class="eyebrow">What I work with</p>
+          <ul class="skills">
+            <li>Unreal Engine 5: Lumen, Nanite, Sequencer</li>
+            <li>MetaHuman, facial and body performance capture</li>
+            <li>Photogrammetry assets (RealityScan)</li>
+            <li>DaVinci Resolve</li>
+            <li>Game prototyping (Unreal, C#)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ MORE ═══ -->
+    <section id="more">
+      <div class="wrap rv">
+        <p class="eyebrow">Eredhar Studios</p>
+        <h2>The wider world</h2>
+        <p style="max-width:56ch;color:#cfc9be;margin:0 0 28px;">Eredhar is also a fantasy novel and a handful of small games. They live on the original site.</p>
+        <div class="more-links">
+          <a class="btn ghost" href="../index.html#games">Games</a>
+          <a class="btn ghost" href="../index.html#books">The novel</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CONTACT ═══ -->
+    <section class="contact" id="contact" style="padding-top:0;">
+      <div class="wrap rv">
+        <p class="eyebrow">Contact</p>
+        <a class="mail" href="mailto:andrei_alexe@ymail.com">andrei_alexe@ymail.com</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>&copy; <span id="year"></span> Andrei Alexe · Eredhar Studios</span>
+      <span>Built in Unreal Engine 5</span>
+    </div>
+  </footer>
+
+  <!-- ═══ LIGHTBOX ═══ -->
+  <dialog id="player" aria-label="Video player">
+    <p class="player-title" id="playerTitle"></p>
+    <button class="player-close" type="button" id="playerClose">Close ✕</button>
+    <div class="player-box" id="playerBox"></div>
+  </dialog>
+
+  <script>
+    (function () {
+      // ── config: the hero loop. Tweak start/end (seconds) to pick the moment.
+      var HERO = { id: 'g3okrkPMDy0', start: 0, end: 25 };
+
+      var YT = 'https://www.youtube-nocookie.com/embed/';
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // ── nav background once scrolled
+      var nav = document.getElementById('nav');
+      function onScroll() { nav.classList.toggle('solid', window.scrollY > 40); }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // ── reveal on scroll
+      var rv = document.querySelectorAll('.rv');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0, rootMargin: '0px 0px 15% 0px' });
+        rv.forEach(function (el) { io.observe(el); });
+      } else {
+        rv.forEach(function (el) { el.classList.add('in'); });
+      }
+
+      // ── lightbox player: one click, plays in place
+      var dlg = document.getElementById('player');
+      var box = document.getElementById('playerBox');
+      var ttl = document.getElementById('playerTitle');
+      var lastTrigger = null;
+
+      function openPlayer(id, title, trigger) {
+        lastTrigger = trigger || null;
+        ttl.textContent = title || '';
+        var f = document.createElement('iframe');
+        f.src = YT + id + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+        f.title = title || 'Video';
+        f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        f.allowFullscreen = true;
+        box.innerHTML = '';
+        box.appendChild(f);
+        pauseHero(true);
+        if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
+      }
+      function closePlayer() {
+        box.innerHTML = '';
+        if (dlg.open) dlg.close();
+        pauseHero(false);
+        if (lastTrigger) lastTrigger.focus();
+      }
+      document.querySelectorAll('[data-yt]').forEach(function (b) {
+        b.addEventListener('click', function () { openPlayer(b.dataset.yt, b.dataset.title, b); });
+      });
+      document.getElementById('playerClose').addEventListener('click', closePlayer);
+      dlg.addEventListener('click', function (e) { if (e.target === dlg) closePlayer(); });
+      dlg.addEventListener('cancel', function () { box.innerHTML = ''; pauseHero(false); });
+
+      // ── hero background loop (YouTube, muted). Falls back to the poster.
+      var heroWrap = document.getElementById('heroVideo');
+      var heroFrame = null, heroPlaying = false, heroPausedByUs = false;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var saveData = navigator.connection && navigator.connection.saveData;
+
+      function cmd(func, args) {
+        if (!heroFrame || !heroFrame.contentWindow) return;
+        heroFrame.contentWindow.postMessage(JSON.stringify({ event: 'command', func: func, args: args || [] }), '*');
+      }
+      function pauseHero(pause) {
+        if (!heroPlaying) return;
+        if (pause) { cmd('pauseVideo'); heroPausedByUs = true; }
+        else if (heroPausedByUs) { cmd('playVideo'); heroPausedByUs = false; }
+      }
+      function onState(state) {
+        if (state === 1 && !heroPlaying) { heroPlaying = true; heroWrap.classList.add('on'); }
+        if (state === 0) { cmd('seekTo', [HERO.start, true]); cmd('playVideo'); }
+      }
+      window.addEventListener('message', function (e) {
+        if (!/youtube/.test(e.origin) || !heroFrame || e.source !== heroFrame.contentWindow) return;
+        var d = e.data;
+        if (typeof d === 'string') { try { d = JSON.parse(d); } catch (err) { return; } }
+        if (!d) return;
+        if (d.event === 'onStateChange') onState(d.info);
+        else if (d.event === 'infoDelivery' && d.info && typeof d.info.playerState === 'number') onState(d.info.playerState);
+      });
+
+      function startHero() {
+        if (reduce || saveData) return;
+        heroFrame = document.createElement('iframe');
+        var q = 'autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3&fs=0&enablejsapi=1'
+              + '&start=' + HERO.start + '&end=' + HERO.end + '&origin=' + encodeURIComponent(location.origin);
+        heroFrame.src = YT + HERO.id + '?' + q;
+        heroFrame.title = 'Background loop';
+        heroFrame.tabIndex = -1;
+        heroFrame.allow = 'autoplay; encrypted-media';
+        heroFrame.addEventListener('load', function () {
+          heroFrame.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }), '*');
+        });
+        heroWrap.appendChild(heroFrame);
+
+        // pause the loop when the hero is off screen
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) { if (dlg.open) return; pauseHero(!en.isIntersecting); });
+          }, { threshold: 0.05 }).observe(document.getElementById('top'));
+        }
+      }
+      if (document.readyState === 'complete') setTimeout(startHero, 300);
+      else window.addEventListener('load', function () { setTimeout(startHero, 300); });
+    })();
+  </script>
+</body>
+</html>
