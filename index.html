@@ -21,12 +21,12 @@
       --border:     rgba(200, 160, 60, 0.18);
       --gold:       #c8a03c;
       --gold-light: #e8c86a;
-      --gold-dim:   rgba(200, 160, 60, 0.45);
+      --gold-dim:   rgba(200, 160, 60, 0.75);
       --ember:      #e05c20;
       --teal:       #1a4a52;
       --teal-light: #2d7a88;
       --text:       #d8d0c0;
-      --text-dim:   #8a8070;
+      --text-dim:   #a89e8c;
       --text-muted: #4a4840;
       --glow:       0 0 40px rgba(200, 160, 60, 0.2);
       --glow-strong:0 0 60px rgba(200, 160, 60, 0.4);
@@ -94,23 +94,6 @@
       z-index: 10001;
       box-shadow: 0 0 10px rgba(200,160,60,0.7), 0 0 20px rgba(224,92,32,0.4);
       transition: width 0.08s linear;
-    }
-
-
-    /* ════════════════════════════════════════════
-       CURSOR SPARK
-    ════════════════════════════════════════════ */
-    .cursor-spark {
-      position: fixed;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9998;
-      animation: sparkFade 0.7s ease-out forwards;
-    }
-
-    @keyframes sparkFade {
-      0%   { opacity: 0.9; transform: scale(1) translateY(0); }
-      100% { opacity: 0;   transform: scale(0.1) translateY(-12px); }
     }
 
 
@@ -369,7 +352,7 @@
       margin-bottom: 32px;
       opacity: 0;
       transform: translateY(20px);
-      animation: fadeUp 1s ease forwards 0.3s;
+      animation: fadeUp 0.7s ease forwards 0.1s;
     }
 
     .hero-logo {
@@ -377,12 +360,8 @@
       margin: 0 auto 28px;
       opacity: 0;
       transform: translateY(30px);
-      animation: fadeUp 1.2s ease forwards 0.7s, logoBreathe 5s ease-in-out infinite 2.2s;
-    }
-
-    @keyframes logoBreathe {
-      0%, 100% { filter: drop-shadow(0 0 22px rgba(200,160,60,0.30)) drop-shadow(0 0 55px rgba(200,160,60,0.12)); }
-      50%       { filter: drop-shadow(0 0 45px rgba(200,160,60,0.65)) drop-shadow(0 0 90px rgba(200,160,60,0.30)); }
+      animation: fadeUp 0.9s ease forwards 0.2s;
+      filter: drop-shadow(0 0 28px rgba(200,160,60,0.28));
     }
 
     .hero-tagline {
@@ -395,7 +374,7 @@
       margin-bottom: 48px;
       opacity: 0;
       transform: translateY(20px);
-      animation: fadeUp 1s ease forwards 1.3s;
+      animation: fadeUp 0.7s ease forwards 0.4s;
     }
 
     .hero-cta {
@@ -530,17 +509,7 @@
       line-height: 1.15;
       letter-spacing: 0.04em;
       margin-bottom: 0;
-      background: linear-gradient(90deg, #f0e8d0 30%, var(--gold-light) 50%, #f0e8d0 70%);
-      background-size: 250% auto;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: titleShimmer 8s ease-in-out infinite;
-    }
-
-    @keyframes titleShimmer {
-      0%, 100% { background-position: 0% center; }
-      50%       { background-position: 100% center; }
+      color: #f0e8d0;
     }
 
     .section-rule {
@@ -654,6 +623,12 @@
       cursor: default;
     }
 
+    .about-side { border-left: 2px solid var(--gold-dim); padding-left: 32px; }
+    .about-list-title { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+    .about-list { list-style: none; margin: 0; padding: 0; }
+    .about-list li { padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 1rem; color: var(--text); }
+    .about-list li:last-child { border-bottom: 0; }
+
     .about-stat:hover {
       border-color: rgba(200,160,60,0.4);
       background: rgba(200,160,60,0.04);
@@ -709,40 +684,25 @@
       gap: 24px;
     }
 
-    .card-grid.single { grid-template-columns: minmax(280px, 420px); }
+    .card-grid.single { grid-template-columns: minmax(280px, 620px); }
+    .card-grid.two { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
 
     .project-card {
+      display: flex;
+      flex-direction: column;
       position: relative;
       border-radius: var(--radius);
       overflow: hidden;
       background: var(--panel);
       border: 1px solid var(--border);
-      transition: border-color 0.4s, box-shadow 0.4s, transform 0.25s ease;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s ease;
       cursor: pointer;
-      transform-style: preserve-3d;
-      will-change: transform;
     }
 
     .project-card:hover {
+      transform: translateY(-4px);
       border-color: rgba(200,160,60,0.5);
       box-shadow: 0 24px 64px rgba(0,0,0,0.7), 0 0 36px rgba(200,160,60,0.12);
-    }
-
-    /* Shimmer sweep on hover */
-    .project-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(115deg, transparent 30%, rgba(255,220,120,0.06) 50%, transparent 70%);
-      background-size: 300% 300%;
-      background-position: 200% 200%;
-      transition: background-position 0.7s ease;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .project-card:hover::after {
-      background-position: -50% -50%;
     }
 
     .card-img-wrap {
@@ -771,11 +731,14 @@
       transition: opacity 0.4s;
     }
 
+    .book-card { flex-direction: row; }
     .book-card .card-img-wrap {
       flex-shrink: 0;
-      width: 160px;
-      aspect-ratio: 2/3;
+      width: 210px;
+      aspect-ratio: 1000/1414;
     }
+    .book-card .card-img-wrap img { filter: none; }
+    .book-card .card-img-overlay { display: none; }
 
     .book-card {
       display: flex;
@@ -791,7 +754,12 @@
       padding: 24px 24px 22px;
       position: relative;
       z-index: 2;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
     }
+    .card-body .card-cta { margin-top: auto; align-self: flex-start; }
+    .card-desc { margin-bottom: 20px; }
 
     .card-category {
       font-family: 'Cinzel', serif;
@@ -953,8 +921,8 @@
     ════════════════════════════════════════════ */
     .reveal {
       opacity: 0;
-      transform: translateY(36px);
-      transition: opacity 0.85s ease, transform 0.85s ease;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease-out, transform 0.45s ease-out;
     }
 
     .reveal.visible {
@@ -964,14 +932,14 @@
 
     .reveal-left {
       opacity: 0;
-      transform: translateX(-44px);
-      transition: opacity 0.85s ease, transform 0.85s ease;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease-out, transform 0.45s ease-out;
     }
 
     .reveal-right {
       opacity: 0;
-      transform: translateX(44px);
-      transition: opacity 0.85s ease, transform 0.85s ease;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease-out, transform 0.45s ease-out;
     }
 
     .reveal-left.visible, .reveal-right.visible {
@@ -979,12 +947,12 @@
       transform: none;
     }
 
-    .reveal-delay-1 { transition-delay: 0.10s; }
-    .reveal-delay-2 { transition-delay: 0.20s; }
-    .reveal-delay-3 { transition-delay: 0.30s; }
-    .reveal-delay-4 { transition-delay: 0.40s; }
-    .reveal-delay-5 { transition-delay: 0.50s; }
-    .reveal-delay-6 { transition-delay: 0.60s; }
+    .reveal-delay-1 { transition-delay: 0.05s; }
+    .reveal-delay-2 { transition-delay: 0.10s; }
+    .reveal-delay-3 { transition-delay: 0.15s; }
+    .reveal-delay-4 { transition-delay: 0.20s; }
+    .reveal-delay-5 { transition-delay: 0.25s; }
+    .reveal-delay-6 { transition-delay: 0.30s; }
 
 
     /* ════════════════════════════════════════════
@@ -1007,12 +975,6 @@
       height: 1px;
       background: linear-gradient(to right, transparent, var(--border), transparent);
       margin: 0;
-      animation: dividerPulse 5s ease-in-out infinite;
-    }
-
-    @keyframes dividerPulse {
-      0%, 100% { opacity: 0.4; }
-      50%       { opacity: 1.0; }
     }
 
 
@@ -1051,6 +1013,12 @@
     nav {
       transition: background 0.4s, border-color 0.4s, backdrop-filter 0.4s;
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      #emberCanvas { display: none; }
+      .reveal, .reveal-left, .reveal-right { opacity: 1; transform: none; }
+    }
   </style>
 </head>
 <body>
@@ -1065,9 +1033,9 @@
     <span class="nav-logo">Eredhar Studios</span>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
-      <li><a href="#books">Books</a></li>
-      <li><a href="#games">Games</a></li>
       <li><a href="#cinematics">Cinematics</a></li>
+      <li><a href="#games">Games</a></li>
+      <li><a href="#books">Books</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu">
@@ -1078,9 +1046,9 @@
   <!-- Mobile overlay menu -->
   <div class="nav-mobile-menu" id="navMobileMenu">
     <a href="#about">About</a>
-    <a href="#books">Books</a>
-    <a href="#games">Games</a>
     <a href="#cinematics">Cinematics</a>
+    <a href="#games">Games</a>
+    <a href="#books">Books</a>
     <a href="#contact">Contact</a>
   </div>
 
@@ -1096,14 +1064,14 @@
     <canvas id="emberCanvas"></canvas>
 
     <div class="hero-content" id="heroContent">
-      <p class="hero-eyebrow">Est. — Solo Indie Studio</p>
+      <p class="hero-eyebrow">Cinematic Artist · Unreal Engine 5</p>
       <img
         src="assets/images/eredhar-logo.png"
         alt="Eredhar Studios Logo"
         class="hero-logo"
       >
       <p class="hero-tagline">Forging Worlds of Wonder</p>
-      <a href="#about" class="hero-cta">Enter the World</a>
+      <a href="#cinematics" class="hero-cta">See the Work</a>
     </div>
 
     <div class="scroll-indicator">
@@ -1121,36 +1089,43 @@
       <div class="about-inner">
 
         <div class="about-text reveal-left">
-          <p class="section-label">The Studio</p>
-          <h2 class="section-title">One Creator.<br>Countless Worlds.</h2>
+          <p class="section-label">About</p>
+          <h2 class="section-title">Andrei Alexe</h2>
           <div class="section-rule"></div>
           <p>
-            Games, stories, and cinematic worlds; all built from the same obsession with craft
-            and imagination. Whatever brought you here, there's something waiting for you.
+            I make short films and small games in Unreal Engine 5, on my own.
+            Most of it happens in one setting, Eredhar, a fantasy world I've been
+            writing since 2020 and that started with a novel.
+          </p>
+          <p>
+            I'm looking to move into game cinematics, where lighting, camera and
+            character performance are the whole job.
           </p>
 
           <div class="about-stats">
             <div class="about-stat reveal reveal-delay-2">
-              <div class="about-stat-num" data-count="5" data-suffix="+">5+</div>
-              <div class="about-stat-label">Games Released</div>
+              <div class="about-stat-num" data-count="4" data-suffix="">4</div>
+              <div class="about-stat-label">Cinematics</div>
             </div>
             <div class="about-stat reveal reveal-delay-3">
-              <div class="about-stat-num" data-count="1" data-suffix="">1</div>
-              <div class="about-stat-label">Fantasy Novel</div>
+              <div class="about-stat-num" data-count="5" data-suffix="">5</div>
+              <div class="about-stat-label">Game Projects</div>
             </div>
             <div class="about-stat reveal reveal-delay-4">
-              <div class="about-stat-num">∞</div>
-              <div class="about-stat-label">Stories to Tell</div>
+              <div class="about-stat-num" data-count="1" data-suffix="">1</div>
+              <div class="about-stat-label">Published Novel</div>
             </div>
           </div>
         </div>
 
-        <div class="about-quote reveal-right reveal-delay-2">
-          <p>
-            "The world of Eredhar is not just a setting — it is a living, breathing
-            mythology forged through games, novels, and cinematic vision. Every project
-            is a new window into the same vast, dark, and wondrous universe."
-          </p>
+        <div class="about-side reveal-right reveal-delay-2">
+          <p class="about-list-title">What I work with</p>
+          <ul class="about-list">
+            <li>Unreal Engine 5: Sequencer, lighting, rendering</li>
+            <li>MetaHuman characters and facial animation</li>
+            <li>Gameplay prototyping (Unreal, C#)</li>
+            <li>Worldbuilding and writing</li>
+          </ul>
         </div>
 
       </div>
@@ -1161,34 +1136,78 @@
 
 
   <!-- ═══════════════════════════════════════
-       BOOKS
+       CINEMATICS
   ═══════════════════════════════════════ -->
-  <section class="projects-section" id="books">
+  <section class="projects-section" id="cinematics">
     <div class="container">
 
       <div class="reveal">
-        <p class="section-label">📚 Books of Eredhar</p>
-        <h2 class="section-title">The Written Word</h2>
+        <p class="section-label">Cinematics</p>
+        <h2 class="section-title">Cinematic Worlds</h2>
         <div class="section-rule"></div>
       </div>
 
-      <div class="card-grid single">
+      <div class="card-grid two">
 
-        <article class="project-card book-card reveal reveal-delay-2">
+        <article class="project-card reveal reveal-delay-2">
           <div class="card-img-wrap">
-            <img src="assets/images/dawn-of-darkness.jpg" alt="Dawn of Darkness">
+            <img src="assets/images/mission-to-minerva.jpg" alt="Mission to Minerva">
             <div class="card-img-overlay"></div>
           </div>
           <div class="card-body">
-            <p class="card-category">Fantasy Novel · First Edition · 2018</p>
-            <h3 class="card-title">Wars of Eredhar:<br>Dawn of Darkness</h3>
-            <p class="card-desc">
-              Whispers in the night tell of an ancient darkness re-emerging from the cold corners of Eredhar.
-              The times of peace are fading — the war to come will test the very boundaries of virtue and belief.
-              Will the kingdoms stand, or fall to the creeping dark?
-            </p>
-            <a href="projects/wars-of-eredhar-dawn-of-darkness.html" class="card-cta">
-              Read More
+            <p class="card-category">Short Film · #KB3Dchallenge</p>
+            <h3 class="card-title">Mission to Minerva</h3>
+            <p class="card-desc">Created for the #KB3Dchallenge — a cinematic short that launched a thousand imaginations.</p>
+            <a href="projects/mission-to-minerva.html" class="card-cta">
+              Watch
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="project-card reveal reveal-delay-3">
+          <div class="card-img-wrap">
+            <img src="assets/images/weathertop-nazgul.jpg" alt="Weathertop — The Nazgûl">
+            <div class="card-img-overlay"></div>
+          </div>
+          <div class="card-body">
+            <p class="card-category">Cinematic · Unreal Engine 5</p>
+            <h3 class="card-title">Weathertop —<br>The Nazgûl</h3>
+            <p class="card-desc">The ancient watchtower of Amon Sûl rebuilt in Unreal Engine 5. The Nine are waiting.</p>
+            <a href="projects/weathertop-nazgul.html" class="card-cta">
+              Watch
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="project-card reveal reveal-delay-1">
+          <div class="card-img-wrap">
+            <img src="assets/images/argonath.png" alt="Pillars of the Kings — Argonath">
+            <div class="card-img-overlay"></div>
+          </div>
+          <div class="card-body">
+            <p class="card-category">Cinematic · Unreal Engine 5</p>
+            <h3 class="card-title">Pillars of<br>the Kings</h3>
+            <p class="card-desc">The Gates of Argonath recreated in Unreal Engine 5; Isildur and Anárion standing watch over the River Anduin.</p>
+            <a href="projects/pillars-of-the-kings.html" class="card-cta">
+              Watch
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="project-card reveal reveal-delay-4">
+          <div class="card-img-wrap">
+            <img src="assets/images/the-one-who-waits.jpg" alt="The One Who Waits — Unreal Engine 5 psychological horror short">
+            <div class="card-img-overlay"></div>
+          </div>
+          <div class="card-body">
+            <p class="card-category">Horror Short · Unreal Engine 5</p>
+            <h3 class="card-title">The One<br>Who Waits</h3>
+            <p class="card-desc">A psychological horror short built in Unreal Engine 5 — a single character locked in an argument with himself, drawn in flickering light.</p>
+            <a href="projects/the-one-who-waits.html" class="card-cta">
+              Watch
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
@@ -1208,7 +1227,7 @@
     <div class="container">
 
       <div class="reveal">
-        <p class="section-label">🎮 Games</p>
+        <p class="section-label">Games</p>
         <h2 class="section-title">Playable Worlds</h2>
         <div class="section-rule"></div>
       </div>
@@ -1303,78 +1322,34 @@
 
 
   <!-- ═══════════════════════════════════════
-       CINEMATICS
+       BOOKS
   ═══════════════════════════════════════ -->
-  <section class="projects-section" id="cinematics">
+  <section class="projects-section" id="books">
     <div class="container">
 
       <div class="reveal">
-        <p class="section-label">📽️ Cinematics</p>
-        <h2 class="section-title">Cinematic Worlds</h2>
+        <p class="section-label">Books</p>
+        <h2 class="section-title">The Written Word</h2>
         <div class="section-rule"></div>
       </div>
 
-      <div class="card-grid">
+      <div class="card-grid single">
 
-        <article class="project-card reveal reveal-delay-2">
+        <article class="project-card book-card reveal reveal-delay-2">
           <div class="card-img-wrap">
-            <img src="assets/images/mission-to-minerva.jpg" alt="Mission to Minerva">
+            <img src="assets/images/dawn-of-darkness.jpg" alt="Dawn of Darkness">
             <div class="card-img-overlay"></div>
           </div>
           <div class="card-body">
-            <p class="card-category">Short Film · #KB3Dchallenge</p>
-            <h3 class="card-title">Mission to Minerva</h3>
-            <p class="card-desc">Created for the #KB3Dchallenge — a cinematic short that launched a thousand imaginations.</p>
-            <a href="projects/mission-to-minerva.html" class="card-cta">
-              Watch
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </article>
-
-        <article class="project-card reveal reveal-delay-3">
-          <div class="card-img-wrap">
-            <img src="assets/images/weathertop-nazgul.jpg" alt="Weathertop — The Nazgûl">
-            <div class="card-img-overlay"></div>
-          </div>
-          <div class="card-body">
-            <p class="card-category">Cinematic · Unreal Engine 5</p>
-            <h3 class="card-title">Weathertop —<br>The Nazgûl</h3>
-            <p class="card-desc">The ancient watchtower of Amon Sûl rebuilt in Unreal Engine 5. The Nine are waiting.</p>
-            <a href="projects/weathertop-nazgul.html" class="card-cta">
-              Watch
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </article>
-
-        <article class="project-card reveal reveal-delay-1">
-          <div class="card-img-wrap">
-            <img src="assets/images/argonath.png" alt="Pillars of the Kings — Argonath">
-            <div class="card-img-overlay"></div>
-          </div>
-          <div class="card-body">
-            <p class="card-category">Cinematic · Unreal Engine 5</p>
-            <h3 class="card-title">Pillars of<br>the Kings</h3>
-            <p class="card-desc">The Gates of Argonath recreated in Unreal Engine 5; Isildur and Anárion standing watch over the River Anduin.</p>
-            <a href="projects/pillars-of-the-kings.html" class="card-cta">
-              Watch
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </article>
-
-        <article class="project-card reveal reveal-delay-4">
-          <div class="card-img-wrap">
-            <img src="assets/images/the-one-who-waits.jpg" alt="The One Who Waits — Unreal Engine 5 psychological horror short">
-            <div class="card-img-overlay"></div>
-          </div>
-          <div class="card-body">
-            <p class="card-category">Horror Short · Unreal Engine 5</p>
-            <h3 class="card-title">The One<br>Who Waits</h3>
-            <p class="card-desc">A psychological horror short built in Unreal Engine 5 — a single character locked in an argument with himself, drawn in flickering light.</p>
-            <a href="projects/the-one-who-waits.html" class="card-cta">
-              Watch
+            <p class="card-category">Fantasy Novel · First Edition · 2018</p>
+            <h3 class="card-title">Wars of Eredhar:<br>Dawn of Darkness</h3>
+            <p class="card-desc">
+              Whispers in the night tell of an ancient darkness re-emerging from the cold corners of Eredhar.
+              The times of peace are fading — the war to come will test the very boundaries of virtue and belief.
+              Will the kingdoms stand, or fall to the creeping dark?
+            </p>
+            <a href="projects/wars-of-eredhar-dawn-of-darkness.html" class="card-cta">
+              Read More
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
@@ -1471,7 +1446,7 @@
           io.unobserve(e.target);
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px 200px 0px' });
     revealEls.forEach(el => io.observe(el));
 
     // ── stat counter animation ─────────────────────────────
@@ -1498,59 +1473,6 @@
     }, { threshold: 0.6 });
     statNums.forEach(el => counterObserver.observe(el));
 
-    // ── hero mouse parallax ────────────────────────────────
-    const heroContent = document.getElementById('heroContent');
-    const heroSection = document.querySelector('.hero');
-    if (heroSection && heroContent) {
-      heroSection.addEventListener('mousemove', (e) => {
-        const x = (e.clientX / window.innerWidth  - 0.5) * 18;
-        const y = (e.clientY / window.innerHeight - 0.5) * 12;
-        heroContent.style.transform = `translate(${x * 0.45}px, ${y * 0.3}px)`;
-      }, { passive: true });
-      heroSection.addEventListener('mouseleave', () => {
-        heroContent.style.transform = '';
-      });
-    }
-
-    // ── 3D card tilt ───────────────────────────────────────
-    document.querySelectorAll('.project-card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width  - 0.5;
-        const y = (e.clientY - rect.top)  / rect.height - 0.5;
-        card.style.transform = `translateY(-7px) perspective(700px) rotateX(${-y * 7}deg) rotateY(${x * 7}deg)`;
-      }, { passive: true });
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
-      });
-    });
-
-    // ── cursor sparkle trail ───────────────────────────────
-    let lastSpark = 0;
-    document.addEventListener('mousemove', (e) => {
-      const now = Date.now();
-      if (now - lastSpark < 45) return;
-      lastSpark = now;
-
-      const spark = document.createElement('div');
-      spark.className = 'cursor-spark';
-      const isEmber = Math.random() < 0.25;
-      const hue     = isEmber ? Math.round(15 + Math.random() * 15) : Math.round(38 + Math.random() * 12);
-      const size    = Math.round(2 + Math.random() * 4);
-      const offsetX = (Math.random() - 0.5) * 12;
-      const offsetY = (Math.random() - 0.5) * 12;
-
-      spark.style.cssText = `
-        left: ${e.clientX + offsetX - size / 2}px;
-        top:  ${e.clientY + offsetY - size / 2}px;
-        width: ${size}px;
-        height: ${size}px;
-        background: hsla(${hue}, 92%, 65%, 0.85);
-        box-shadow: 0 0 ${size * 2}px hsla(${hue}, 90%, 60%, 0.55);
-      `;
-      document.body.appendChild(spark);
-      setTimeout(() => spark.remove(), 700);
-    }, { passive: true });
 
     // ── ember + star particle system ───────────────────────
     (function () {
