@@ -50,7 +50,8 @@
       transition: background 0.3s;
     }
     .nav.solid { background: rgba(8,8,10,0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-    .nav-name { font-family: var(--serif); font-size: 1.35rem; text-decoration: none; letter-spacing: 0.01em; }
+    .nav-name { display: inline-flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 1.35rem; text-decoration: none; letter-spacing: 0.01em; }
+    .nav-name img { width: 38px; height: 38px; object-fit: contain; }
     .nav-links { display: flex; gap: clamp(18px, 3vw, 40px); list-style: none; margin: 0; padding: 0; }
     .nav-links a { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; color: var(--dim); transition: color 0.2s; }
     .nav-links a:hover { color: var(--fg); }
@@ -87,8 +88,8 @@
       max-width: var(--max); margin: 0 auto;
       padding: 0 var(--gutter) clamp(40px, 8vh, 88px);
     }
-    .lockup { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; font-size: 0.72rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--dim); }
-    .lockup img { width: 26px; height: 26px; object-fit: contain; }
+    .lockup { margin-bottom: 8px; }
+    .lockup img { width: clamp(110px, 13vw, 168px); height: auto; filter: drop-shadow(0 2px 18px rgba(0,0,0,0.6)); }
     h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(3.2rem, 9vw, 8rem); line-height: 0.95; letter-spacing: -0.01em; margin: 0; }
     .role { margin: 18px 0 0; font-size: clamp(0.95rem, 1.5vw, 1.15rem); color: var(--dim); }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; align-items: center; }
@@ -117,6 +118,9 @@
 
     /* ── films ───────────────────────────── */
     .film { margin-bottom: clamp(64px, 9vw, 120px); }
+    .film-rule { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--dim); }
+    .film-rule i { flex: 1; height: 1px; background: var(--line); }
+    .film-rule span:first-child { color: var(--accent); }
     .frame {
       position: relative; display: block; width: 100%; padding: 0; border: 0; cursor: pointer;
       aspect-ratio: 2.39 / 1; overflow: hidden; background: #000; border-radius: 2px;
@@ -160,6 +164,7 @@
     .socials a { font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; color: var(--dim); border-bottom: 1px solid var(--line); padding-bottom: 4px; transition: color 0.2s, border-color 0.2s; }
     .socials a:hover { color: var(--fg); border-color: var(--accent); }
     footer { padding: 28px 0 40px; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--dim); }
+    .foot-brand { display: inline-flex; align-items: center; gap: 12px; }
     footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 
     /* ── lightbox ────────────────────────── */
@@ -207,7 +212,7 @@
 <body>
 
   <header class="nav" id="nav">
-    <a class="nav-name" href="#top">Andrei Alexe</a>
+    <a class="nav-name" href="#top"><img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios"><span>Andrei Alexe</span></a>
     <ul class="nav-links">
       <li><a href="#work">Work</a></li>
       <li><a href="#about">About</a></li>
@@ -221,7 +226,7 @@
     <div class="hero-video" id="heroVideo" aria-hidden="true"></div>
 
     <div class="hero-inner">
-      <div class="lockup"><img src="../assets/images/eredhar-logo.png" alt=""><span>Eredhar Studios</span></div>
+      <div class="lockup"><img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios"></div>
       <h1>Andrei Alexe</h1>
       <p class="role">Cinematic artist · Unreal Engine 5</p>
       <div class="hero-actions">
@@ -242,6 +247,7 @@
         <h2 class="rv">Films</h2>
 
         <article class="film rv">
+          <div class="film-rule"><span>Film 01</span><i></i><span>01 / 04</span></div>
           <button class="frame" type="button" data-yt="g3okrkPMDy0" data-title="The One Who Waits" aria-label="Play The One Who Waits">
             <img src="../assets/images/the-one-who-waits.jpg" alt="" loading="lazy">
             <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
@@ -264,6 +270,7 @@
         </article>
 
         <article class="film rv">
+          <div class="film-rule"><span>Film 02</span><i></i><span>02 / 04</span></div>
           <button class="frame" type="button" data-yt="LCD1RRdazms" data-title="Mission to Minerva" aria-label="Play Mission to Minerva">
             <img src="../assets/images/mission-to-minerva.jpg" alt="" loading="lazy">
             <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
@@ -291,6 +298,7 @@
 
         <div class="studies">
           <article class="film rv">
+            <div class="film-rule"><span>Film 03</span><i></i><span>03 / 04</span></div>
             <button class="frame" type="button" data-yt="Xb2dExFdLss" data-title="Weathertop: The Nazgûl" aria-label="Play Weathertop: The Nazgûl">
               <img src="../assets/images/weathertop-nazgul.jpg" alt="" loading="lazy">
               <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
@@ -307,6 +315,7 @@
           </article>
 
           <article class="film rv">
+            <div class="film-rule"><span>Film 04</span><i></i><span>04 / 04</span></div>
             <button class="frame" type="button" data-yt="3KOwRnLt_kw" data-title="Pillars of the Kings" aria-label="Play Pillars of the Kings">
               <img src="../assets/images/argonath.png" alt="" loading="lazy">
               <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
@@ -331,9 +340,9 @@
         <div class="rv">
           <p class="eyebrow">03 · About</p>
           <h2>Hi, I'm Andrei.</h2>
-          <p>I'm from Romania. Eredhar started as a novel, and over the years it turned into a few small games and, more recently, short films in Unreal Engine 5.</p>
-          <p>I make all of it on my own, so it is slow and I am still learning. The One Who Waits is the one I'm proudest of so far.</p>
-          <p>I'd like to do this properly, on a cinematics team, and learn from people who are better at it than me.</p>
+          <p>I'm from Romania. I wrote Wars of Eredhar out of a love for fantasy and for imagined worlds. That world has since grown into a few small games and, more recently, short films in Unreal Engine 5.</p>
+          <p>What I enjoy most is learning. Every project makes me pick up a method or a process I didn't know before, and the ones I learned for The One Who Waits ended up on screen.</p>
+          <p>I make everything on my own, so I'm still learning, and I'd like to do this properly on a cinematics team.</p>
         </div>
         <div class="rv">
           <p class="eyebrow">Day to day I use</p>
@@ -376,7 +385,7 @@
 
   <footer>
     <div class="wrap">
-      <span>&copy; <span id="year"></span> Andrei Alexe · Eredhar Studios</span>
+      <span class="foot-brand"><img src="../assets/images/eredhar-logo.png" alt="" width="34" height="34"> &copy; <span id="year"></span> Andrei Alexe · Eredhar Studios</span>
       <span>Built in Unreal Engine 5</span>
     </div>
   </footer>
