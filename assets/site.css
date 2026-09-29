@@ -158,7 +158,7 @@ h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 5vw, 
 .tile em, .novel-row em { display: block; margin-top: 4px; font-family: var(--sans); font-style: normal; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
 .novel-row { display: grid; grid-template-columns: clamp(170px, 20vw, 280px) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: center; text-decoration: none; }
 .novel-row img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 2px; border: 1px solid var(--line); }
-.novel-row b { display: block; font-family: var(--serif); font-weight: 400; font-size: clamp(1.9rem, 3.8vw, 3rem); line-height: 1.05; margin-bottom: 14px; }
+.novel-row b { display: block; color: var(--fg); font-family: var(--serif); font-weight: 400; font-size: clamp(1.9rem, 3.8vw, 3rem); line-height: 1.05; margin-bottom: 14px; }
 .novel-row span { color: #cfc9be; max-width: 56ch; display: block; font-size: clamp(1rem, 1.4vw, 1.15rem); }
 .novel-row:hover b { color: var(--accent); }
 @media (max-width: 700px) { .tiles { grid-template-columns: 1fr; } .novel-row { grid-template-columns: 130px minmax(0, 1fr); gap: 20px; } .novel-row img { width: 100%; } }
