@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Andrei Alexe · Cinematic Artist · Eredhar Studios</title>
-  <meta name="description" content="Andrei Alexe, cinematic artist working in Unreal Engine 5. Short films, MetaHuman performance and lighting. Eredhar Studios.">
-  <link rel="icon" href="../assets/images/eredhar-logo.png">
+  <meta name="description" content="Andrei Alexe, cinematic artist working in Unreal Engine 5. Short films, MetaHuman performance and lighting, made under Eredhar Studios.">
+  <link rel="icon" href="../assets/images/eredhar-logo-trim.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -45,13 +45,14 @@
     .nav {
       position: fixed; inset: 0 0 auto 0; z-index: 50;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 20px var(--gutter);
-      background: linear-gradient(to bottom, rgba(8,8,10,0.75), rgba(8,8,10,0));
+      padding: 12px var(--gutter);
+      background: linear-gradient(to bottom, rgba(8,8,10,0.8), rgba(8,8,10,0));
       transition: background 0.3s;
     }
     .nav.solid { background: rgba(8,8,10,0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-    .nav-name { display: inline-flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 1.35rem; text-decoration: none; letter-spacing: 0.01em; }
-    .nav-name img { width: 38px; height: 38px; object-fit: contain; }
+    .nav-logo { display: inline-flex; align-items: center; }
+    .nav-logo img { height: 92px; width: auto; transition: height 0.3s ease; filter: drop-shadow(0 2px 12px rgba(0,0,0,0.55)); }
+    .nav.solid .nav-logo img { height: 58px; }
     .nav-links { display: flex; gap: clamp(18px, 3vw, 40px); list-style: none; margin: 0; padding: 0; }
     .nav-links a { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; color: var(--dim); transition: color 0.2s; }
     .nav-links a:hover { color: var(--fg); }
@@ -88,8 +89,6 @@
       max-width: var(--max); margin: 0 auto;
       padding: 0 var(--gutter) clamp(40px, 8vh, 88px);
     }
-    .lockup { margin-bottom: 8px; }
-    .lockup img { width: clamp(110px, 13vw, 168px); height: auto; filter: drop-shadow(0 2px 18px rgba(0,0,0,0.6)); }
     h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(3.2rem, 9vw, 8rem); line-height: 0.95; letter-spacing: -0.01em; margin: 0; }
     .role { margin: 18px 0 0; font-size: clamp(0.95rem, 1.5vw, 1.15rem); color: var(--dim); }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; align-items: center; }
@@ -163,9 +162,6 @@
     .socials { list-style: none; display: flex; flex-wrap: wrap; gap: 12px 32px; margin: 36px 0 0; padding: 0; }
     .socials a { font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; color: var(--dim); border-bottom: 1px solid var(--line); padding-bottom: 4px; transition: color 0.2s, border-color 0.2s; }
     .socials a:hover { color: var(--fg); border-color: var(--accent); }
-    footer { padding: 28px 0 40px; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--dim); }
-    .foot-brand { display: inline-flex; align-items: center; gap: 12px; }
-    footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 
     /* ── lightbox ────────────────────────── */
     dialog#player { border: 0; padding: 0; background: #000; width: min(94vw, 1400px); max-width: none; max-height: 92vh; overflow: visible; color: var(--fg); }
@@ -198,7 +194,8 @@
       .nav-links { gap: 16px; }
     }
     @media (max-width: 520px) {
-      .nav-name { font-size: 1.1rem; }
+      .nav-logo img { height: 66px; }
+      .nav.solid .nav-logo img { height: 46px; }
       .nav-links a { font-size: 0.68rem; letter-spacing: 0.1em; }
       .btn { padding: 13px 20px; }
     }
@@ -207,12 +204,21 @@
       *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
       .js .rv { opacity: 1; transform: none; }
     }
+    footer { border-top: 1px solid var(--line); background: var(--bg-2); padding: clamp(40px, 6vw, 72px) 0 28px; }
+    .foot-grid { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: clamp(24px, 5vw, 72px); align-items: center; }
+    .foot-logo img { height: clamp(110px, 12vw, 150px); width: auto; }
+    .foot-text { margin: 0; color: #cfc9be; max-width: 44ch; }
+    .foot-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .foot-links a { font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; color: var(--dim); }
+    .foot-links a:hover { color: var(--fg); }
+    .foot-base { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--dim); }
+    @media (max-width: 760px) { .foot-grid { grid-template-columns: 1fr; justify-items: start; } }
   </style>
 </head>
 <body>
 
   <header class="nav" id="nav">
-    <a class="nav-name" href="#top"><img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios"><span>Andrei Alexe</span></a>
+    <a class="nav-logo" href="#top" aria-label="Eredhar Studios, home"><img src="../assets/images/eredhar-logo-trim.png" alt="Eredhar Studios"></a>
     <ul class="nav-links">
       <li><a href="#work">Work</a></li>
       <li><a href="#about">About</a></li>
@@ -226,9 +232,8 @@
     <div class="hero-video" id="heroVideo" aria-hidden="true"></div>
 
     <div class="hero-inner">
-      <div class="lockup"><img src="../assets/images/eredhar-logo.png" alt="Eredhar Studios"></div>
       <h1>Andrei Alexe</h1>
-      <p class="role">Cinematic artist · Unreal Engine 5</p>
+      <p class="role">Cinematic artist · Unreal Engine 5 · Eredhar Studios</p>
       <div class="hero-actions">
         <button class="btn" type="button" data-yt="g3okrkPMDy0" data-title="The One Who Waits">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg> Play the film
@@ -340,7 +345,7 @@
         <div class="rv">
           <p class="eyebrow">03 · About</p>
           <h2>Hi, I'm Andrei.</h2>
-          <p>I'm from Romania. I wrote Wars of Eredhar out of a love for fantasy and for imagined worlds. That world has since grown into a few small games and, more recently, short films in Unreal Engine 5.</p>
+          <p>I'm from Romania. I wrote the fantasy novel Wars of Eredhar out of a love for fantasy and imagined worlds. Since then I've moved on to small games and, more recently, short films in Unreal Engine 5, all under Eredhar Studios.</p>
           <p>What I enjoy most is learning. Every project makes me pick up a method or a process I didn't know before, and the ones I learned for The One Who Waits ended up on screen.</p>
           <p>I make everything on my own, so I'm still learning, and I'd like to do this properly on a cinematics team.</p>
         </div>
@@ -358,12 +363,12 @@
     <!-- ═══ MORE ═══ -->
     <section id="more">
       <div class="wrap rv">
-        <p class="eyebrow">04 · Eredhar Studios</p>
-        <h2>The wider world</h2>
-        <p style="max-width:56ch;color:#cfc9be;margin:0 0 28px;">Eredhar is also a fantasy novel and a handful of small games. They live on the original site.</p>
+        <p class="eyebrow">04 · Also from the studio</p>
+        <h2>Games and the novel</h2>
+        <p style="max-width:56ch;color:#cfc9be;margin:0 0 28px;">Alongside the films I make small games, and I wrote the fantasy novel Wars of Eredhar. They live on the original site for now.</p>
         <div class="more-links">
           <a class="btn ghost" href="../index.html#games">Games</a>
-          <a class="btn ghost" href="../index.html#books">The novel</a>
+          <a class="btn ghost" href="../index.html#books">Wars of Eredhar (the novel)</a>
         </div>
       </div>
     </section>
@@ -384,10 +389,17 @@
   </main>
 
   <footer>
-    <div class="wrap">
-      <span class="foot-brand"><img src="../assets/images/eredhar-logo.png" alt="" width="34" height="34"> &copy; <span id="year"></span> Andrei Alexe · Eredhar Studios</span>
-      <span>Built in Unreal Engine 5</span>
+    <div class="wrap foot-grid">
+      <a class="foot-logo" href="#top" aria-label="Eredhar Studios, back to top"><img src="../assets/images/eredhar-logo-trim.png" alt="Eredhar Studios"></a>
+      <p class="foot-text">Andrei Alexe, cinematic artist. Films, games and the fantasy novel Wars of Eredhar, made under Eredhar Studios.</p>
+      <ul class="foot-links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="https://www.youtube.com/@eredhar/videos" target="_blank" rel="noopener">YouTube</a></li>
+      </ul>
     </div>
+    <div class="wrap foot-base"><span>&copy; <span id="year"></span> Andrei Alexe · Eredhar Studios</span><span>Built in Unreal Engine 5</span></div>
   </footer>
 
   <!-- ═══ LIGHTBOX ═══ -->
