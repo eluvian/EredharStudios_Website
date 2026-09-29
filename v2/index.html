@@ -107,7 +107,10 @@
     .now-playing b { display: block; color: var(--fg); font-weight: 500; letter-spacing: 0.08em; margin-top: 2px; }
 
     /* ── sections ────────────────────────── */
-    section { padding: clamp(72px, 11vw, 140px) 0; }
+    section { padding: clamp(72px, 11vw, 140px) 0; border-top: 1px solid var(--line); position: relative; }
+    section.band { background: var(--bg-2); }
+    section.warm { background: #100e0b; }
+    section::before { content: ''; position: absolute; top: -1px; left: var(--gutter); width: 56px; height: 1px; background: var(--accent); }
     .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
     .eyebrow { font-size: 0.72rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
     h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.05; margin: 0 0 clamp(36px, 5vw, 64px); }
@@ -143,7 +146,6 @@
     .note { font-size: 0.84rem; color: var(--dim); max-width: 64ch; margin: -32px 0 48px; }
 
     /* ── about ───────────────────────────── */
-    .about { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .about-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 6vw, 96px); }
     .about p { font-size: clamp(1.05rem, 1.6vw, 1.3rem); line-height: 1.6; margin: 0 0 1.1em; max-width: 44ch; }
     .skills { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
@@ -154,6 +156,9 @@
     .contact { text-align: left; }
     .mail { display: inline-block; font-family: var(--serif); font-size: clamp(1.8rem, 5.2vw, 4rem); line-height: 1.1; text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 6px; word-break: break-word; transition: color 0.2s; }
     .mail:hover { color: var(--accent); }
+    .socials { list-style: none; display: flex; flex-wrap: wrap; gap: 12px 32px; margin: 36px 0 0; padding: 0; }
+    .socials a { font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; color: var(--dim); border-bottom: 1px solid var(--line); padding-bottom: 4px; transition: color 0.2s, border-color 0.2s; }
+    .socials a:hover { color: var(--fg); border-color: var(--accent); }
     footer { padding: 28px 0 40px; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--dim); }
     footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 
@@ -233,7 +238,7 @@
     <!-- ═══ WORK ═══ -->
     <section id="work">
       <div class="wrap">
-        <p class="eyebrow rv">Selected work</p>
+        <p class="eyebrow rv">01 · Selected work</p>
         <h2 class="rv">Films</h2>
 
         <article class="film rv">
@@ -274,7 +279,14 @@
           </div>
         </article>
 
-        <h2 class="rv" style="margin-top: clamp(72px, 10vw, 128px);">Environment studies</h2>
+      </div>
+    </section>
+
+    <!-- ═══ STUDIES ═══ -->
+    <section id="studies" class="band">
+      <div class="wrap">
+        <p class="eyebrow rv">02 · Studies</p>
+        <h2 class="rv">Environment studies</h2>
         <p class="note rv">Fan-made, unofficial and non-commercial. Built to practise environments, scanned assets and lighting.</p>
 
         <div class="studies">
@@ -314,22 +326,21 @@
     </section>
 
     <!-- ═══ ABOUT ═══ -->
-    <section class="about" id="about">
+    <section class="about warm" id="about">
       <div class="wrap about-grid">
         <div class="rv">
-          <p class="eyebrow">About</p>
-          <h2>Working alone, on purpose.</h2>
-          <p>I make short films and small games in Unreal Engine 5. Most of it happens in one setting, Eredhar, a fantasy world I have been writing since 2020 and that started with a novel.</p>
-          <p>I am looking to move into game cinematics, where lighting, camera and character performance are the whole job.</p>
+          <p class="eyebrow">03 · About</p>
+          <h2>Hi, I'm Andrei.</h2>
+          <p>I'm from Romania. Eredhar started as a novel, and over the years it turned into a few small games and, more recently, short films in Unreal Engine 5.</p>
+          <p>I make all of it on my own, so it is slow and I am still learning. The One Who Waits is the one I'm proudest of so far.</p>
+          <p>I'd like to do this properly, on a cinematics team, and learn from people who are better at it than me.</p>
         </div>
         <div class="rv">
-          <p class="eyebrow">What I work with</p>
+          <p class="eyebrow">Day to day I use</p>
           <ul class="skills">
-            <li>Unreal Engine 5: Lumen, Nanite, Sequencer</li>
-            <li>MetaHuman, facial and body performance capture</li>
-            <li>Photogrammetry assets (RealityScan)</li>
+            <li>Unreal Engine 5</li>
+            <li>MetaHuman and performance capture</li>
             <li>DaVinci Resolve</li>
-            <li>Game prototyping (Unreal, C#)</li>
           </ul>
         </div>
       </div>
@@ -338,7 +349,7 @@
     <!-- ═══ MORE ═══ -->
     <section id="more">
       <div class="wrap rv">
-        <p class="eyebrow">Eredhar Studios</p>
+        <p class="eyebrow">04 · Eredhar Studios</p>
         <h2>The wider world</h2>
         <p style="max-width:56ch;color:#cfc9be;margin:0 0 28px;">Eredhar is also a fantasy novel and a handful of small games. They live on the original site.</p>
         <div class="more-links">
@@ -349,10 +360,16 @@
     </section>
 
     <!-- ═══ CONTACT ═══ -->
-    <section class="contact" id="contact" style="padding-top:0;">
+    <section class="contact band" id="contact">
       <div class="wrap rv">
-        <p class="eyebrow">Contact</p>
+        <p class="eyebrow">05 · Contact</p>
         <a class="mail" href="mailto:andrei_alexe@ymail.com">andrei_alexe@ymail.com</a>
+        <ul class="socials">
+          <li><a href="https://www.youtube.com/@eredhar/videos" target="_blank" rel="noopener">YouTube</a></li>
+          <li><a href="https://www.instagram.com/eredharstudios/" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://www.tiktok.com/@eredhar" target="_blank" rel="noopener">TikTok</a></li>
+          <li><a href="https://x.com/AndreiAlexe93" target="_blank" rel="noopener">X</a></li>
+        </ul>
       </div>
     </section>
   </main>
@@ -374,7 +391,7 @@
   <script>
     (function () {
       // ── config: the hero loop. Tweak start/end (seconds) to pick the moment.
-      var HERO = { id: 'g3okrkPMDy0', start: 0, end: 25 };
+      var HERO = { id: 'g3okrkPMDy0', start: 28, end: 42 };
 
       var YT = 'https://www.youtube-nocookie.com/embed/';
       document.getElementById('year').textContent = new Date().getFullYear();
