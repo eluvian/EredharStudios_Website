@@ -144,7 +144,24 @@ h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 5vw, 
 .skills li { padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 0.98rem; }
 
 /* ── more + contact ──────────────────── */
-.more-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+.more-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 0 0 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+.more-head + .tiles, .more-head + .novel-row { margin-bottom: clamp(40px, 6vw, 72px); }
+.more-head:last-child { margin-bottom: 0; }
+.more-head h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.5rem, 2.6vw, 2rem); margin: 0; }
+.text-link { font-size: 0.74rem; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; color: var(--dim); border-bottom: 1px solid var(--line); padding-bottom: 3px; transition: color 0.2s, border-color 0.2s; }
+.text-link:hover { color: var(--fg); border-color: var(--accent); }
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 28px); }
+.tile { display: block; text-decoration: none; }
+.tile img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 2px; border: 1px solid var(--line); transition: filter 0.4s; }
+.tile:hover img { filter: brightness(0.8); }
+.tile span { display: block; margin-top: 12px; font-family: var(--serif); font-size: 1.35rem; line-height: 1.15; }
+.tile em, .novel-row em { display: block; margin-top: 4px; font-family: var(--sans); font-style: normal; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
+.novel-row { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: clamp(18px, 3vw, 36px); align-items: center; text-decoration: none; }
+.novel-row img { width: 120px; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 2px; border: 1px solid var(--line); }
+.novel-row b { display: block; font-family: var(--serif); font-weight: 400; font-size: clamp(1.4rem, 2.6vw, 2rem); line-height: 1.1; margin-bottom: 8px; }
+.novel-row span { color: #cfc9be; max-width: 56ch; display: block; }
+.novel-row:hover b { color: var(--accent); }
+@media (max-width: 700px) { .tiles { grid-template-columns: 1fr; } .novel-row { grid-template-columns: 88px minmax(0, 1fr); } .novel-row img { width: 88px; } }
 .contact { text-align: left; }
 .contact-line { max-width: 46ch; font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: #cfc9be; margin: 0 0 28px; }
 .mail { display: inline-block; font-family: var(--serif); font-size: clamp(1.8rem, 5.2vw, 4rem); line-height: 1.1; text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 6px; word-break: break-word; transition: color 0.2s; }
