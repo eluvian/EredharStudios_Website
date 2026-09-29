@@ -151,12 +151,16 @@
     /* ── about ───────────────────────────── */
     .about-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 6vw, 96px); }
     .about p { font-size: clamp(1.05rem, 1.6vw, 1.3rem); line-height: 1.6; margin: 0 0 1.1em; max-width: 44ch; }
+    .about-grid.has-photo { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; }
+    .about-photo img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 2px; }
+    .tools-label { margin-top: 36px; }
     .skills { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
     .skills li { padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 0.98rem; }
 
     /* ── more + contact ──────────────────── */
     .more-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
     .contact { text-align: left; }
+    .contact-line { max-width: 46ch; font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: #cfc9be; margin: 0 0 28px; }
     .mail { display: inline-block; font-family: var(--serif); font-size: clamp(1.8rem, 5.2vw, 4rem); line-height: 1.1; text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 6px; word-break: break-word; transition: color 0.2s; }
     .mail:hover { color: var(--accent); }
     .socials { list-style: none; display: flex; flex-wrap: wrap; gap: 12px 32px; margin: 36px 0 0; padding: 0; }
@@ -185,7 +189,8 @@
     @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
     @media (max-width: 860px) {
-      .cap, .about-grid { grid-template-columns: 1fr; }
+      .cap, .about-grid, .about-grid.has-photo { grid-template-columns: 1fr; }
+      .about-photo { max-width: 360px; }
       .studies { grid-template-columns: 1fr; }
       .studies .film { margin-bottom: 48px; }
       .now-playing { display: none; }
@@ -341,15 +346,16 @@
 
     <!-- ═══ ABOUT ═══ -->
     <section class="about warm" id="about">
-      <div class="wrap about-grid">
+      <div class="wrap about-grid has-photo">
+        <div class="about-photo rv">
+          <img src="../assets/images/andrei-alexe.jpg" alt="Portrait of Andrei Alexe" width="576" height="720" loading="lazy">
+        </div>
         <div class="rv">
           <p class="eyebrow">03 · About</p>
           <h2>Hi, I'm Andrei.</h2>
           <p>I'm from Romania. I wrote the fantasy novel Wars of Eredhar out of a love for fantasy and imagined worlds. Since then I've moved on to small games and, more recently, short films in Unreal Engine 5.</p>
           <p>What I enjoy most is learning. Every project makes me pick up a method or a process I didn't know before.</p>
-        </div>
-        <div class="rv">
-          <p class="eyebrow">Day to day I use</p>
+          <p class="eyebrow tools-label">Day to day I use</p>
           <ul class="skills">
             <li>Unreal Engine 5</li>
             <li>MetaHuman and performance capture</li>
@@ -376,6 +382,7 @@
     <section class="contact band" id="contact">
       <div class="wrap rv">
         <p class="eyebrow">05 · Contact</p>
+        <p class="contact-line">Open to collaborations and new projects, cinematics or anything else. If you have something in mind, write to me.</p>
         <a class="mail" href="mailto:andrei_alexe@ymail.com">andrei_alexe@ymail.com</a>
         <ul class="socials">
           <li><a href="https://www.youtube.com/@eredhar/videos" target="_blank" rel="noopener">YouTube</a></li>
