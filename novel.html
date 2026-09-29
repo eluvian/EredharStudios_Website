@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wars of Eredhar · Andrei Alexe · Eredhar Studios</title>
+  <meta name="description" content="Wars of Eredhar: Dawn of Darkness, a fantasy novel by Andrei Alexe.">
+  <link rel="icon" href="assets/images/eredhar-logo-trim.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>document.documentElement.className += ' js';</script>
+  <link rel="stylesheet" href="assets/site.css">
+  <style>.nav-links [aria-current] { color: var(--fg); }</style>
+</head>
+<body>
+  <header class="nav solid" id="nav">
+    <a class="nav-logo" href="index.html" aria-label="Eredhar Studios, home"><img src="assets/images/eredhar-logo-trim.png" alt="Eredhar Studios"></a>
+    <ul class="nav-links"><li><a href="index.html#work">Films</a></li><li><a href="games.html">Games</a></li><li><a href="novel.html" aria-current="page">Novel</a></li><li><a href="index.html#about">About</a></li><li><a href="index.html#contact">Contact</a></li></ul>
+  </header>
+  <main>
+    <section class="page-head" style="border-top:0">
+      <div class="wrap">
+        <p class="eyebrow">The novel</p>
+        <h1>Wars of Eredhar</h1>
+        <p class="lede">A fantasy novel, written out of a love for fantasy and imagined worlds. Eredhar is the world of the book.</p>
+      </div>
+    </section>
+    <section class="band">
+      <div class="wrap">
+        <article class="entry rv" id="dawn-of-darkness">
+          <div class="entry-img tall"><img src="assets/images/dawn-of-darkness.jpg" alt="Cover of Wars of Eredhar: Dawn of Darkness" loading="lazy"></div>
+          <div class="entry-text">
+            <div class="film-rule"><span>Book 01</span><i></i><span>First edition · 2018</span></div>
+            <h3>Dawn of Darkness</h3>
+            <p>The first book of the series Wars of Eredhar, a fantasy novel set in a world full of secrets, mysteries and adventures.</p>
+            <p>Whispers in the night tell of an ancient darkness re-emerging from the cold corners of Eredhar. The times of peace are fading, and the war to come will test the boundaries of virtue and belief.</p>
+            <p>The looming threat will not go unanswered, for there will be those who rise up against it. But will they be in time, or will the return of the Darkness be the downfall of every kingdom in Eredhar?</p>
+            <a class="btn" href="https://www.amazon.co.uk/dp/B07H4P4B26" target="_blank" rel="noopener">Read on Amazon</a>
+          </div>
+        </article>
+        <article class="entry text-only rv" id="second-edition">
+          <div class="entry-text">
+            <div class="film-rule"><span>Next</span><i></i><span>In development</span></div>
+            <h3>Dawn of Darkness, Second Edition</h3>
+            <p>A rewrite of the original tale with more depth, clarity and resonance in its characters, themes and world. Not just a revision, but a rediscovery.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap foot-grid">
+      <a class="foot-logo" href="index.html" aria-label="Eredhar Studios, home"><img src="assets/images/eredhar-logo-trim.png" alt="Eredhar Studios"></a>
+      <p class="foot-text">Andrei Alexe, cinematic artist. Films, gaming experiences and the fantasy novel Wars of Eredhar.</p>
+      <ul class="foot-links">
+        <li><a href="index.html#work">Films</a></li>
+        <li><a href="games.html">Games</a></li>
+        <li><a href="novel.html">Novel</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="https://www.youtube.com/@eredhar/videos" target="_blank" rel="noopener">YouTube</a></li>
+      </ul>
+    </div>
+    <div class="wrap foot-base"><span>&copy; <span id="year"></span> Andrei Alexe · Eredhar Studios</span><span>Built in Unreal Engine 5</span></div>
+  </footer>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    (function () {
+      var rv = document.querySelectorAll('.rv');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0, rootMargin: '0px 0px 15% 0px' });
+        rv.forEach(function (el) { io.observe(el); });
+      } else { rv.forEach(function (el) { el.classList.add('in'); }); }
+    })();
+  </script>
+</body>
+</html>
