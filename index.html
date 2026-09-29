@@ -609,8 +609,8 @@
 
     .about-stats {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
       margin-top: 48px;
     }
 
@@ -685,7 +685,7 @@
     }
 
     .card-grid.single { grid-template-columns: minmax(280px, 620px); }
-    .card-grid.two { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+    .card-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
     .project-card {
       display: flex;
@@ -993,7 +993,7 @@
     }
 
     @media (max-width: 600px) {
-      .card-grid { grid-template-columns: 1fr; }
+      .card-grid, .card-grid.two { grid-template-columns: 1fr; }
       .book-card { flex-direction: column; }
       .book-card .card-img-wrap {
         width: 100%;
